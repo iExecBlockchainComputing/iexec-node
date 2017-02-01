@@ -13,11 +13,11 @@ contract owned{
 }
 
 contract Task is owned{
-    function setParam(string);
-    function pushResult(address userContract, string res, string url);
-    function getResult() constant returns (string res, string url);
-    event Launch(string param, address addr);
-    event Logs(string status, address user);
+    function setParam(string, string); // launch process
+    function pushResult(address userContract, string res, string url); // the Bridge publish the result
+    function getResult() constant returns (string res, string url); // the user get the result
+    event Launch(string value, string param, address addr); // special log to launch process
+    event Logs(string status, address indexed user); // logs for the front-end or smart contract to react correctly
 }
 
 contract VanityGen is Task {
@@ -26,10 +26,10 @@ contract VanityGen is Task {
         string url;
     }
     mapping (address => Vanity ) vanityRegister;
-    function setParam(string userParam) public {
-        if (bytes(userParam).length == 0) throw;
-        if (bytes(userParam).length > 5) throw;  // max vanity lenght
-        Launch(userParam, msg.sender);
+    function setParam(string userValue, string params) public {
+        if (bytes(userValue).length == 0) throw;
+        if (bytes(userValue).length > 5) throw;  // max vanity lenght
+        Launch(userValue, params, msg.sender);
     }
     function pushResult(address userAddr, string keys, string url) onlyowner {
         vanityRegister[userAddr].myKeys = keys;
@@ -40,7 +40,7 @@ contract VanityGen is Task {
         if (bytes(vanityRegister[msg.sender].myKeys).length == 0) throw;
         return (vanityRegister[msg.sender].myKeys , vanityRegister[msg.sender].url);
     }
-    function broadcast(string status, address user) onlyowner
+    function broadcast(string status, address user) onlyowner // for the front-end or smart contract watcher to know the step of the task
     {
         Logs(status, user);
     }
