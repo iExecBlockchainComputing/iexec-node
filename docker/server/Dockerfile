@@ -42,6 +42,6 @@ RUN cd /root && unzip master.zip
 # RUN cd /root & git clone https://github.com/lodygens/xtremweb-hep.git
 RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/ && make clean && make
 
-COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/xwhep-10.4.0/conf/
-RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/xwhep-10.4.0/  && ./bin/xwconfigure --yes --nopkg
+COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/xwhep-10.5.0/conf/
+RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/xwhep-10.5.0/  && ./bin/xwconfigure --yes --nopkg
 
