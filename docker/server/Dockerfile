@@ -43,5 +43,5 @@ RUN cd /root && unzip master.zip
 RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/ && make clean && make
 
 COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/xwhep-10.5.0/conf/
-RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/xwhep-10.5.0/  && ./bin/xwconfigure --yes --nopkg
+RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/xwhep-10.5.0/  && ./bin/xwconfigure --yes --nopkg || ./bin/xwconfigure --yes --nopkg 
 
