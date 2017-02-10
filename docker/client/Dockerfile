@@ -26,7 +26,7 @@ MAINTAINER Oleg Lodygensky (oleg.lodygensky@lal.in2p3.fr)
 LABEL "copyrights"="CNRS 2016"
 LABEL "author"="Oleg Lodygensky"
 LABEL version="0.2"
-LABEL description="This creates a Docker image for the XWHEP server"
+LABEL description="This creates a Docker image for the XWHEP client"
 
 #
 # DEBIAN_FRONTEND=noninteractive bypasses user input.
