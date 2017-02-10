@@ -26,7 +26,7 @@ MAINTAINER Oleg Lodygensky (oleg.lodygensky@lal.in2p3.fr)
 LABEL "copyrights"="CNRS 2016"
 LABEL "author"="Oleg Lodygensky"
 LABEL version="0.2"
-LABEL description="This downloads and compiles XWHEP server"
+LABEL description="This creates a Docker image for the XWHEP server"
 
 #
 # DEBIAN_FRONTEND=noninteractive bypasses user input.
@@ -37,11 +37,10 @@ LABEL description="This downloads and compiles XWHEP server"
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y apt-utils
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jdk mysql-server mysql-client zip unzip wget make ant gcc uuid uuid-runtime vim git
 RUN service mysql start
-RUN cd /root && wget https://github.com/lodygens/xtremweb-hep/archive/master.zip
-RUN cd /root && unzip master.zip
-# RUN cd /root & git clone https://github.com/lodygens/xtremweb-hep.git
-RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/ && make clean && make
 
-COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/xwhep-10.5.0/conf/
-RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/xwhep-10.5.0/  && ./bin/xwconfigure --yes --nopkg || ./bin/xwconfigure --yes --nopkg 
+COPY xwhep-server-10.5.0.deb /tmp/
+COPY xwhep-server-conf-10.5.0.deb /tmp/
+RUN cd /tmp/ && dpkg -i xwhep-server-10.5.0.deb
+RUN cd /tmp/ && dpkg -i xwhep-server-conf-10.5.0.deb
+RUN service xtremweb.server start
 
