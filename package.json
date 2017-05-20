@@ -2,6 +2,16 @@
   "name": "vanitygen",
   "version": "0.1.0",
   "private": true,
+  "description": "Vanitygen is a vanity bitcoin address generator",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iExecBlockchainComputing/vanitygen.git"
+  },
+  "bugs": {
+    "url": "https://github.com/iExecBlockchainComputing/vanitygen/issues"
+  },
+  "homepage": "https://github.com/iExecBlockchainComputing/vanitygen/blob/master/README.md",
+  "author": "Mehdi & Ishak",
   "dependencies": {
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
