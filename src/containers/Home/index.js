@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // import { bindActionCreators } from 'redux';
+import './Home.sass';
 
-export class Home extends Component {
+class Home extends Component {
+
   state = {};
 
   render() {
     return (
-      <div>
-        Home page
+      <div className="home">
+        <div className="title">
+          Home page test
+        </div>
       </div>
     );
   }
