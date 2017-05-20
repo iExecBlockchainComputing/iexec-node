@@ -178,12 +178,16 @@ module.exports = {
       // "style" loader turns CSS into JS modules that inject <style> tags.
       // In production, we use a plugin to extract that CSS to a file, but
       // in development "style" loader enables hot editing of CSS.
+      {
+        test: /\.sass$/,
+        loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader!sass-loader' })
+      },
       // {
-      //   test: /\.sass$/,
+      //   test: /\.css$/,
       //   use: [
       //     require.resolve('style-loader'),
       //     {
-      //       loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader!sass-loader' }),
+      //       loader: require.resolve('css-loader'),
       //       options: {
       //         importLoaders: 1,
       //       },
@@ -208,10 +212,6 @@ module.exports = {
       //     },
       //   ],
       // },
-      {
-        test: /\.sass$/,
-        loader: ExtractTextPlugin.extract({ fallback: 'style-loader', use: 'css-loader!sass-loader' }),
-      },
       // ** STOP ** Are you adding a new loader?
       // Remember to add the new extension(s) to the "file" loader exclusion list.
     ],
