@@ -17,7 +17,8 @@ const Navbar = () => (
 
         <div className="collapse navbar-collapse" id="navbar-collapse-1">
           <ul className="nav navbar-nav navbar-right">
-            <li><a href="">500 RLC</a></li>
+            <li><a>Home</a></li>
+            <li><a>500 RLC</a></li>
           </ul>
         </div>
       </div>
