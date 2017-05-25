@@ -1,3 +1,12 @@
+# VANITYGEN
+
+Vanitygen is a vanity bitcoin address generator.
+
+## Table of Contents
+
+- [Bridge](#Bridge)
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
 Below you will find some information on how to perform common tasks.<br>
@@ -129,7 +138,7 @@ my-app/
     index.js
     logo.svg
 ```
-
+## <a name="Bridge"></a> Bridge
 For the project to build, **these files must exist with exact filenames**:
 
 * `public/index.html` is the page template;
