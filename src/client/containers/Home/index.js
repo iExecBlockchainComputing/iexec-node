@@ -7,11 +7,9 @@ import allActions from '../../actions';
 import Input from '../../components/Input';
 import * as regex from '../../constants/regex';
 
-
 import './Home.css';
 
 class Home extends Component {
-
   state = {
     address: 'LoBRx5td5344njzVPAVBqR8WQfVTsGwYQ',
     letters: '',
@@ -41,7 +39,7 @@ class Home extends Component {
       actions.letters.setLetters(letters);
       this.setState({ redirect: true });
     }
-  }
+  };
 
   render() {
     const { address, letters, email, redirect } = this.state;
@@ -61,7 +59,9 @@ class Home extends Component {
                 onChange={this.handleChangeLetters}
               />
               <h5>Example address:</h5>
-              1<span className="color">{letters}</span>{address}
+              <span style={{ marginBottom: '20px' }}>
+                1<span className="color">{letters}</span>{address}
+              </span>
               <Input
                 placeholder="Enter your Email"
                 label="Your Email"
@@ -71,8 +71,14 @@ class Home extends Component {
                 onChange={this.handleChangeEmail}
               />
               <div className="form-group">
-                <button id="button" className="btn btn-primary btn-lg btn-block login-button" onClick={this.submit} >Next Step</button>
-                { redirect && <Redirect to="/address" /> }
+                <button
+                  id="button"
+                  className="btn btn-primary btn-lg btn-block login-button"
+                  onClick={this.submit}
+                >
+                  Next Step
+                </button>
+                {redirect && <Redirect to="/address" />}
               </div>
             </form>
           </div>

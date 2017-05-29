@@ -3,7 +3,14 @@ Code snippet by maridlcrmn for Bootsnipp.com
 Follow me on Twitter @maridlcrmn
 */
 
-.navbar-brand { position: relative; z-index: 2; }
+.navbar {
+  background-color: #009edf; max-width: 1200px;
+      margin: auto;
+}
+.navbar-brand {
+  position: relative;
+  z-index: 2;
+}
 
 .navbar-nav.navbar-right .btn { position: relative; z-index: 2; padding: 4px 20px; margin: 10px auto; transition: transform 0.3s; }
 
@@ -11,8 +18,9 @@ Follow me on Twitter @maridlcrmn
 .navbar .navbar-collapse .navbar-right > li:last-child { padding-left: 22px; }
 
 .navbar .nav-collapse { position: absolute; z-index: 1; top: 0; left: 0; right: 0; bottom: 0; margin: 0; padding-right: 120px; padding-left: 80px; width: 100%; }
-.navbar.navbar-default .nav-collapse { background-color: #f8f8f8; }
-.navbar.navbar-inverse .nav-collapse { background-color: #222; }
+.navbar.navbar-default .nav-collapse { background-color: #009edf; max-width: 1200px;
+    margin: auto;}
+.navbar.navbar-inverse .nav-collapse { background-color: #009edf; }
 .navbar .nav-collapse .navbar-form { border-width: 0; box-shadow: none; }
 .nav-collapse>li { float: right; }
 

@@ -9,7 +9,6 @@ import * as regex from '../../constants/regex';
 import './Address.css';
 
 class Address extends Component {
-
   state = {
     userPublicKey: '',
     redirect: false,
@@ -27,12 +26,12 @@ class Address extends Component {
       actions.address.setUserPublicKey(userPublicKey);
       this.setState({ redirect: true });
     }
-  }
+  };
 
   submitGenerator = (e) => {
     e.preventDefault();
     this.setState({ redirect: true });
-  }
+  };
 
   render() {
     const { userPublicKey, redirect } = this.state;
@@ -44,8 +43,14 @@ class Address extends Component {
             <form>
               <h5>Generate your key in the Brother</h5>
               <div className="form-group">
-                <button id="button" className="btn btn-primary btn-lg btn-block login-button" onClick={this.submitGenerator}>Generate Vanity Address</button>
-                { redirect && <Redirect to="/run" /> }
+                <button
+                  id="button"
+                  className="btn btn-primary btn-lg btn-block login-button"
+                  onClick={this.submitGenerator}
+                >
+                  Generate Public Key
+                </button>
+                {redirect && <Redirect to="/run" />}
               </div>
             </form>
           </div>
@@ -66,8 +71,14 @@ class Address extends Component {
                 onChange={this.handleChange}
               />
               <div className="form-group">
-                <button id="button" className="btn btn-primary btn-lg btn-block login-button" onClick={this.submit}>Generate Vanity Address</button>
-                { redirect && <Redirect to="/run" /> }
+                <button
+                  id="button"
+                  className="btn btn-primary btn-lg btn-block login-button"
+                  onClick={this.submit}
+                >
+                  Generate Vanity Address
+                </button>
+                {redirect && <Redirect to="/run" />}
               </div>
             </form>
           </div>
