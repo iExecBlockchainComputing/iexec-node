@@ -5,15 +5,8 @@
     validRegex: /^[1-9A-HJ-NP-Za-km-z]+$/,
     base: BigInteger.valueOf(58),
 
-    /**
-		* Convert a byte array to a base58-encoded string.
-		*
-		* Written by Mike Hearn for BitcoinJ.
-		*   Copyright (c) 2011 Google Inc.
-		*
-		* Ported to JavaScript by Stefan Thomas.
-		*/
     encode(input) {
+      console.log('2.1');
       let bi = BigInteger.fromByteArrayUnsigned(input);
       const chars = [];
 
@@ -43,6 +36,8 @@
 		* Ported to JavaScript by Stefan Thomas.
 		*/
     decode(input) {
+      console.log('2.2');
+
       let bi = BigInteger.valueOf(0);
       let leadingZerosNum = 0;
       for (let i = input.length - 1; i >= 0; i--) {

@@ -1,5 +1,5 @@
-/* global ECKey EllipticCurve */
 const getECKeyFromAdding = (privKey1, privKey2) => {
+  console.log('getECKeyFromAdding');
   const n = EllipticCurve.getSECCurveByName('secp256k1').getN();
   const ecKey1 = new ECKey(privKey1);
   const ecKey2 = new ECKey(privKey2);
@@ -13,6 +13,7 @@ const getECKeyFromAdding = (privKey1, privKey2) => {
 };
 
 export default getECKeyFromAdding;
+
 // var keyPair2 = bitcoin.ECPair.makeRandom({compressed: false}) -> creer une adresse btc
 
 // console.log(keyPair2.getPublicKeyBuffer().toString('hex').length) ->

@@ -1,6 +1,6 @@
 /* global bitcoin */
 
-import getECKeyFromAdding from '../constants/vanity';
+import getECKeyFromAdding from '../vanity/vanity';
 
 export const SET_USER_PUBLIC_KEY = 'SET_USER_PUBLIC_KEY';
 export const GENERATE_BITCOIN_ADDRESS = 'GENERATE_BITCOIN_ADDRESS';
