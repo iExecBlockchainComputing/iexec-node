@@ -1,4 +1,9 @@
-import { SET_USER_PUBLIC_KEY, GENERATE_BITCOIN_ADDRESS, GET_ECKEY } from '../actions/address';
+import {
+  SET_USER_PUBLIC_KEY,
+  GENERATE_BITCOIN_ADDRESS,
+  GET_ECKEY,
+  GET_ARRAY,
+} from '../actions/address';
 
 export default (state = {}, action) => {
   switch (action.type) {
@@ -16,6 +21,11 @@ export default (state = {}, action) => {
         bitcoinAddress: action.payload.bitcoinAddress,
         privateKeyWif: action.payload.privateKeyWif,
         publicKeyHex: action.payload.publicKeyHex,
+      };
+    case GET_ARRAY:
+      return {
+        ...state,
+        bitcoin: action.payload,
       };
     default:
       return state;

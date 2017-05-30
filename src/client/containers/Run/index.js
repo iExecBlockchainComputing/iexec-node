@@ -45,6 +45,8 @@ class Run extends Component {
     if (!address.userPublicKey) {
       addr = actions.address.generateBitcoinAdress();
       console.log(addr);
+    } else {
+      addr.userAddr = address.userPublicKey;
     }
     // recuperer public et privateKey
     this.setState({ phase1: 'fa fa-check fa-2x', phase2: 'fa fa-refresh fa-spin fa-2x', addr });
@@ -58,12 +60,20 @@ class Run extends Component {
   // }
 
   vanityWallet() {
-    const { actions } = this.props;
+    const { actions, address } = this.props;
     const { addr } = this.state;
-    actions.address.getECKey(
-      addr.privateKey,
-      'C206014862AAE70B12E9842988C1D8575092A70756A1EA84F291836D6B903DC5',
-    );
+
+    if (address.userPublicKey) {
+      actions.address.getByteArray(
+        addr.userPublicKey,
+        'C206014862AAE70B12E9842988C1D8575092A70756A1EA84F291836D6B903DC5',
+      );
+    } else {
+      actions.address.getECKey(
+        addr.privateKey,
+        'C206014862AAE70B12E9842988C1D8575092A70756A1EA84F291836D6B903DC5',
+      );
+    }
     this.setState({ phase4: 'fa fa-check fa-2x', getResult: true });
   }
 

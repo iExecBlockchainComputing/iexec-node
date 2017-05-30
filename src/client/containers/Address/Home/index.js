@@ -58,10 +58,10 @@ class Home extends Component {
                 value={letters}
                 onChange={this.handleChangeLetters}
               />
-              <h5>Example address:</h5>
-              <span style={{ marginBottom: '20px' }}>
+              <h5 className="title-addr">Example address:</h5>
+              <div className="addr">
                 1<span className="color">{letters}</span>{address}
-              </span>
+              </div>
               <Input
                 placeholder="Enter your Email"
                 label="Your Email"
