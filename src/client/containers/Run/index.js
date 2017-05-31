@@ -65,7 +65,7 @@ class Run extends Component {
 
     if (address.userPublicKey) {
       actions.address.getByteArray(
-        addr.userPublicKey,
+        address.userPublicKey,
         'C206014862AAE70B12E9842988C1D8575092A70756A1EA84F291836D6B903DC5',
       );
     } else {
@@ -79,11 +79,13 @@ class Run extends Component {
 
   render() {
     const { phase1, phase2, phase3, phase4, getResult, redirect } = this.state;
+    const { email } = this.props;
 
     return (
       <div className="address">
+        { email === '' && <Redirect to="/" /> }
         <div className="row main">
-          <div className="main-login main-center">
+          <div className="main-login main-center padd">
             <form className="form">
               <span className="inline-content">
                 <i className={phase1} />
@@ -114,10 +116,16 @@ class Run extends Component {
 Run.propTypes = {
   actions: PropTypes.object.isRequired,
   address: PropTypes.object.isRequired,
+  email: PropTypes.string,
 };
 
-const mapStateToProps = ({ address }) => ({
+Run.defaultProps = {
+  email: '',
+};
+
+const mapStateToProps = ({ address, email }) => ({
   address,
+  email,
 });
 
 const mapDispatchToProps = dispatch => ({

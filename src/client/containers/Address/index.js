@@ -35,9 +35,11 @@ class Address extends Component {
 
   render() {
     const { userPublicKey, redirect } = this.state;
+    const { email } = this.props;
 
     return (
       <div className="address">
+        { email === '' && <Redirect to="/" /> }
         <div className="row main">
           <div className="main-login main-center">
             <form>
@@ -90,9 +92,16 @@ class Address extends Component {
 
 Address.propTypes = {
   actions: PropTypes.object.isRequired,
+  email: PropTypes.string,
 };
 
-const mapStateToProps = () => ({});
+Address.defaultProps = {
+  email: '',
+};
+
+const mapStateToProps = ({ email }) => ({
+  email,
+});
 
 const mapDispatchToProps = dispatch => ({
   actions: {

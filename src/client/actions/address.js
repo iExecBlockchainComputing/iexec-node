@@ -1,12 +1,12 @@
-/* global bitcoin ECKey*/
+/* global bitcoin ECKey */
 
 import getECKeyFromAdding from '../vanity/vanity';
 import getByteArrayFromAdding from '../vanity/vanityPublicPrivate';
+import { getBitcoinAddressFromByteArray, getHexFromByteArray } from '../vanity/utils';
 
 export const SET_USER_PUBLIC_KEY = 'SET_USER_PUBLIC_KEY';
 export const GENERATE_BITCOIN_ADDRESS = 'GENERATE_BITCOIN_ADDRESS';
 export const GET_ECKEY = 'GET_ECKEY';
-export const GET_ARRAY = 'GET_ARRAY';
 
 export const setUserPublicKey = userPublicKey => ({
   type: SET_USER_PUBLIC_KEY,
@@ -22,11 +22,6 @@ export const GenerateBitcoinAdress = payload => ({
 
 export const eckey = payload => ({
   type: GET_ECKEY,
-  payload,
-});
-
-export const getArray = payload => ({
-  type: GET_ARRAY,
   payload,
 });
 
@@ -51,7 +46,12 @@ export const getECKey = (privKey1, privKey2) => (dispatch) => {
 };
 
 export const getByteArray = (input1KeyString, input2KeyString) => (dispatch) => {
-  const pubKeyCombined = getByteArrayFromAdding(input1KeyString, ECKey(input2KeyString));
-  dispatch(getArray(pubKeyCombined));
-  console.log(pubKeyCombined);
+  const eck = new ECKey(input2KeyString).getPubKeyHex();
+  const pubKeyCombined = getByteArrayFromAdding(input1KeyString, eck);
+  const key = {
+    bitcoinAddress: getBitcoinAddressFromByteArray(pubKeyCombined),
+    privateKeyWif: 'Only available when combining two private keys',
+    publicKeyHex: getHexFromByteArray(pubKeyCombined),
+  };
+  dispatch(eckey(key));
 };

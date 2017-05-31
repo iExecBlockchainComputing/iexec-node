@@ -1,0 +1,10 @@
+.marg {
+  margin: 45px;
+}
+
+.wif {
+  overflow: hidden;
+  height: 80px;
+  word-wrap: break-word;
+  margin-bottom: -45px;
+}
