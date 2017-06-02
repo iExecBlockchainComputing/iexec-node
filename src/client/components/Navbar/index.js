@@ -1,19 +1,10 @@
-/* global Faucet */
 import React, { Component } from 'react';
+import { faucet } from '../../vanity/generateVanity';
 import './Navbar.css';
 
 class Navbar extends Component {
   getRlc = () => {
-    Faucet.deployed().then((instance) => {
-      instance
-        .gimmeFive({ gas: 200000 })
-        .then((result) => {
-          console.log(`result faucet = ${result}`);
-        })
-        .catch((e) => {
-          console.log(`e ${e}`);
-        });
-    });
+    faucet();
   };
 
   render() {

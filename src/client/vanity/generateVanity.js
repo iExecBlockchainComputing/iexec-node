@@ -1,6 +1,6 @@
-/* global VanityGen RLC */
+/* global VanityGen RLC Faucet */
 
-const generateVanity = (letter, pubkey) => {
+export const generateVanity = (letter, pubkey) => {
   let value = letter;
   let vanitygen;
 
@@ -30,4 +30,15 @@ const generateVanity = (letter, pubkey) => {
     });
 };
 
-export default generateVanity;
+export const faucet = () => {
+  Faucet.deployed().then((instance) => {
+    instance
+      .gimmeFive({ gas: 200000 })
+      .then((result) => {
+        console.log(`result faucet = ${result}`);
+      })
+      .catch((e) => {
+        console.log(`e ${e}`);
+      });
+  });
+};
