@@ -1,9 +1,9 @@
-/* global VanityGen RLC Faucet */
 
-export const generateVanity = (letter, pubkey) => {
+/* global VanityGen RLC */
+const generateVanity = (letter, pubkey) => {
   let value = letter;
   let vanitygen;
-
+  console.log(letter, pubkey);
   value = value.replace(/l/g, '1');
   value = value.replace(/I/g, '1');
   value = value.replace(/O/g, '1');
@@ -19,7 +19,8 @@ export const generateVanity = (letter, pubkey) => {
     .then((instance) => {
       console.log('rlc', instance);
       console.log('vanityGen ', vanitygen.address, ' pubkey ', pubkey, ' value ', value);
-      return instance.approveAndCall(vanitygen.address, 1000000000, pubkey, value, { gas: 100000 });
+      return instance.approveAndCall(vanitygen.address,
+            1000000000, pubkey, value, { gas: 100000 });
     })
     .then((result) => {
       console.log(`res = ${result.tx}`);
@@ -30,15 +31,4 @@ export const generateVanity = (letter, pubkey) => {
     });
 };
 
-export const faucet = () => {
-  Faucet.deployed().then((instance) => {
-    instance
-      .gimmeFive({ gas: 200000 })
-      .then((result) => {
-        console.log(`result faucet = ${result}`);
-      })
-      .catch((e) => {
-        console.log(`e ${e}`);
-      });
-  });
-};
+export default generateVanity;

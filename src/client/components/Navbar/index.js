@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { faucet } from '../../vanity/generateVanity';
+import getRlc from '../../vanity/getRlc';
 import './Navbar.css';
 
 class Navbar extends Component {
   getRlc = () => {
-    faucet();
+    getRlc();
   };
 
   render() {
@@ -34,7 +34,7 @@ class Navbar extends Component {
                     type="button"
                     className="btn btn-primary"
                     style={{ backgroundColor: 'rgb(36, 85, 128)', borderColor: 'rgb(36, 85, 128)' }}
-                    onClick={this.getRlc()}
+                    onClick={() => this.getRlc()}
                   >
                     GET RLC
                   </button>

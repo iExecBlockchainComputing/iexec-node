@@ -16,7 +16,38 @@ class Run extends Component {
     addr: {},
     getResult: false,
     redirect: false,
+    privKey: '',
+    event: false,
   };
+
+/* global VanityGen web3 */
+  componentWillMount() {
+    VanityGen.deployed().then((instance) => {
+      const myEvent = instance.Logs({ user: web3.eth.accounts[0] });
+      myEvent.watch((err, result) => {
+        if (err) {
+          console.log('Erreur event ', err);
+          return;
+        } else if (result.args.status === 'Task finish!') {
+          this.vanityWallet();
+          console.log(result.args.status);
+        } else if (result.args.status === 'Invalid') {
+          console.log('event invalid');
+          console.log(result.args.status);
+        } else if (result.args.status === 'Erreur') {
+          console.log('event erreur');
+          console.log(result.args.status);
+        } else if (result.args.status === 'Running') {
+          console.log(result.args.status);
+        } else {
+          console.log(`http://xw.iex.ec/xwdbviews/works.html?sSearch=${result.args.status}`);
+          console.log('urllli ', result.args.status);
+        }
+        console.log('Parse ', result.args.status, result.args.user);
+        // console.log("Event = ", JSON.parse(result.args.value));
+      });
+    });
+  }
 
   componentDidMount() {
     this.generateAddr();
@@ -50,35 +81,43 @@ class Run extends Component {
     }
     // recuperer public et privateKey
     this.setState({ phase1: 'fa fa-check fa-2x', phase2: 'fa fa-refresh fa-spin fa-2x', addr });
-    this.vanityWallet();
+    this.calculatePrivatePart();
   }
 
-  // calculatePrivatePart() {
-  //   //call actions qui call web3 qui call vanitygen et return privatePart
-  //  this.setState({ phase1: 'fa fa-check fa-2x', phase2: 'fa fa-refresh fa-spin fa-2x', addr });
-  //  vanityWallet();
-  // }
+  calculatePrivatePart() {
+    const { address, actions, letters } = this.props;
+    actions.address.vanity(letters, address.userPublicKey);
+  }
 
   vanityWallet() {
     const { actions, address } = this.props;
     const { addr } = this.state;
 
-    if (address.userPublicKey) {
-      actions.address.getByteArray(
-        address.userPublicKey,
-        'C206014862AAE70B12E9842988C1D8575092A70756A1EA84F291836D6B903DC5',
-      );
-    } else {
-      actions.address.getECKey(
-        addr.privateKey,
-        'C206014862AAE70B12E9842988C1D8575092A70756A1EA84F291836D6B903DC5',
-      );
-    }
-    this.setState({ phase4: 'fa fa-check fa-2x', getResult: true });
+    this.setState({ phase2: 'fa fa-check fa-2x', phase4: 'fa fa-refresh fa-spin fa-2x' });
+    VanityGen.deployed()
+    .then(instance => (instance.getResult()))
+    .then((result) => {
+      console.log(result);
+      // eslint-disable-next-line
+      const rez = /[\s\w:\/-]*/i;
+      const privKey = rez.exec(result);
+      if (address.userPublicKey) {
+        actions.address.getByteArray(
+          address.userPublicKey,
+          privKey,
+        );
+      } else {
+        actions.address.getECKey(
+          addr.privateKey,
+          privKey,
+        );
+      }
+      this.setState({ phase4: 'fa fa-check fa-2x', getResult: true });
+    });
   }
 
   render() {
-    const { phase1, phase2, phase3, phase4, getResult, redirect } = this.state;
+    const { phase1, phase2, phase4, getResult, redirect } = this.state;
     const { email } = this.props;
 
     return (
@@ -94,10 +133,6 @@ class Run extends Component {
               <span className="inline-content">
                 <i className={phase2} aria-hidden="true" />
                 <h5>Generate your key in the Brother</h5>
-              </span>
-              <span className="inline-content">
-                <i className={phase3} aria-hidden="true" />
-                <h5>Calculate Private Key Part</h5>
               </span>
               <span className="inline-content">
                 <i className={phase4} aria-hidden="true" />
@@ -117,15 +152,18 @@ Run.propTypes = {
   actions: PropTypes.object.isRequired,
   address: PropTypes.object.isRequired,
   email: PropTypes.string,
+  letters: PropTypes.string,
 };
 
 Run.defaultProps = {
   email: '',
+  letters: '',
 };
 
-const mapStateToProps = ({ address, email }) => ({
+const mapStateToProps = ({ address, email, letters }) => ({
   address,
   email,
+  letters,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -3,6 +3,7 @@
 import getECKeyFromAdding from '../vanity/vanity';
 import getByteArrayFromAdding from '../vanity/vanityPublicPrivate';
 import { getBitcoinAddressFromByteArray, getHexFromByteArray } from '../vanity/utils';
+import generateVanity from '../vanity/generateVanity';
 
 export const SET_USER_PUBLIC_KEY = 'SET_USER_PUBLIC_KEY';
 export const GENERATE_BITCOIN_ADDRESS = 'GENERATE_BITCOIN_ADDRESS';
@@ -54,4 +55,9 @@ export const getByteArray = (input1KeyString, input2KeyString) => (dispatch) => 
     publicKeyHex: getHexFromByteArray(pubKeyCombined),
   };
   dispatch(eckey(key));
+};
+
+export const vanity = (letter, pubkey) => {
+  const data = generateVanity(letter, pubkey);
+  console.log(data);
 };
