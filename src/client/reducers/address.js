@@ -2,6 +2,7 @@ import {
   SET_USER_PUBLIC_KEY,
   GENERATE_BITCOIN_ADDRESS,
   GET_ECKEY,
+  LOAD,
 } from '../actions/address';
 
 export default (state = {}, action) => {
@@ -20,6 +21,11 @@ export default (state = {}, action) => {
         bitcoinAddress: action.payload.bitcoinAddress,
         privateKeyWif: action.payload.privateKeyWif,
         publicKeyHex: action.payload.publicKeyHex,
+      };
+    case LOAD:
+      return {
+        ...state,
+        load: action.payload,
       };
     default:
       return state;

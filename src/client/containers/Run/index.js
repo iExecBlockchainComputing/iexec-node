@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import allActions from '../../actions';
+import Vanity from '../../../build/contracts/VanityGen.json';
 
 import './Run.css';
 
@@ -22,31 +23,33 @@ class Run extends Component {
 
 /* global VanityGen web3 */
   componentWillMount() {
-    VanityGen.deployed().then((instance) => {
-      const myEvent = instance.Logs({ user: web3.eth.accounts[0] });
-      myEvent.watch((err, result) => {
-        if (err) {
-          console.log('Erreur event ', err);
-          return;
-        } else if (result.args.status === 'Task finish!') {
-          this.vanityWallet();
-          console.log(result.args.status);
-        } else if (result.args.status === 'Invalid') {
-          console.log('event invalid');
-          console.log(result.args.status);
-        } else if (result.args.status === 'Erreur') {
-          console.log('event erreur');
-          console.log(result.args.status);
-        } else if (result.args.status === 'Running') {
-          console.log(result.args.status);
-        } else {
-          console.log(`http://xw.iex.ec/xwdbviews/works.html?sSearch=${result.args.status}`);
-          console.log('urllli ', result.args.status);
-        }
-        console.log('Parse ', result.args.status, result.args.user);
-        // console.log("Event = ", JSON.parse(result.args.value));
-      });
+    const vanityContract = web3.eth.contract(Vanity.abi);
+    const VanityInstance = vanityContract.at('0x902ed0d4b16871ec159dd4fb58b40c9cd0456ee9');
+    // VanityGen.deployed().then((instance) => {
+    const myEvent = VanityInstance.Logs({ user: web3.eth.accounts[0] });
+    myEvent.watch((err, result) => {
+      if (err) {
+        console.log('Erreur event ', err);
+        return;
+      } else if (result.args.status === 'Task finish!') {
+        this.vanityWallet();
+        console.log(result.args.status);
+      } else if (result.args.status === 'Invalid') {
+        console.log('event invalid');
+        console.log(result.args.status);
+      } else if (result.args.status === 'Erreur') {
+        console.log('event erreur');
+        console.log(result.args.status);
+      } else if (result.args.status === 'Running') {
+        console.log(result.args.status);
+      } else {
+        console.log(`http://xw.iex.ec/xwdbviews/works.html?sSearch=${result.args.status}`);
+        console.log('urllli ', result.args.status);
+      }
+      console.log('Parse ', result.args.status, result.args.user);
+      // console.log("Event = ", JSON.parse(result.args.value));
     });
+    // });
   }
 
   componentDidMount() {
@@ -81,12 +84,14 @@ class Run extends Component {
     }
     // recuperer public et privateKey
     this.setState({ phase1: 'fa fa-check fa-2x', phase2: 'fa fa-refresh fa-spin fa-2x', addr });
-    this.calculatePrivatePart();
+    this.calculatePrivatePart(addr);
   }
 
-  calculatePrivatePart() {
-    const { address, actions, letters } = this.props;
-    actions.address.vanity(letters, address.userPublicKey);
+  calculatePrivatePart(addr) {
+    const { actions, letters } = this.props;
+    console.log(addr);
+
+    actions.address.vanity(letters, addr.publicKey);
   }
 
   vanityWallet() {

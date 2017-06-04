@@ -1,36 +1,22 @@
+/* global web3 */
 import Web3 from 'web3';
-
 import faucet from '../../build/contracts/Faucet.json';
 
-const contract = require('truffle-contract');
-
-
-// Get the RPC provider and setup our SimpleStorage contract.
 const getRlc = () => {
-  const provider = new Web3.providers.HttpProvider('http://localhost:8545');
+  let provider = null;
 
-  const Faucet = contract(faucet);
-  Faucet.setProvider(provider);
+  if (typeof web3 !== 'undefined') provider = new Web3(window.web3.currentProvider);
+  else provider = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
-  console.log(Faucet);
-  // Get Web3 so we can get our accounts.
-  const web3RPC = new Web3(provider);
+  const faucetContract = web3.eth.contract(faucet.abi);
+  const faucetInstance = faucetContract.at('0x876b14fd47c18dce81860c7ffe0a76f5882201d5');
 
-  // Declaring this for later so we can chain functions on SimpleStorage.
-  // let simpleStorageInstance;
-
-  // Get accounts.
-  web3RPC.eth.getAccounts((error, accounts) => {
-    Faucet.deployed().then((instance) => {
-      instance
-        .gimmeFive({ gas: 200000, from: accounts[0] })
-        .then((result) => {
-          console.log(`result faucet = ${result}`);
-        })
-        .catch((e) => {
-          console.log(`e ${e}`);
-        });
-    });
+  provider.eth.getAccounts((error, accounts) => {
+    faucetInstance
+      .gimmeFive({ gas: 200000, from: accounts[0] }, (err, result) => {
+        if (err) console.log(err);
+        else console.log(`https://ropsten.etherscan.io/tx/${result}`);
+      });
   });
 };
 

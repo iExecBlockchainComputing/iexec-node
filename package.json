@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "autoprefixer": "7.1.0",
+    "babel-cli": "^6.24.1",
     "babel-core": "6.24.1",
     "babel-eslint": "7.2.3",
     "babel-jest": "20.0.3",
@@ -81,8 +82,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom",
-    "bridge": "babel-node ./src/bridge/server.js"
+    "test": "node scripts/test.js --env=jsdom"
   },
   "jest": {
     "collectCoverageFrom": [

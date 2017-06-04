@@ -1,13 +1,15 @@
+/* global web3 */
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Web3 from 'web3';
 import allActions from '../../actions';
 import Input from '../../components/Input';
 import * as regex from '../../constants/regex';
-
 import './Home.css';
+import Vanity from '../../../build/contracts/VanityGen.json';
 
 class Home extends Component {
   state = {
@@ -15,6 +17,41 @@ class Home extends Component {
     letters: '',
     redirect: false,
   };
+
+  componentWillMount() {
+    let provider = null;
+
+    if (typeof web3 !== 'undefined') provider = new Web3(window.web3.currentProvider);
+    else provider = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+
+    const vanityContract = web3.eth.contract(Vanity.abi);
+    const VanityInstance = vanityContract.at('0x902ed0d4b16871ec159dd4fb58b40c9cd0456ee9');
+
+    provider.eth.getAccounts((error, accounts) => {
+      console.log(accounts);
+      const myEvent = VanityInstance.Logs({ user: web3.eth.accounts[0] });
+      myEvent.watch((err, result) => {
+        if (err) {
+          console.log('Erreur event ', err);
+          return;
+        } else if (result.args.status === 'Task finish!') {
+          console.log(result.args.status);
+        } else if (result.args.status === 'Invalid') {
+          console.log('event invalid');
+          console.log(result.args.status);
+        } else if (result.args.status === 'Erreur') {
+          console.log('event erreur');
+          console.log(result.args.status);
+        } else if (result.args.status === 'Running') {
+          console.log(result.args.status);
+        } else {
+          console.log(`http://xw.iex.ec/xwdbviews/works.html?sSearch=${result.args.status}`);
+          console.log('urllli ', result.args.status);
+        }
+        console.log('Parse ', result.args.status, result.args.user);
+      });
+    });
+  }
 
   handleChangeLetters = (e) => {
     const addr = 'LoBRx5td5344njzVPAVBqR8WQfVTsGwYQ';

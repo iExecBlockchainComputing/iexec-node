@@ -8,6 +8,7 @@ import generateVanity from '../vanity/generateVanity';
 export const SET_USER_PUBLIC_KEY = 'SET_USER_PUBLIC_KEY';
 export const GENERATE_BITCOIN_ADDRESS = 'GENERATE_BITCOIN_ADDRESS';
 export const GET_ECKEY = 'GET_ECKEY';
+export const LOAD = 'LOAD';
 
 export const setUserPublicKey = userPublicKey => ({
   type: SET_USER_PUBLIC_KEY,
@@ -23,6 +24,11 @@ export const GenerateBitcoinAdress = payload => ({
 
 export const eckey = payload => ({
   type: GET_ECKEY,
+  payload,
+});
+
+export const vanityGen = payload => ({
+  type: LOAD,
   payload,
 });
 
@@ -57,7 +63,7 @@ export const getByteArray = (input1KeyString, input2KeyString) => (dispatch) => 
   dispatch(eckey(key));
 };
 
-export const vanity = (letter, pubkey) => {
-  const data = generateVanity(letter, pubkey);
-  console.log(data);
+export const vanity = (letter, pubkey) => (dispatch) => {
+  generateVanity(letter, pubkey);
+  dispatch(vanityGen(true));
 };

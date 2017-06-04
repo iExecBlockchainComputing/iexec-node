@@ -11,7 +11,7 @@ import generateStore from './generateStore';
 import './styles/index.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import './constants/truffle';
+// import './constants/truffle';
 
 const store = generateStore(process.env.NODE_ENV);
 

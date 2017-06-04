@@ -7,7 +7,10 @@ console.log(Vanity);
 // const self = this;
 
 // Get the RPC provider and setup our SimpleStorage contract.
-const provider = new Web3.providers.HttpProvider('http://localhost:8545');
+// const provider = new Web3.providers.HttpProvider('http://localhost:8545');
+let provider = null;
+if (typeof web3 !== 'undefined') provider = new Web3(window.web3.currentProvider);
+else provider = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 const contract = require('truffle-contract');
 
 const VanityGen = contract(Vanity);
@@ -18,19 +21,20 @@ RLC.setProvider(provider);
 VanityGen.setProvider(provider);
 
 // Get Web3 so we can get our accounts.
-const web3RPC = new Web3(provider);
+const web3RPC = provider;
 
 // Declaring this for later so we can chain functions on SimpleStorage.
 // let simpleStorageInstance;
 
 // Get accounts.
 web3RPC.eth.getAccounts((error, accounts) => {
+  console.log(VanityGen);
   console.log(accounts);
-
   VanityGen.deployed().then((instance) => {
     const vanity = instance;
     console.log(`https://ropsten.etherscan.io/address/${vanity.address}`);
   });
+
   /* global web3 */
   VanityGen.deployed().then((instance) => {
     const myEvent = instance.Logs({ user: web3.eth.accounts[0] });
