@@ -21,6 +21,8 @@
     "bs58": "^4.0.0",
     "ecurve": "^1.0.5",
     "eslint-config-airbnb": "^15.0.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-babel": "^4.1.1",
     "express": "^4.15.3",
     "prop-types": "^15.5.10",
     "react": "^15.5.4",
