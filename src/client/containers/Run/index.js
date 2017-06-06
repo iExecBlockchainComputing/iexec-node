@@ -22,21 +22,21 @@ class Run extends Component {
   componentDidMount() {
     this.generateAddr();
   }
-/* global VanityGen web3 */
+/* global web3 */
 // eslint-disable-next-line
   test() {
     const vanityContract = web3.eth.contract(Vanity.abi);
     console.log(vanityContract);
     console.log(Vanity.abi);
-    const VanityInstance = vanityContract.at('0x902ed0d4b16871ec159dd4fb58b40c9cd0456ee9');
+    const VanityInstance = vanityContract.at('0x8099be7909174ed81980e21bedded95c2f987c0f');
     // VanityGen.deployed().then((instance) => {
     console.log(VanityInstance);
-    const myEvent = VanityInstance.allEvents({ user: web3.eth.accounts[0] }, (err, result) => {
+    const myEvent = VanityInstance.Logs({ user: web3.eth.accounts[0] }, (err, result) => {
       console.log(result);
       if (err) {
         console.log('Erreur event ', err);
         return;
-      } else if (result.args.status === 'COMPLETED') {
+      } else if (result.args.status === 'Task finish!') {
         this.vanityWallet();
         console.log(result.args.status);
       } else if (result.args.status === 'Invalid') {
@@ -104,18 +104,23 @@ class Run extends Component {
   vanityWallet() {
     const { actions, address } = this.props;
     const { addr } = this.state;
-
+    console.log('VANITY WALLET');
     this.setState({ phase2: 'fa fa-check fa-2x', phase4: 'fa fa-refresh fa-spin fa-2x' });
     const vanityContract = web3.eth.contract(Vanity.abi);
     console.log(vanityContract);
     console.log(Vanity.abi);
-    const VanityInstance = vanityContract.at('0x902ed0d4b16871ec159dd4fb58b40c9cd0456ee9');
-    VanityInstance.getResult()
-    .then((result) => {
+    const VanityInstance = vanityContract.at('0x8099be7909174ed81980e21bedded95c2f987c0f');
+    VanityInstance.getResult((err, result) => {
       console.log(result);
+      if (err) console.log(err);
       // eslint-disable-next-line
-      const rez = /[\s\w:\/-]*/i;
-      const privKey = rez.exec(result);
+      const url = /,\S*/i;
+      const myurl = url.exec(result);
+      myurl.toString().replace(',', 'http://xw.iex.ec/xwdbviews/works.html?sSearch=');
+     // eslint-disable-next-line
+       const rez = /PrivkeyPart: (.+?) */g;
+      const privKey = rez.exec(result[0]);
+      console.log(privKey.$1);
       if (address.userPublicKey) {
         actions.address.getByteArray(
           address.userPublicKey,
