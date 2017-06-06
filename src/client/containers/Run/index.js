@@ -5,7 +5,6 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import allActions from '../../actions';
 import Vanity from '../../../build/contracts/VanityGen.json';
-
 import './Run.css';
 
 class Run extends Component {
@@ -20,18 +19,24 @@ class Run extends Component {
     privKey: '',
     event: false,
   };
-
+  componentDidMount() {
+    this.generateAddr();
+  }
 /* global VanityGen web3 */
-  componentWillMount() {
+// eslint-disable-next-line
+  test() {
     const vanityContract = web3.eth.contract(Vanity.abi);
+    console.log(vanityContract);
+    console.log(Vanity.abi);
     const VanityInstance = vanityContract.at('0x902ed0d4b16871ec159dd4fb58b40c9cd0456ee9');
     // VanityGen.deployed().then((instance) => {
-    const myEvent = VanityInstance.Logs({ user: web3.eth.accounts[0] });
-    myEvent.watch((err, result) => {
+    console.log(VanityInstance);
+    const myEvent = VanityInstance.allEvents({ user: web3.eth.accounts[0] }, (err, result) => {
+      console.log(result);
       if (err) {
         console.log('Erreur event ', err);
         return;
-      } else if (result.args.status === 'Task finish!') {
+      } else if (result.args.status === 'COMPLETED') {
         this.vanityWallet();
         console.log(result.args.status);
       } else if (result.args.status === 'Invalid') {
@@ -50,11 +55,12 @@ class Run extends Component {
       // console.log("Event = ", JSON.parse(result.args.value));
     });
     // });
+    console.log(myEvent);
   }
 
-  componentDidMount() {
-    this.generateAddr();
-  }
+  // componentDidMount() {
+    // this.generateAddr();
+  // }
 
   getResult() {
     return (
@@ -92,6 +98,7 @@ class Run extends Component {
     console.log(addr);
 
     actions.address.vanity(letters, addr.publicKey);
+    this.test();
   }
 
   vanityWallet() {
