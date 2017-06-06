@@ -26,36 +26,36 @@ class Run extends Component {
 // eslint-disable-next-line
   test() {
     const vanityContract = web3.eth.contract(Vanity.abi);
-    console.log(vanityContract);
-    console.log(Vanity.abi);
+    // console.log(vanityContract);
+    // console.log(Vanity.abi);
     const VanityInstance = vanityContract.at('0x8099be7909174ed81980e21bedded95c2f987c0f');
     // VanityGen.deployed().then((instance) => {
-    console.log(VanityInstance);
-    const myEvent = VanityInstance.Logs({ user: web3.eth.accounts[0] }, (err, result) => {
-      console.log(result);
+    // console.log(VanityInstance);
+    VanityInstance.Logs({ user: web3.eth.accounts[0] }, (err, result) => {
+      // console.log(result);
       if (err) {
         console.log('Erreur event ', err);
-        return;
+        // return;
       } else if (result.args.status === 'Task finish!') {
         this.vanityWallet();
-        console.log(result.args.status);
+        // console.log(result.args.status);
       } else if (result.args.status === 'Invalid') {
-        console.log('event invalid');
-        console.log(result.args.status);
+        // console.log('event invalid');
+        // console.log(result.args.status);
       } else if (result.args.status === 'Erreur') {
-        console.log('event erreur');
-        console.log(result.args.status);
+        // console.log('event erreur');
+        // console.log(result.args.status);
       } else if (result.args.status === 'Running') {
-        console.log(result.args.status);
+        // console.log(result.args.status);
       } else {
-        console.log(`http://xw.iex.ec/xwdbviews/works.html?sSearch=${result.args.status}`);
+        // console.log(`http://xw.iex.ec/xwdbviews/works.html?sSearch=${result.args.status}`);
         console.log('urllli ', result.args.status);
       }
-      console.log('Parse ', result.args.status, result.args.user);
+      // console.log('Parse ', result.args.status, result.args.user);
       // console.log("Event = ", JSON.parse(result.args.value));
     });
     // });
-    console.log(myEvent);
+    // console.log(myEvent);
   }
 
   // componentDidMount() {
@@ -84,6 +84,7 @@ class Run extends Component {
     let addr = {};
     if (!address.userPublicKey) {
       addr = actions.address.generateBitcoinAdress();
+      console.log('generateBitcoinAdress :');
       console.log(addr);
     } else {
       addr.userAddr = address.userPublicKey;
@@ -95,8 +96,9 @@ class Run extends Component {
 
   calculatePrivatePart(addr) {
     const { actions, letters } = this.props;
-    console.log(addr);
-
+    // console.log(addr);
+    console.log('send letters + addr.publicKey');
+    console.log(addr.publicKey);
     actions.address.vanity(letters, addr.publicKey);
     this.test();
   }
@@ -104,11 +106,11 @@ class Run extends Component {
   vanityWallet() {
     const { actions, address } = this.props;
     const { addr } = this.state;
-    console.log('VANITY WALLET');
+    // console.log('VANITY WALLET');
     this.setState({ phase2: 'fa fa-check fa-2x', phase4: 'fa fa-refresh fa-spin fa-2x' });
     const vanityContract = web3.eth.contract(Vanity.abi);
-    console.log(vanityContract);
-    console.log(Vanity.abi);
+    // console.log(vanityContract);
+    // console.log(Vanity.abi);
     const VanityInstance = vanityContract.at('0x8099be7909174ed81980e21bedded95c2f987c0f');
     VanityInstance.getResult((err, result) => {
       console.log(result);
@@ -120,6 +122,7 @@ class Run extends Component {
      // eslint-disable-next-line
        const rez = /PrivkeyPart: (.+?) */g;
       const privKey = rez.exec(result[0]);
+      console.log('privKey vanity :');
       console.log(privKey.$1);
       if (address.userPublicKey) {
         actions.address.getByteArray(
