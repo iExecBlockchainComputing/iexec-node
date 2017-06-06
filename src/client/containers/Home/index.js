@@ -25,7 +25,7 @@ class Home extends Component {
     else provider = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
     const vanityContract = web3.eth.contract(Vanity.abi);
-    const VanityInstance = vanityContract.at('0x902ed0d4b16871ec159dd4fb58b40c9cd0456ee9');
+    const VanityInstance = vanityContract.at('0x8099be7909174ed81980e21bedded95c2f987c0f');
 
     provider.eth.getAccounts((error, accounts) => {
       console.log(accounts);

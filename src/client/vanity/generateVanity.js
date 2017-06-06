@@ -12,10 +12,10 @@ const generateVanity = (letter, pubkey) => {
   value = value.replace(/\W/g, '1');
 
   const vanityContract = web3.eth.contract(Vanity.abi);
-  const VanityInstance = vanityContract.at('0x902ed0d4b16871ec159dd4fb58b40c9cd0456ee9');
+  const VanityInstance = vanityContract.at('0x8099be7909174ed81980e21bedded95c2f987c0f');
 
   const rlcContract = web3.eth.contract(rlc.abi);
-  const rlcInstance = rlcContract.at('0x93e2163fd20d27285d09e230d3a214e1d0e9f863');
+  const rlcInstance = rlcContract.at('0x9978b9a251e2f1b306dde81830c7bc97c5e6e149');
   rlcInstance
     .approveAndCall(VanityInstance.address, 1000000000, pubkey,
     value, { gas: 100000 }, (err, result) => {

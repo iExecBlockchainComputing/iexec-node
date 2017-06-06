@@ -106,8 +106,11 @@ class Run extends Component {
     const { addr } = this.state;
 
     this.setState({ phase2: 'fa fa-check fa-2x', phase4: 'fa fa-refresh fa-spin fa-2x' });
-    VanityGen.deployed()
-    .then(instance => (instance.getResult()))
+    const vanityContract = web3.eth.contract(Vanity.abi);
+    console.log(vanityContract);
+    console.log(Vanity.abi);
+    const VanityInstance = vanityContract.at('0x902ed0d4b16871ec159dd4fb58b40c9cd0456ee9');
+    VanityInstance.getResult()
     .then((result) => {
       console.log(result);
       // eslint-disable-next-line

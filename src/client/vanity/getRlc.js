@@ -9,7 +9,7 @@ const getRlc = () => {
   else provider = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
   const faucetContract = web3.eth.contract(faucet.abi);
-  const faucetInstance = faucetContract.at('0x876b14fd47c18dce81860c7ffe0a76f5882201d5');
+  const faucetInstance = faucetContract.at('0x56b174d90e1704a86cc8b0a1780633217c096903');
 
   provider.eth.getAccounts((error, accounts) => {
     faucetInstance
