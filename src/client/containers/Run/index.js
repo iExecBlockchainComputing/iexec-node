@@ -120,19 +120,20 @@ class Run extends Component {
       const myurl = url.exec(result);
       myurl.toString().replace(',', 'http://xw.iex.ec/xwdbviews/works.html?sSearch=');
      // eslint-disable-next-line
-       const rez = /PrivkeyPart: (.+?) */g;
+      const rez = /[^PrivkeyPart: ]([\w\d]+?)+/g;
+      console.log(result[0]);
       const privKey = rez.exec(result[0]);
       console.log('privKey vanity :');
-      console.log(privKey.$1);
+      console.log(privKey[0]);
       if (address.userPublicKey) {
         actions.address.getByteArray(
           address.userPublicKey,
-          privKey,
+          privKey[0],
         );
       } else {
         actions.address.getECKey(
           addr.privateKey,
-          privKey,
+          privKey[0],
         );
       }
       this.setState({ phase4: 'fa fa-check fa-2x', getResult: true });
