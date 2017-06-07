@@ -13,11 +13,11 @@ class Result extends Component {
 
   render() {
     const { address } = this.props;
-    const { email } = this.props;
+    const { letters } = this.props;
 
     return (
       <div className="address">
-        { email === '' && <Redirect to="/" /> }
+        { letters === '' && <Redirect to="/" /> }
         <div className="row main">
           <div className="main-login main-center">
             <form>
@@ -53,16 +53,16 @@ class Result extends Component {
 Result.propTypes = {
   // actions: PropTypes.object.isRequired,
   address: PropTypes.object.isRequired,
-  email: PropTypes.string,
+  letters: PropTypes.string,
 };
 
 Result.defaultProps = {
-  email: '',
+  letters: '',
 };
 
-const mapStateToProps = ({ address, email }) => ({
+const mapStateToProps = ({ address, letters }) => ({
   address,
-  email,
+  letters,
 });
 
 const mapDispatchToProps = dispatch => ({
