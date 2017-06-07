@@ -1,6 +1,5 @@
 /* global EllipticCurve ECKey */
 const getECKeyFromAdding = (privKey1, privKey2) => {
-  console.log('getECKeyFromAdding');
   const n = EllipticCurve.getSECCurveByName('secp256k1').getN();
   const ecKey1 = new ECKey(privKey1);
   const ecKey2 = new ECKey(privKey2);
@@ -18,18 +17,3 @@ const getECKeyFromAdding = (privKey1, privKey2) => {
 };
 
 export default getECKeyFromAdding;
-
-// var keyPair2 = bitcoin.ECPair.makeRandom({compressed: false}) -> creer une adresse btc
-
-// console.log(keyPair2.getPublicKeyBuffer().toString('hex').length) ->
-// return address a envoyer a web3 (041e65d926f3bc46d403f0ca02bbd6da981730abe78a34e03
-// 9dec3b664ab40f93cae5e69fb1dc0e58005cce17c44217534bed81b4849d253cf77ef825c43d9e233)
-
-// keyPair2.toWIF() -> return private key (5JgQ4jQQVRhCnGMKzZ2jmFZMpMYU3BsPgXqLVat6Rpxwo8166nf)
-
-// getECKeyFromAdding(privateKey, retouWeb3)
-//
-// Puis on extrait les data
-// bitcoinAddress = combinedPrivateKey.getBitcoinAddress();
-// privateKeyWif = combinedPrivateKey.getBitcoinWalletImportFormat();
-// publicKeyHex = combinedPrivateKey.getPubKeyHex();

@@ -4,7 +4,6 @@ import thunk from 'redux-thunk';
 import reducers from './reducers';
 
 const initalState = {
-  email: '',
   letters: '',
   address: {},
 };

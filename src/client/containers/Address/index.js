@@ -4,28 +4,11 @@ import { bindActionCreators } from 'redux';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import allActions from '../../actions';
-import Input from '../../components/Input';
-import * as regex from '../../constants/regex';
 import './Address.css';
 
 class Address extends Component {
   state = {
-    userPublicKey: '',
     redirect: false,
-  };
-
-  handleChange = e => this.setState({ userPublicKey: e.target.value });
-
-  submit = (e) => {
-    e.preventDefault();
-
-    const { actions } = this.props;
-    const { userPublicKey } = this.state;
-
-    if (regex.userPublicKey(userPublicKey)) {
-      actions.address.setUserPublicKey(userPublicKey);
-      this.setState({ redirect: true });
-    }
   };
 
   submitGenerator = (e) => {
@@ -34,51 +17,23 @@ class Address extends Component {
   };
 
   render() {
-    const { userPublicKey, redirect } = this.state;
-    const { email } = this.props;
+    const { redirect } = this.state;
+    const { letters } = this.props;
 
     return (
       <div className="address">
-        { email === '' && <Redirect to="/" /> }
+        { letters === '' && <Redirect to="/" /> }
         <div className="row main">
           <div className="main-login main-center">
             <form>
-              <h5>Generate your key in the Brother</h5>
+              <h5>Generate your key in the Browser</h5>
               <div className="form-group">
                 <button
                   id="button"
                   className="btn btn-primary btn-lg btn-block login-button"
                   onClick={this.submitGenerator}
                 >
-                  Generate Public Key
-                </button>
-                {redirect && <Redirect to="/run" />}
-              </div>
-            </form>
-          </div>
-        </div>
-        <div className="main-login main-center or">
-          OR
-        </div>
-        <div className="row main">
-          <div className="main-login main-center">
-            <form>
-              <Input
-                placeholder="Uncompressed Public Key (130 characters)"
-                label="Enter your Public Key"
-                type="text"
-                logo="fa fa-lock fa-lg"
-                length={130}
-                value={userPublicKey}
-                onChange={this.handleChange}
-              />
-              <div className="form-group">
-                <button
-                  id="button"
-                  className="btn btn-primary btn-lg btn-block login-button"
-                  onClick={this.submit}
-                >
-                  Generate Vanity Address
+                  Generate Public and Private Key
                 </button>
                 {redirect && <Redirect to="/run" />}
               </div>
@@ -91,16 +46,11 @@ class Address extends Component {
 }
 
 Address.propTypes = {
-  actions: PropTypes.object.isRequired,
-  email: PropTypes.string,
+  letters: PropTypes.string.isRequired,
 };
 
-Address.defaultProps = {
-  email: '',
-};
-
-const mapStateToProps = ({ email }) => ({
-  email,
+const mapStateToProps = ({ letters }) => ({
+  letters,
 });
 
 const mapDispatchToProps = dispatch => ({

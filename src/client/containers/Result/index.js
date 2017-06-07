@@ -26,7 +26,7 @@ class Result extends Component {
                 <p>{address.bitcoinAddress}</p>
               </div>
               <div className="form-group marg">
-                <h4>Vanity Public Key (HEX):</h4>
+                <h4>Vanity Private Key (HEX):</h4>
                 <span>{address.privateKeyWif}</span>
               </div>
               <div className="form-group marg">

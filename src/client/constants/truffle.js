@@ -3,14 +3,11 @@ import Web3 from 'web3';
 import Vanity from '../../build/contracts/VanityGen.json';
 import rlc from '../../build/contracts/RLC.json';
 
-console.log(Vanity);
-// const self = this;
-
-// Get the RPC provider and setup our SimpleStorage contract.
-// const provider = new Web3.providers.HttpProvider('http://localhost:8545');
 let provider = null;
+
 if (typeof web3 !== 'undefined') provider = new Web3(window.web3.currentProvider);
 else provider = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
+
 const contract = require('truffle-contract');
 
 const VanityGen = contract(Vanity);
