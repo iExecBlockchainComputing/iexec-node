@@ -6,6 +6,7 @@ Vanitygen is a vanity bitcoin address generator.
 
 - [Bridge](#Bridge)
 
+![Vanitygen](https://github.com/iExecBlockchainComputing/vanitygen/tree/master/img/part1.gif)
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
