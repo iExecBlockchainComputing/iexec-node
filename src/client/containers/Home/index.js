@@ -31,7 +31,9 @@ class Home extends Component {
 
     if (letters.length) {
       actions.letters.setLetters(letters);
-      this.setState({ redirect: true });
+      if (window.web3.eth.accounts[0]) {
+        this.setState({ redirect: true });
+      }
     }
   };
 

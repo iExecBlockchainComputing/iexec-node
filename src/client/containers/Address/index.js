@@ -13,7 +13,9 @@ class Address extends Component {
 
   submitGenerator = (e) => {
     e.preventDefault();
-    this.setState({ redirect: true });
+    if (window.web3.eth.accounts[0]) {
+      this.setState({ redirect: true });
+    }
   };
 
   render() {
