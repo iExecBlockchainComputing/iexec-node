@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
-import logger from 'redux-logger';
+// import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import reducers from './reducers';
 
@@ -9,11 +9,11 @@ const initalState = {
   rlc: 0,
 };
 
-export default mode => createStore(
+export default () => createStore(
   reducers,
   initalState,
   applyMiddleware(
-    mode === 'development' ? logger : (0),
+    // mode === 'development' ? logger : (0),
     thunk,
   ),
 );
