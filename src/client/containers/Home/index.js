@@ -13,6 +13,7 @@ class Home extends Component {
     letters: '',
     redirect: false,
     install: false,
+    text: false,
   };
 
   componentWillMount() {
@@ -30,12 +31,16 @@ class Home extends Component {
     });
   };
 
+  // eslint-disable-next-line
   submit = (e) => {
     e.preventDefault();
 
-    const { actions } = this.props;
+    const { actions, rlc } = this.props;
     const { letters } = this.state;
 
+    if (!rlc) {
+      return this.setState({ text: true });
+    }
     if (letters.length) {
       actions.letters.setLetters(letters);
       if (window.web3.eth.accounts[0]) {
@@ -45,7 +50,7 @@ class Home extends Component {
   };
 
   render() {
-    const { address, letters, redirect, install } = this.state;
+    const { address, letters, redirect, install, text } = this.state;
 
     return (
       <div className="home">
@@ -65,6 +70,9 @@ class Home extends Component {
               <div className="addr">
                 1<span className="color">{letters}</span>{address}
               </div>
+              {text &&
+                <h5>Please click on GET RLC</h5>
+              }
               <div className="form-group">
                 <button
                   id="button"
@@ -86,9 +94,12 @@ class Home extends Component {
 
 Home.propTypes = {
   actions: PropTypes.object.isRequired,
+  rlc: PropTypes.number.isRequired,
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = ({ rlc }) => ({
+  rlc,
+});
 
 const mapDispatchToProps = dispatch => ({
   actions: {
