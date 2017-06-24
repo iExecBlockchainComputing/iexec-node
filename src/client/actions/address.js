@@ -5,10 +5,12 @@ import getByteArrayFromAdding from '../vanity/vanityPublicPrivate';
 import { getBitcoinAddressFromByteArray, getHexFromByteArray } from '../vanity/utils';
 import generateVanity from '../vanity/generateVanity';
 
-export const SET_USER_PUBLIC_KEY = 'SET_USER_PUBLIC_KEY';
-export const GENERATE_BITCOIN_ADDRESS = 'GENERATE_BITCOIN_ADDRESS';
-export const GET_ECKEY = 'GET_ECKEY';
-export const LOAD = 'LOAD';
+import {
+  SET_USER_PUBLIC_KEY,
+  GENERATE_BITCOIN_ADDRESS,
+  GET_ECKEY,
+  LOAD,
+} from './redux';
 
 export const setUserPublicKey = userPublicKey => ({
   type: SET_USER_PUBLIC_KEY,

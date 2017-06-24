@@ -6,6 +6,7 @@ import reducers from './reducers';
 const initalState = {
   letters: '',
   address: {},
+  rlc: 0,
 };
 
 export default mode => createStore(

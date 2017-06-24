@@ -22,7 +22,12 @@ class Run extends Component {
     redirect: false,
     privKey: '',
     event: false,
+    install: false,
   };
+
+  componentWillMount() {
+    if (!window.web3) this.setState({ install: true });
+  }
 
   componentDidMount() {
     this.generateAddr();
@@ -111,7 +116,17 @@ class Run extends Component {
   }
 
   render() {
-    const { phase1, phase2, phase3, phase4, phase5, phase6, getResult, redirect } = this.state;
+    const {
+      phase1,
+      phase2,
+      phase3,
+      phase4,
+      phase5,
+      phase6,
+      getResult,
+      redirect,
+      install,
+    } = this.state;
     const { letters } = this.props;
 
     return (
@@ -126,7 +141,7 @@ class Run extends Component {
               </span>
               <span className="inline-content">
                 <i className={phase2} aria-hidden="true" />
-                <h5>Call xTremWeb</h5>
+                <h5>Call XtremWeb</h5>
               </span>
               <span className="inline-content">
                 <i className={phase3} aria-hidden="true" />
@@ -146,6 +161,7 @@ class Run extends Component {
               </span>
               {getResult && this.getResult()}
               {redirect && <Redirect to="/result" />}
+              {install && <Redirect to="/install" />}
             </form>
           </div>
         </div>

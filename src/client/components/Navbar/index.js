@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import allActions from '../../actions';
 import getRlc from '../../vanity/getRlc';
 import './Navbar.css';
 
 class Navbar extends Component {
   getRlc = () => {
+    const { actions } = this.props;
     getRlc();
+    actions.rlc.setNewRlc();
   };
 
   render() {
+    const { rlc } = this.props;
     return (
       <div className="container-fluid">
         <nav className="navbar navbar-default">
@@ -30,6 +37,9 @@ class Navbar extends Component {
             <div className="collapse navbar-collapse" id="navbar-collapse-1">
               <ul className="nav navbar-nav navbar-right">
                 <li>
+                  <a className="navbar-brand">{rlc} RLC</a>
+                </li>
+                <li>
                   <button
                     type="button"
                     className="btn btn-primary"
@@ -48,4 +58,19 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+Navbar.propTypes = {
+  rlc: PropTypes.number.isRequired,
+  actions: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = ({ rlc }) => ({
+  rlc,
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: {
+    rlc: bindActionCreators(allActions.rlc, dispatch),
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar);

@@ -11,6 +11,7 @@ import generateStore from './generateStore';
 import './styles/index.css';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import Install from './components/install';
 
 const store = generateStore(process.env.NODE_ENV);
 
@@ -24,6 +25,7 @@ render(
           <Route path="/address" component={Address} />
           <Route path="/run" component={Run} />
           <Route path="/result" component={Result} />
+          <Route path="/install" component={Install} />
         </div>
       </Router>
       <Footer />

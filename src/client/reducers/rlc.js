@@ -1,9 +1,9 @@
-import { SET_LETTERS } from '../actions/redux';
+import { SET_RLC } from '../actions/redux';
 
 export default (state = '', action) => {
   switch (action.type) {
-    case SET_LETTERS:
-      return action.payload.letters;
+    case SET_RLC:
+      return action.payload;
     default:
       return state;
   }

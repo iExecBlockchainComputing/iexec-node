@@ -12,7 +12,14 @@ class Home extends Component {
     address: 'LoBRx5td5344njzVPAVBqR8WQfVTsGwYQ',
     letters: '',
     redirect: false,
+    install: false,
   };
+
+  componentWillMount() {
+    const { actions } = this.props;
+    if (!window.web3) this.setState({ install: true });
+    actions.rlc.setNewRlc();
+  }
 
   handleChangeLetters = (e) => {
     const addr = 'LoBRx5td5344njzVPAVBqR8WQfVTsGwYQ';
@@ -38,7 +45,7 @@ class Home extends Component {
   };
 
   render() {
-    const { address, letters, redirect } = this.state;
+    const { address, letters, redirect, install } = this.state;
 
     return (
       <div className="home">
@@ -67,6 +74,7 @@ class Home extends Component {
                   Next Step
                 </button>
                 {redirect && <Redirect to="/address" />}
+                {install && <Redirect to="/install" />}
               </div>
             </form>
           </div>
@@ -85,6 +93,7 @@ const mapStateToProps = () => ({});
 const mapDispatchToProps = dispatch => ({
   actions: {
     letters: bindActionCreators(allActions.letters, dispatch),
+    rlc: bindActionCreators(allActions.rlc, dispatch),
   },
 });
 

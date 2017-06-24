@@ -9,7 +9,12 @@ import './Address.css';
 class Address extends Component {
   state = {
     redirect: false,
+    install: false,
   };
+
+  componentWillMount() {
+    if (!window.web3) this.setState({ install: true });
+  }
 
   submitGenerator = (e) => {
     e.preventDefault();
@@ -19,7 +24,7 @@ class Address extends Component {
   };
 
   render() {
-    const { redirect } = this.state;
+    const { redirect, install } = this.state;
     const { letters } = this.props;
 
     return (
@@ -38,6 +43,7 @@ class Address extends Component {
                   Generate Public and Private Key
                 </button>
                 {redirect && <Redirect to="/run" />}
+                {install && <Redirect to="/install" />}
               </div>
             </form>
           </div>

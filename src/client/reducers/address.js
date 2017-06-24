@@ -3,7 +3,7 @@ import {
   GENERATE_BITCOIN_ADDRESS,
   GET_ECKEY,
   LOAD,
-} from '../actions/address';
+} from '../actions/redux';
 
 export default (state = {}, action) => {
   switch (action.type) {

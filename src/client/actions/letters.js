@@ -1,8 +1,10 @@
-export const SET_LETTERS = 'SET_LETTERS';
+import { SET_LETTERS } from './redux';
 
-export const setLetters = letters => ({
+const setLetters = letters => ({
   type: SET_LETTERS,
   payload: {
     letters,
   },
 });
+
+export default setLetters;
