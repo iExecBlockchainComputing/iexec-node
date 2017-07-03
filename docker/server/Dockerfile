@@ -27,7 +27,7 @@ LABEL "copyrights"="CNRS 2016"
 LABEL "author"="Oleg Lodygensky"
 LABEL version="0.2"
 LABEL description="This creates a Docker image for the XWHEP server"
-
+EXPOSE 4320 4321 4322 4323 4324 4325 4326 4327 4328 4329
 #
 # DEBIAN_FRONTEND=noninteractive bypasses user input.
 # Hence, mysql-server installation will not ask
