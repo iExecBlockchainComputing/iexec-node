@@ -21,13 +21,24 @@
 #
 #
 
+# Versionning
+#  0.3 : July 7th, 2017
+#    a) xwversion : 10.6.0
+#  0.2 : July 3rd, 2017
+#    a) exposes server ports
+#
+
 FROM ubuntu:16.04
 MAINTAINER Oleg Lodygensky (oleg.lodygensky@lal.in2p3.fr)
 LABEL "copyrights"="CNRS 2016"
 LABEL "author"="Oleg Lodygensky"
-LABEL version="0.2"
+LABEL version="0.3"
 LABEL description="This creates a Docker image for the XWHEP server"
 EXPOSE 4320 4321 4322 4323 4324 4325 4326 4327 4328 4329
+ENV XWVERSION="10.6.0"
+
+COPY xwhep-server-$XWVERSION.deb /tmp/
+COPY xwhep-server-conf-$XWVERSION.deb /tmp/
 #
 # DEBIAN_FRONTEND=noninteractive bypasses user input.
 # Hence, mysql-server installation will not ask
@@ -38,9 +49,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jdk mysql-server mysql-client zip unzip wget make ant gcc uuid uuid-runtime vim git
 RUN service mysql start
 
-COPY xwhep-server-10.5.0.deb /tmp/
-COPY xwhep-server-conf-10.5.0.deb /tmp/
-RUN cd /tmp/ && dpkg -i xwhep-server-10.5.0.deb
-RUN cd /tmp/ && dpkg -i xwhep-server-conf-10.5.0.deb
+RUN cd /tmp/ && dpkg -i xwhep-server-$XWVERSION.deb
+RUN cd /tmp/ && dpkg -i xwhep-server-conf-$XWVERSION.deb
 RUN service xtremweb.server start
 

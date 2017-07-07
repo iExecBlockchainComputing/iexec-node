@@ -21,12 +21,23 @@
 #
 #
 
+# Versionning
+#  0.3 : July 7th, 2017
+#    a) xwversion : 10.6.0
+#    b) exposes server ports
+#
+
 FROM ubuntu:16.04
 MAINTAINER Oleg Lodygensky (oleg.lodygensky@lal.in2p3.fr)
 LABEL "copyrights"="CNRS 2016"
 LABEL "author"="Oleg Lodygensky"
-LABEL version="0.2"
+LABEL version="0.3"
 LABEL description="This downloads and compiles XWHEP server"
+EXPOSE 4320 4321 4322 4323 4324 4325 4326 4327 4328 4329
+
+ENV XWVERSION "10.6.0"
+
+COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/$XWVERSION/conf/
 
 #
 # DEBIAN_FRONTEND=noninteractive bypasses user input.
@@ -42,6 +53,7 @@ RUN cd /root && unzip master.zip
 # RUN cd /root & git clone https://github.com/lodygens/xtremweb-hep.git
 RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/ && make clean && make
 
-COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/xwhep-10.5.0/conf/
-RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/xwhep-10.5.0/  && ./bin/xwconfigure --yes --nopkg || ./bin/xwconfigure --yes --nopkg 
+
+RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/$XWVERSION/  && ./bin/xwconfigure --yes --nopkg || ./bin/xwconfigure --yes --nopkg 
+
 
