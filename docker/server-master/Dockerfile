@@ -37,7 +37,9 @@ EXPOSE 4320 4321 4322 4323 4324 4325 4326 4327 4328 4329
 
 ENV XWVERSION "10.6.0"
 
-COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/$XWVERSION/conf/
+# next is only to check file is present
+# before getting time to apt-get update etc.
+COPY xwconfigure.values /tmp/
 
 #
 # DEBIAN_FRONTEND=noninteractive bypasses user input.
@@ -47,13 +49,12 @@ COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/$XWVERSION/conf/
 #
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y apt-utils
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jdk mysql-server mysql-client zip unzip wget make ant gcc uuid uuid-runtime vim git
-RUN service mysql start
+#RUN service mysql start
 RUN cd /root && wget https://github.com/lodygens/xtremweb-hep/archive/master.zip
 RUN cd /root && unzip master.zip
 # RUN cd /root & git clone https://github.com/lodygens/xtremweb-hep.git
 RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/ && make clean && make
 
-
-RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/$XWVERSION/  && ./bin/xwconfigure --yes --nopkg || ./bin/xwconfigure --yes --nopkg 
-
-
+COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/conf/
+RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && ./bin/xwconfigure --yes --nopkg || ./bin/xwconfigure --yes --nopkg 
+RUN cd /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && sed -i "s/LAUNCHER.*//g" conf/xtremweb.server.conf && ./bin/xtremweb.server console
