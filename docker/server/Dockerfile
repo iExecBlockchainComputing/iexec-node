@@ -35,7 +35,7 @@ LABEL "author"="Oleg Lodygensky"
 LABEL version="0.3"
 LABEL description="This creates a Docker image for the XWHEP server"
 EXPOSE 4320 4321 4322 4323 4324 4325 4326 4327 4328 4329
-ENV XWVERSION="10.6.0"
+ENV XWVERSION="10.5.2"
 
 COPY xwhep-server-$XWVERSION.deb /tmp/
 COPY xwhep-server-conf-$XWVERSION.deb /tmp/
@@ -46,10 +46,23 @@ COPY xwhep-server-conf-$XWVERSION.deb /tmp/
 # and mysql admin password will be empty
 #
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y apt-utils
-RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jdk mysql-server mysql-client zip unzip wget make ant gcc uuid uuid-runtime vim git
+RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre mysql-server mysql-client zip unzip wget make ant gcc uuid uuid-runtime vim git
 RUN service mysql start
 
 RUN cd /tmp/ && dpkg -i xwhep-server-$XWVERSION.deb
 RUN cd /tmp/ && dpkg -i xwhep-server-conf-$XWVERSION.deb
-RUN service xtremweb.server start
+RUN service mysql start && mysql -u root < /opt/xwhep-server-$XWVERSION/bin/db-maintenance/xwhep-core-tables-create-tables.sql
+
+#
+# -1- don't renice in container
+# -2- we must remove LAUNCHERURL since Apache is not installed
+# 
+RUN sed -i "s/^V_NICE=.*//g" /opt/xwhep-server-$XWVERSION/bin/xtremwebconf.sh
+RUN sed -i "s/LAUNCHER.*//g" /opt/xwhep-server-$XWVERSION/conf/xtremweb.server.conf
+
+RUN service mysql restart && service xtremweb.server start
+
+#RUN service mysql start && sed -i "s/^V_NICE=.*//g" /opt/xwhep-server-$XWVERSION/bin/xtremwebconf.sh && sed -i "s/LAUNCHER.*//g" /opt/xwhep-server-$XWVERSION/conf/xtremweb.server.conf && service xtremweb.server start
+
+
 
