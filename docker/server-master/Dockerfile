@@ -56,5 +56,16 @@ RUN cd /root && unzip master.zip
 RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/ && make clean && make
 
 COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/conf/
-RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && ./bin/xwconfigure --yes --nopkg || ./bin/xwconfigure --yes --nopkg 
-RUN cd /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && sed -i "s/LAUNCHER.*//g" conf/xtremweb.server.conf && ./bin/xtremweb.server console
+RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && ./bin/xwconfigure --yes || ./bin/xwconfigure --yes
+
+RUN cd /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && dpkg -i xwhep-server-$XWVERSION.deb && dpkg -i xwhep-server-conf-$XWVERSION.deb 
+
+#
+# -1- don't renice in container
+# -2- we must remove LAUNCHERURL since Apache is not installed
+# 
+RUN sed -i "s/^V_NICE=.*//g" /opt/xwhep-server-$XWVERSION/bin/xtremwebconf.sh
+RUN sed -i "s/LAUNCHER.*//g" /opt/xwhep-server-$XWVERSION/conf/xtremweb.server.conf
+
+RUN service mysql restart && service xtremweb.server start
+
