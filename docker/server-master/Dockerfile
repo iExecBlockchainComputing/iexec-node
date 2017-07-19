@@ -67,5 +67,13 @@ RUN cd /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && dpkg -i xwhep-
 RUN sed -i "s/^V_NICE=.*//g" /opt/xwhep-server-$XWVERSION/bin/xtremwebconf.sh
 RUN sed -i "s/LAUNCHER.*//g" /opt/xwhep-server-$XWVERSION/conf/xtremweb.server.conf
 
-RUN service mysql restart && service xtremweb.server start
+#
+# Entry point script
+# 
+RUN echo "#!/bin/sh" > /tmp/xwstart.sh
+RUN echo "service mysql start" >> /tmp/xwstart.sh
+RUN echo "/etc/init.d/xtremweb.server console" >> /tmp/xwstart.sh
+RUN chmod +x /tmp/xwstart.sh
+
+ENTRYPOINT [ "/tmp/xwstart.sh" ]
 
