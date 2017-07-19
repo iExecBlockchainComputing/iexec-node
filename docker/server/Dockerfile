@@ -49,7 +49,6 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -
 RUN export DEBIAN_FRONTEND=noninteractive && \
        apt-get install -y openjdk-8-jre mysql-server mysql-client \
        zip unzip wget make ant gcc uuid uuid-runtime vim git
-RUN service mysql start
 
 RUN cd /tmp/ && dpkg -i xwhep-server-$XWVERSION.deb
 RUN cd /tmp/ && dpkg -i xwhep-server-conf-$XWVERSION.deb
@@ -62,9 +61,15 @@ RUN service mysql start && mysql -u root < /opt/xwhep-server-$XWVERSION/bin/db-m
 RUN sed -i "s/^V_NICE=.*//g" /opt/xwhep-server-$XWVERSION/bin/xtremwebconf.sh
 RUN sed -i "s/LAUNCHER.*//g" /opt/xwhep-server-$XWVERSION/conf/xtremweb.server.conf
 
-RUN service mysql restart && service xtremweb.server start
+#
+# Entry point script
+# 
+RUN echo "#!/bin/sh" > /tmp/xwstart.sh
+RUN echo "service mysql start" >> /tmp/xwstart.sh
+RUN echo "/etc/init.d/xtremweb.server console" >> /tmp/xwstart.sh
+RUN chmod +x /tmp/xwstart.sh
 
-#RUN service mysql start && sed -i "s/^V_NICE=.*//g" /opt/xwhep-server-$XWVERSION/bin/xtremwebconf.sh && sed -i "s/LAUNCHER.*//g" /opt/xwhep-server-$XWVERSION/conf/xtremweb.server.conf && service xtremweb.server start
+ENTRYPOINT [ "/tmp/xwstart.sh" ]
 
 
 
