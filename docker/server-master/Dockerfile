@@ -56,7 +56,6 @@ RUN cd /root && unzip master.zip
 RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/ && make clean && make
 
 COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/conf/
-RUN cd /tmp && service mysql start && mysqladmin -u root password $(grep "DBADMINPASSWORD" xwconfigure.values | sed "s/DBADMINPASSWORD='//" | sed "s/'//")
 RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && ./bin/xwconfigure --yes || ./bin/xwconfigure --yes
 
 RUN cd /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && dpkg -i xwhep-server-$XWVERSION.deb && dpkg -i xwhep-server-conf-$XWVERSION.deb 
