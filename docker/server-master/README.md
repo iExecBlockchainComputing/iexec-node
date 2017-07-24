@@ -17,7 +17,7 @@ Launch xwdeploy.sh like:
 This script :
 - builds a new Docker image for the XWHEP server;
 - starts a new Docker container for the XWHEP server;
-- copy XWHEP worker and client Debian packages from the running container.
+- copy XWHEP worker and client Debian packages from the running container to host.
 
 These Debian packages can avantageoulsy be used with docker/worker and docker/client to
 launch Docker containers that connect to the XWHEP server inside its container.
