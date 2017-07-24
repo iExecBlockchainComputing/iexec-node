@@ -10,7 +10,7 @@ Docker deployment
 This directory contains everything to start your own deployment from last sources.
 
 ## Security
-If you wish to deploy a production platform, don't forget to set your own configation in xwconfigure.values file.
+If you wish to deploy a production platform, don't forget to set your own configuration in xwconfigure.values file.
 Please refer to the [administrator guide](../../doc/xwhep-admin-guide.odt).
 
 ## Deployment
