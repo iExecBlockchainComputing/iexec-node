@@ -28,6 +28,9 @@ LABEL "author"="Oleg Lodygensky"
 LABEL version="0.2"
 LABEL description="This creates a Docker image for the XWHEP worker"
 
+ENV XWVERSION "10.6.0"
+
+
 #
 # DEBIAN_FRONTEND=noninteractive bypasses user input.
 # Hence, mysql-server installation will not ask
@@ -37,6 +40,6 @@ LABEL description="This creates a Docker image for the XWHEP worker"
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y apt-utils
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jdk zip unzip wget make ant gcc uuid uuid-runtime vim git
 
-COPY xwhep-worker-10.5.0.deb /tmp/
-RUN cd /tmp/ && dpkg -i xwhep-worker-10.5.0.deb
+COPY xwhep-worker-$XWVERSION.deb /tmp/
+RUN cd /tmp/ && dpkg -i xwhep-worker-$XWVERSION.deb
 RUN service xtremweb.worker start
