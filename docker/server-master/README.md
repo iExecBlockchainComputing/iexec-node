@@ -20,4 +20,4 @@ This script :
 - copy XWHEP worker and client Debian packages from the running container to host.
 
 These Debian packages can avantageoulsy be used with [docker/worker](../worker) and [docker/client](../client) to
-launch Docker containers that connect to the XWHEP server inside its container.
+create and launch Docker containers that connect to the XWHEP server inside its container.
