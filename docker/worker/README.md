@@ -20,5 +20,5 @@ To start a worker, launch xwdeploy.sh like:
 
 This script :
 - builds a new Docker image for the XWHEP worker;
-- starts a new Docker container for the XWHEP worker;
+- starts the XWHEP worker in a new Docker container.
 
