@@ -36,9 +36,14 @@ ENV XWVERSION "10.6.0"
 # Hence, mysql-server installation will not ask
 # for the new mysql admin password;
 # and mysql admin password will be empty
-#
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y apt-utils
-RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip wget make ant gcc uuid uuid-runtime vim git
+# 
+#RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y apt-utils
+#RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip wget make ant gcc uuid uuid-runtime vim git
 
-COPY xwhep-client-$XWVERSION.deb /tmp/
-RUN cd /tmp/ && dpkg -i xwhep-client-$XWVERSION.deb
+RUN apt-get update
+RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip 
+
+ADD . /xwhep
+WORKDIR /xwhep
+RUN dpkg -i xwhep-client-$XWVERSION.deb
+
