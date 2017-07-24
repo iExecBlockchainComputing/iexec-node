@@ -38,7 +38,7 @@ ENV XWVERSION "10.6.0"
 # and mysql admin password will be empty
 #
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y apt-utils
-RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jdk zip unzip wget make ant gcc uuid uuid-runtime vim git
+RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip wget make ant gcc uuid uuid-runtime vim git
 
 COPY xwhep-worker-$XWVERSION.deb /tmp/
 RUN cd /tmp/ && dpkg -i xwhep-worker-$XWVERSION.deb
