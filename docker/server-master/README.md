@@ -13,6 +13,7 @@ This directory contains everything to start your own deployment from last source
 If you wish to deploy a production platform, don't forget to set your own configation in xwconfigure.values file.
 Please refer to the [administrator guide](../../doc/xwhep-admin-guide.odt).
 
+## Deployment
 
 Launch xwdeploy.sh like:
 ```
