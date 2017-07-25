@@ -21,11 +21,19 @@
 #
 #
 
+# Versionning
+#  July 24th, 2017 
+#  0.3
+#    - xwversion : 10.6.0
+#    - using ADD and WORKDIR to ease usage
+#    - reducing packages list to the necessary only to reduce image size
+#
+
 FROM ubuntu:16.04
 MAINTAINER Oleg Lodygensky (oleg.lodygensky@lal.in2p3.fr)
 LABEL "copyrights"="CNRS 2016"
 LABEL "author"="Oleg Lodygensky"
-LABEL version="0.2"
+LABEL version="0.3"
 LABEL description="This creates a Docker image for the XWHEP client"
 
 ENV XWVERSION "10.6.0"
