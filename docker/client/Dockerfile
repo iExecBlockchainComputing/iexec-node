@@ -49,7 +49,7 @@ ENV XWVERSION "10.6.0"
 #RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip wget make ant gcc uuid uuid-runtime vim git
 
 RUN apt-get update
-RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip 
+RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip vim
 
 ADD . /xwhep
 WORKDIR /xwhep

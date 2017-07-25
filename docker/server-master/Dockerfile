@@ -22,16 +22,22 @@
 #
 
 # Versionning
-#  0.3 : July 7th, 2017
-#    a) xwversion : 10.6.0
-#    b) exposes server ports
+#  July 24th, 2017
+#  0.4
+#    - using ADD and WORKDIR to ease usage
+#    - reducing packages list to the necessary only to reduce image size
+#
+#  July 7th, 2017
+#  0.3
+#    - xwversion : 10.6.0
+#    - exposes server ports
 #
 
 FROM ubuntu:16.04
 MAINTAINER Oleg Lodygensky (oleg.lodygensky@lal.in2p3.fr)
 LABEL "copyrights"="CNRS 2016"
 LABEL "author"="Oleg Lodygensky"
-LABEL version="0.3"
+LABEL version="0.4"
 LABEL description="This downloads and compiles XWHEP server"
 EXPOSE 4320 4321 4322 4323 4324 4325 4326 4327 4328 4329
 
