@@ -22,19 +22,21 @@
 #
 
 # Versionning
+#  0.4 : July 25th, 2017
+#    - reducing exposed ports
 #  0.3 : July 7th, 2017
-#    a) xwversion : 10.6.0
+#    - xwversion : 10.6.0
 #  0.2 : July 3rd, 2017
-#    a) exposes server ports
+#    - exposes server ports
 #
 
 FROM ubuntu:16.04
 MAINTAINER Oleg Lodygensky (oleg.lodygensky@lal.in2p3.fr)
 LABEL "copyrights"="CNRS 2016"
 LABEL "author"="Oleg Lodygensky"
-LABEL version="0.3"
+LABEL version="0.4"
 LABEL description="This creates a Docker image for the XWHEP server"
-EXPOSE 4320 4321 4322 4323 4324 4325 4326 4327 4328 4329
+EXPOSE 4321 4322 4323 443
 ENV XWVERSION="10.5.2"
 
 ADD . /xwhep
