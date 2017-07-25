@@ -60,7 +60,7 @@ RUN dpkg -i xwhep-worker-$XWVERSION.deb
 
 RUN sed -i "s/^V_NICE=.*//g" /opt/xwhep-worker-$XWVERSION/bin/xtremwebconf.sh
 RUN sed -i "s/LAUNCHER.*//g" /opt/xwhep-worker-$XWVERSION/conf/xtremweb.worker.conf
-RUN sed -i "s/DISPATCHER.*/DISPATCHER=xwserver/g" /opt/xwhep-worker-$XWVERSION/conf/xtremweb.worker.conf
+RUN sed -i "s/DISPATCHERS.*/DISPATCHERS=xwserver/g" /opt/xwhep-worker-$XWVERSION/conf/xtremweb.worker.conf
 
 #
 # Entry point script
