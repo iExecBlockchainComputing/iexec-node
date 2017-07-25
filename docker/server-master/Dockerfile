@@ -39,7 +39,7 @@ LABEL "copyrights"="CNRS 2016"
 LABEL "author"="Oleg Lodygensky"
 LABEL version="0.4"
 LABEL description="This downloads and compiles XWHEP server"
-EXPOSE 4320 4321 4322 4323 4324 4325 4326 4327 4328 4329
+EXPOSE 4321 4322 4323 443
 
 ENV XWVERSION "10.6.0"
 
