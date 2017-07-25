@@ -173,10 +173,10 @@ services:
       image: "${IMAGENAME_SERVER}"
       ports:
         - "4320:4329"
-    #xwworker:
-    #image: "${IMAGENAME_WORKER}"
-    xwclient:
-      image: "${IMAGENAME_CLIENT}"
+    xwworker:
+      image: "${IMAGENAME_WORKER}"
+    #xwclient:
+    #  image: "${IMAGENAME_CLIENT}"
 EOF_DOCKERCOMPOSEYAML
 
 exit 0

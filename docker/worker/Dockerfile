@@ -35,6 +35,7 @@ LABEL "copyrights"="CNRS 2016"
 LABEL "author"="Oleg Lodygensky"
 LABEL version="0.3"
 LABEL description="This creates a Docker image for the XWHEP worker"
+EXPOSE 4324 443
 
 ENV XWVERSION "10.6.0"
 
@@ -59,6 +60,7 @@ RUN dpkg -i xwhep-worker-$XWVERSION.deb
 
 RUN sed -i "s/^V_NICE=.*//g" /opt/xwhep-worker-$XWVERSION/bin/xtremwebconf.sh
 RUN sed -i "s/LAUNCHER.*//g" /opt/xwhep-worker-$XWVERSION/conf/xtremweb.worker.conf
+RUN sed -i "s/DISPATCHER.*/DISPATCHER=xwserver/g" /opt/xwhep-worker-$XWVERSION/conf/xtremweb.worker.conf
 
 #
 # Entry point script

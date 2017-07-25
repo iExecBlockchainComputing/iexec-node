@@ -26,6 +26,7 @@
 #  0.4
 #    - using ADD and WORKDIR to ease usage
 #    - reducing packages list to the necessary only to reduce image size
+#    - reducing exposed ports
 #
 #  July 7th, 2017
 #  0.3
