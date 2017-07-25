@@ -37,21 +37,22 @@ LABEL description="This creates a Docker image for the XWHEP server"
 EXPOSE 4320 4321 4322 4323 4324 4325 4326 4327 4328 4329
 ENV XWVERSION="10.5.2"
 
-COPY xwhep-server-$XWVERSION.deb /tmp/
-COPY xwhep-server-conf-$XWVERSION.deb /tmp/
+ADD . /xwhep
+WORKDIR /xwhep
+
 #
 # DEBIAN_FRONTEND=noninteractive bypasses user input.
 # Hence, mysql-server installation will not ask
 # for the new mysql admin password;
 # and mysql admin password will be empty
 #
-RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y apt-utils
+RUN apt-get update
 RUN export DEBIAN_FRONTEND=noninteractive && \
        apt-get install -y openjdk-8-jre mysql-server mysql-client \
-       zip unzip wget make ant gcc uuid uuid-runtime vim git
+       zip unzip wget make
 
-RUN cd /tmp/ && dpkg -i xwhep-server-$XWVERSION.deb
-RUN cd /tmp/ && dpkg -i xwhep-server-conf-$XWVERSION.deb
+RUN dpkg -i xwhep-server-$XWVERSION.deb
+RUN dpkg -i xwhep-server-conf-$XWVERSION.deb
 RUN service mysql start && mysql -u root < /opt/xwhep-server-$XWVERSION/bin/db-maintenance/xwhep-core-tables-create-tables.sql
 
 #
@@ -70,6 +71,4 @@ RUN echo "/etc/init.d/xtremweb.server console" >> /tmp/xwstart.sh
 RUN chmod +x /tmp/xwstart.sh
 
 ENTRYPOINT [ "/tmp/xwstart.sh" ]
-
-
 
