@@ -36,6 +36,8 @@ LABEL "author"="Oleg Lodygensky"
 LABEL version="0.3"
 LABEL description="This creates a Docker image for the XWHEP client"
 
+EXPOSE 4327
+
 ENV XWVERSION "10.6.0"
 
 
