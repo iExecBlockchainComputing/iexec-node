@@ -25,9 +25,13 @@ or use Docker compose.
 
 We propose the following workflow:
 - launch a Docker container to run the XWHEP server  
- (in next example, the Docker image for the XWHEP server is "xwserverimg\_2017-07-26-15-32-39")
+ In next example:
+  * the server name, "xwserver", is the one used in [server-master](server-master/);
+  * the Docker image for the XWHEP server is "xwserverimg\_2017-07-26-15-32-39".  
+ 
+ 
 ```
-  docker run xwserverimg_2017-07-26-15-32-39
+  docker run --hostname=xwserver xwserverimg_2017-07-26-15-32-39
 ```
 - retrieve the XWHEP server network
 ```
