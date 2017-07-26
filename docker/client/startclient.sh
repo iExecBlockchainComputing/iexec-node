@@ -106,8 +106,8 @@ XWJOBUID="$(date '+%Y-%m-%d-%H-%M-%S')"
 
 IMAGENAME_CLIENT="xwclientimg_${XWJOBUID}"
 CONTAINERNAME_CLIENT="xwclientcontainer_${XWJOBUID}"
-DOCKERFILENAME="Dockerfile"
 DOCKERFILE="${ROOTDIR}/Dockerfile"
+TMPDOCKERFILE="${ROOTDIR}/clientdockerfile_${XWJOBUID}"
 
 CLIENTLOGFILE="${ROOTDIR}/xwclient_${XWJOBUID}.log"
 
@@ -151,7 +151,8 @@ if [ $? -ne 0 ] ; then
 	fatal "File not found : xwhep-client-${VERSION}.deb"
 fi
 
-sed -i ${DOCKERFILE}  "s/ENV XWVERSION.*/ENV XWVERSION \"${VERSION}\"/g"
+sed  "s/ENV XWVERSION.*/ENV XWVERSION \"${VERSION}\"/g" ${DOCKERFILE} > ${TMPDOCKERFILE}
+mv ${TMPDOCKERFILE} ${DOCKERFILE}
 
 docker build --force-rm --tag ${IMAGENAME_CLIENT} .
 

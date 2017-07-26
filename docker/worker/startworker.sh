@@ -107,8 +107,8 @@ XWJOBUID="$(date '+%Y-%m-%d-%H-%M-%S')"
 
 IMAGENAME_WORKER="xwworkerimg_${XWJOBUID}"
 CONTAINERNAME_WORKER="xwworkercontainer_${XWJOBUID}"
-DOCKERFILENAME="Dockerfile"
 DOCKERFILE="${ROOTDIR}/Dockerfile"
+TMPDOCKERFILE="${ROOTDIR}/workerdockerfile_${XWJOBUID}"
 
 WORKERLOGFILE="${ROOTDIR}/xwworker_${XWJOBUID}.log"
 
@@ -152,7 +152,10 @@ if [ $? -ne 0 ] ; then
 	fatal "File not found : xwhep-worker-${VERSION}.deb"
 fi
 
-sed -i ${DOCKERFILE}  "s/ENV XWVERSION.*/ENV XWVERSION \"${VERSION}\"/g"
+sed  "s/ENV XWVERSION.*/ENV XWVERSION \"${VERSION}\"/g" ${DOCKERFILE} > ${TMPDOCKERFILE}
+mv ${TMPDOCKERFILE} ${DOCKERFILE}
+
+exit 0
 
 docker build --force-rm --tag ${IMAGENAME_WORKER} .
 

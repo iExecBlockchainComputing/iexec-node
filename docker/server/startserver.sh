@@ -106,8 +106,8 @@ XWJOBUID="$(date '+%Y-%m-%d-%H-%M-%S')"
 
 IMAGENAME_SERVER="xwserverimg_${XWJOBUID}"
 CONTAINERNAME_SERVER="xwservercontainer_${XWJOBUID}"
-DOCKERFILENAME="Dockerfile"
 DOCKERFILE="${ROOTDIR}/Dockerfile"
+TMPDOCKERFILE="${ROOTDIR}/serverdockerfile_${XWJOBUID}"
 
 SERVERLOGFILE="${ROOTDIR}/xwserver_${XWJOBUID}.log"
 
@@ -147,7 +147,7 @@ fi
 
 
 VERSION=`ls  xwhep-server-conf-*.deb | cut -d ' ' -f 2 | tail -1 | sed "s/xwhep-server-conf-//g" | sed "s/\.deb//g"`
-echo $VERSION
+echo "VERSION=$VERSION"
 ls xwhep-server-${VERSION}.deb > /dev/null 2>&1
 if [ $? -ne 0 ] ; then
 	fatal "File not found : xwhep-server-${VERSION}.deb"
@@ -158,7 +158,9 @@ if [ $? -ne 0 ] ; then
 	fatal "File not found : xwhep-server-conf-${VERSION}.deb"
 fi
 
-sed -i ${DOCKERFILE}  "s/ENV XWVERSION.*/ENV XWVERSION \"${VERSION}\"/g"
+sed  "s/ENV XWVERSION.*/ENV XWVERSION \"${VERSION}\"/g" ${DOCKERFILE} > ${TMPDOCKERFILE}
+mv ${TMPDOCKERFILE} ${DOCKERFILE}
+
 
 docker build --force-rm --tag ${IMAGENAME_SERVER} .
 docker run --name ${CONTAINERNAME_SERVER} ${IMAGENAME_SERVER} > ${SERVERLOGFILE} 2>&1 &
