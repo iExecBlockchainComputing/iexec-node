@@ -48,6 +48,9 @@ ENV XWVERSION "10.6.0"
 # before getting time to apt-get update etc.
 COPY xwconfigure.values /tmp/
 
+ADD . /xwhep
+WORKDIR /xwhep
+
 #
 # DEBIAN_FRONTEND=noninteractive bypasses user input.
 # Hence, mysql-server installation will not ask
@@ -57,15 +60,13 @@ COPY xwconfigure.values /tmp/
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y apt-utils
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jdk mysql-server mysql-client zip unzip wget make ant gcc uuid uuid-runtime vim git
 #RUN service mysql start
-RUN cd /root && wget https://github.com/lodygens/xtremweb-hep/archive/master.zip
-RUN cd /root && unzip master.zip
-# RUN cd /root & git clone https://github.com/lodygens/xtremweb-hep.git
-RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/ && make clean && make
+RUN wget https://github.com/lodygens/xtremweb-hep/archive/master.zip
+RUN unzip master.zip
+RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /xwhep/xtremweb-hep-master/build/ && make clean && make
+RUN cp /xwhep/xwconfigure.values /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/conf/
+RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && ./bin/xwconfigure --yes || ./bin/xwconfigure --yes
 
-COPY xwconfigure.values /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/conf/
-RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && ./bin/xwconfigure --yes || ./bin/xwconfigure --yes
-
-RUN cd /root/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && dpkg -i xwhep-server-$XWVERSION.deb && dpkg -i xwhep-server-conf-$XWVERSION.deb 
+RUN cd /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && dpkg -i xwhep-server-$XWVERSION.deb && dpkg -i xwhep-server-conf-$XWVERSION.deb 
 
 #
 # -1- don't renice in container
