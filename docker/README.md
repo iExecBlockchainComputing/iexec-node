@@ -57,13 +57,17 @@ We propose the following workflow:
 (i.e. 39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57)  
 (in next example, the Docker image for the XWHEP worker is "xwworkerimg\_2017-07-26-15-30-12")
 ```
-  docker run --network=39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57 xwworkerimg_2017-07-26-15-30-12
+  docker run \
+    --network=39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57 \
+    xwworkerimg_2017-07-26-15-30-12
 ```
 - launch a client within the same network  
 (i.e. 39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57)  
 (in next example, the Docker image for the XWHEP client is "xwclientimg\_2017-07-26-15-33-07")
 ```
-  docker run -ti --network=39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57 xwclientimg_2017-07-26-15-33-07 /bin/bash
+  docker run \
+    -ti --network=39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57 \
+    xwclientimg_2017-07-26-15-33-07 /bin/bash
 ```
 
 ## 2.2 - Composed deployment
