@@ -1,7 +1,7 @@
 Build from source
 =================
 
-This directory contains everything to build a deployment from github last sources.
+This directory contains everything to build a deployment from [github](https://github.com/lodygens/xtremweb-hep).
 
 # Security
 If you wish to deploy a production platform, don't forget to set your own configuration in _xwconfigure.values_ file.
