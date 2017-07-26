@@ -15,7 +15,7 @@ These Dockerfile can help you to:
 # Deploy your own platform
 
 We propose the following workflow:
-- [server-master](server-master/) prepares all needed Debian packages to create Docker images. Please read [server-master/README.md](server-master/README.md)
+- [server-master](server-master/) prepares all needed Debian packages to create Docker images. Please read [server-master/README.md](server-master/)
 
 # Install the client
 
