@@ -35,6 +35,16 @@ We propose the following workflow:
 
 # Provide your volunteer resource
 
+The XWHEP worker aims to propose IT resource to an XWHEP deployment:
+- propose its configuration (RAM, CPU etc);
+- propose some shared assets;
+- ask for a job;
+- download binary and data for the job;
+- execute the job;
+- return result;
+- send heartbeat signal for coherency.
+
 We propose the following workflow:
 - copy the worker Debian package to [worker/](worker/). This Debian package is either provided by an XWHEP deployment administrator or created by [server-master](server-master/).
-- execute the [client/startclient.sh](client/startclient.sh) to create a Docker image and launch a Docker container.
+- execute the [worker/startworker.sh](worker/startworker.sh) to create a Docker image and launch the worker in a Docker container.
+
