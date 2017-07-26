@@ -3,11 +3,11 @@ Build from source
 
 This directory contains everything to build a deployment from github last sources.
 
-## Security
+# Security
 If you wish to deploy a production platform, don't forget to set your own configuration in _xwconfigure.values_ file.
 Please refer to the [administrator guide](../../doc/xwhep-admin-guide.odt).
 
-## Deployment
+# Deployment
 
 Launch build.sh like:
 ```
