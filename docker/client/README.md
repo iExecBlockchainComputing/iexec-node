@@ -19,6 +19,5 @@ To create a client Docker image, launch startclien.sh like:
 ```
 
 This script :
-- builds a new Docker image for the XWHEP client;
-- starts a new Docker container for the XWHEP client.
+- builds a new Docker image for the XWHEP client.
 
