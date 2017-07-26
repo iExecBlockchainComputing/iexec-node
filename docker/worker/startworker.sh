@@ -155,8 +155,6 @@ fi
 sed  "s/ENV XWVERSION.*/ENV XWVERSION \"${VERSION}\"/g" ${DOCKERFILE} > ${TMPDOCKERFILE}
 mv ${TMPDOCKERFILE} ${DOCKERFILE}
 
-exit 0
-
 docker build --force-rm --tag ${IMAGENAME_WORKER} .
 
 docker run --name ${CONTAINERNAME_WORKER} ${IMAGENAME_WORKER} > ${WORKERLOGFILE} 2>&1 &

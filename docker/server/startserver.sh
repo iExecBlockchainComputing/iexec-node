@@ -147,7 +147,6 @@ fi
 
 
 VERSION=`ls  xwhep-server-conf-*.deb | cut -d ' ' -f 2 | tail -1 | sed "s/xwhep-server-conf-//g" | sed "s/\.deb//g"`
-echo "VERSION=$VERSION"
 ls xwhep-server-${VERSION}.deb > /dev/null 2>&1
 if [ $? -ne 0 ] ; then
 	fatal "File not found : xwhep-server-${VERSION}.deb"
