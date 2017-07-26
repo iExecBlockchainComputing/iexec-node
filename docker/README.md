@@ -7,9 +7,8 @@ We propose 4 Dockerfile to create images for the server, the client and the work
 The 4th docker file in server-master creates the server image from the github repository.
 
 These Dockerfile can help you to:
-- [deploy your own platform](#deploy-your-own-platform)
-- [use a deployment](#install-the-client)
-- [provide your volunteer resource](#provide-your-volunteer-resource)
+- [deploy your own platform](#2---deploy-your-own-platform)
+- [connect to a deployed platform](#3---connect-to-a-platform)
 
 
 # 2 - Deploy your own platform
