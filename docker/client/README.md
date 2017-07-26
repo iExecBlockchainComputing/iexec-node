@@ -1,17 +1,11 @@
-# xtremweb-hep
-Data driven volunteer cloud
-
-### Status
-[![Build Status](https://travis-ci.org/lodygens/xtremweb-hep.svg?branch=master)](https://travis-ci.org/lodygens/xtremweb-hep)
-
-Docker deployment
-=================
+Docker XWHEP client
+===================
 
 This directory contains everything to install a client inside a container from its Debian package.
 
 The client Debian package can be generated from [docker/server-master](../server-master).
 
-## Deployment
+# Deployment
 
 To create a client Docker image, launch startclient.sh like:
 ```
