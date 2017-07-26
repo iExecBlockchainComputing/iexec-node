@@ -1,13 +1,7 @@
-# xtremweb-hep
-Data driven volunteer cloud
-
-### Status
-[![Build Status](https://travis-ci.org/lodygens/xtremweb-hep.svg?branch=master)](https://travis-ci.org/lodygens/xtremweb-hep)
-
-Docker deployment
+Build from source
 =================
 
-This directory contains everything to start your own deployment from last sources.
+This directory contains everything to build a deployment from github last sources.
 
 ## Security
 If you wish to deploy a production platform, don't forget to set your own configuration in _xwconfigure.values_ file.
@@ -15,15 +9,17 @@ Please refer to the [administrator guide](../../doc/xwhep-admin-guide.odt).
 
 ## Deployment
 
-Launch xwdeploy.sh like:
+Launch build.sh like:
 ```
-  xwdeploy.sh
+  build.sh
 ```
 
 This script :
-- builds a new Docker image for the XWHEP server;
-- starts a new Docker container for the XWHEP server;
-- copy XWHEP worker and client Debian packages from the running container to host.
+- prepare all Debian packages : server, worker and client;
+- builds a new Docker image for the XWHEP server.
 
-These Debian packages can avantageoulsy be used with [docker/worker](../worker) and [docker/client](../client) to
-create and launch Docker containers that connect to the XWHEP server inside its container.
+These Debian packages can avantageoulsy be used with [docker/server](../server), [docker/worker](../worker) and [docker/client](../client) to
+create create Docker images for the worker and the client, respectively.
+
+One can note that a Docker images for the server is created by build.sh script.
+But using [docker/server](../server) would create a smaller Docker images since it will use Java JRE and not Java JDK.
