@@ -37,7 +37,7 @@ We propose the following workflow:
 
 The XWHEP worker aims to propose IT resource to an XWHEP deployment:
 - propose its configuration (RAM, CPU etc);
-- propose some shared assets;
+- propose some shared assets, if any;
 - ask for a job;
 - download binary and data for the job;
 - execute the job;
