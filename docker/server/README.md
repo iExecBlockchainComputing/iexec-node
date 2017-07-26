@@ -13,9 +13,9 @@ The server Debian package can be generated from [docker/server-master](../server
 
 ## Deployment
 
-To start a server, launch xwdeploy.sh like:
+To start a server, launch startserver.sh like:
 ```
-  xwdeploy.sh
+  startserver.sh
 ```
 
 This script :
