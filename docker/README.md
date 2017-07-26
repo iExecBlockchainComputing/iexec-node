@@ -14,8 +14,27 @@ These Dockerfile can help you to:
 
 # Deploy your own platform
 
+There must be Docker images for the server, the worker and the client.
+Please see [server-master](server-master/) to prepare all needed Debian packages
+and create Docker images for the three services.
+Don't be afraitd to read [server-master/README.md](server-master/)
+
+As soon as Docker images are ready, you can either make your deployment manually,
+or use Docker compose.
+
+## Manual deployment
+
 We propose the following workflow:
-- [server-master](server-master/) prepares all needed Debian packages to create Docker images. Please read [server-master/README.md](server-master/)
+- launch a Docker container to run the XWHEP server
+ (in next example, the Docker image for the XWHEP server is "xwserverimg\_2017-07-26-15-32-39")
+```
+  docker run xwserverimg_2017-07-26-15-32-39
+```
+- check the XWHEP server network
+```
+  docker inspect c46088ad8e94
+```
+## Composed deployment
 
 # Install the client
 
