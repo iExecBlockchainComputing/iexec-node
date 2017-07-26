@@ -7,6 +7,17 @@ This directory contains everything to build a deployment from github last source
 If you wish to deploy a production platform, don't forget to set your own configuration in _xwconfigure.values_ file.
 Please refer to the [administrator guide](../../doc/xwhep-admin-guide.odt).
 
+# Network
+You must set two varialbes in the _xwconfigure.values_ file:
+- XWSERVER : the IP address or resolved name of the server;
+- CERTCN : should be equal to XWSERVER. Please refer to [opensll documentation](https://www.openssl.org).
+
+## Docker-compose
+If you want to use [our docker compose deployement](../deployment/), you should:
+- set XWSERVER and CERTCN to "xwserver" as explained in [network section](#network);
+- or modify [deploy.sh](../deployment/deploy.sh) to reflect server name.
+
+
 # Deployment
 
 Launch build.sh like:
