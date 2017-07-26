@@ -1,7 +1,7 @@
 Deploy XWHEP in Docker containers
 =================================
 
-# Introduction
+# 1 - Introduction
 
 We propose 4 Dockerfile to create images for the server, the client and the worker.
 The 4th docker file in server-master creates the server image from the github repository.
@@ -12,7 +12,7 @@ These Dockerfile can help you to:
 - [provide your volunteer resource](#provide-your-volunteer-resource)
 
 
-# Deploy your own platform
+# 2 - Deploy your own platform
 
 There must be Docker images for the server, the worker and the client.
 Please see [server-master](server-master/) to prepare all needed Debian packages
@@ -22,7 +22,7 @@ Don't be afraitd to read [server-master/README.md](server-master/)
 As soon as Docker images are ready, you can either make your deployment manually,
 or use Docker compose.
 
-## Manual deployment
+## 2.1 - Manual deployment
 
 We propose the following workflow:
 - launch a Docker container to run the XWHEP server
@@ -65,9 +65,14 @@ We propose the following workflow:
   docker run -ti --network=39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57 xwclientimg_2017-07-26-15-33-07 /bin/bash
 ```
 
-## Composed deployment
+## 2.2 - Composed deployment
 
-# Install the client
+# 3 - Connect to a platform
+
+You may want to connect to a deployed platform in order to user volunteer resources,
+or to propose volunteer resources.
+
+## 3.1 - Install the client
 
 The XWHEP client aims to interact with an XWHEP deployment:
 - register an application;
@@ -83,7 +88,7 @@ We propose the following workflow:
 - execute the [client/startclient.sh](client/startclient.sh) to create a Docker image.
 
 
-# Provide your volunteer resource
+## 3.2 - Provide your volunteer resource
 
 The XWHEP worker aims to propose IT resource to an XWHEP deployment:
 - propose its configuration (RAM, CPU etc);
