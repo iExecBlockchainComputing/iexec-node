@@ -70,6 +70,9 @@ fatal ()
   [ "$msg" ]  ||  msg="Ctrl+C"
   
   echo  "$(date "$DATE_FORMAT")  $SCRIPTNAME  FATAL : $msg"
+  docker kill ${CONTAINERNAME} 
+  docker rm   ${CONTAINERNAME} 
+  rm -f ${SERVERLOGFILE}
   
   exit 1
 }
@@ -106,17 +109,12 @@ SCRIPTNAME="$(basename "$0")"
 XWJOBUID="$(date '+%Y-%m-%d-%H-%M-%S')"
 
 
-IMAGENAME_SERVER="xwserverimg_${XWJOBUID}"
-IMAGENAME_WORKER="xwworkerimg_${XWJOBUID}"
-IMAGENAME_CLIENT="xwclientimg_${XWJOBUID}"
-CONTAINERNAME_SERVER="xwservercontainer_${XWJOBUID}"
-CONTAINERNAME_WORKER="xwworkercontainer_${XWJOBUID}"
-CONTAINERNAME_CLIENT="xwclientcontainer_${XWJOBUID}"
+IMAGENAME="xwhepimg_${XWJOBUID}"
+CONTAINERNAME="xwhepcontainer_${XWJOBUID}"
 DOCKERFILENAME="Dockerfile"
 DOCKERFILE="${ROOTDIR}/Dockerfile"
 
 SERVERLOGFILE="${ROOTDIR}/xwserver_${XWJOBUID}.log"
-WORKERLOGFILE="${ROOTDIR}/xwworker_${XWJOBUID}.log"
 
 
 while [ $# -gt 0 ]; do
@@ -147,8 +145,8 @@ if [ ! -f ${DOCKERFILE} ] ; then
 	fatal "${DOCKERFILE} not found"
 fi
 
-docker build --force-rm --tag ${IMAGENAME_SERVER} .
-docker run --name ${CONTAINERNAME_SERVER} ${IMAGENAME_SERVER} > ${SERVERLOGFILE} 2>&1 &
+docker build --force-rm --tag ${IMAGENAME} .
+docker run --name ${CONTAINERNAME} ${IMAGENAME} > ${SERVERLOGFILE} 2>&1 &
 
 COUNTER=0
 while ( true ) ; do
@@ -164,12 +162,13 @@ while ( true ) ; do
 done
 
 
-docker cp ${CONTAINERNAME_SERVER}:/xwhep/xtremweb-hep-master/build/dist/xwhep-10.6.0/xwhep-server-10.6.0.deb ${ROOTDIR}
-docker cp ${CONTAINERNAME_SERVER}:/xwhep/xtremweb-hep-master/build/dist/xwhep-10.6.0/xwhep-server-conf-10.6.0.deb ${ROOTDIR}
-docker cp ${CONTAINERNAME_SERVER}:/xwhep/xtremweb-hep-master/build/dist/xwhep-10.6.0/xwhep-worker-10.6.0.deb ${ROOTDIR}
-docker cp ${CONTAINERNAME_SERVER}:/xwhep/xtremweb-hep-master/build/dist/xwhep-10.6.0/xwhep-client-10.6.0.deb ${ROOTDIR}
+docker cp ${CONTAINERNAME}:/xwhep/xtremweb-hep-master/build/dist/xwhep-10.6.0/xwhep-server-10.6.0.deb ${ROOTDIR}
+docker cp ${CONTAINERNAME}:/xwhep/xtremweb-hep-master/build/dist/xwhep-10.6.0/xwhep-server-conf-10.6.0.deb ${ROOTDIR}
+docker cp ${CONTAINERNAME}:/xwhep/xtremweb-hep-master/build/dist/xwhep-10.6.0/xwhep-worker-10.6.0.deb ${ROOTDIR}
+docker cp ${CONTAINERNAME}:/xwhep/xtremweb-hep-master/build/dist/xwhep-10.6.0/xwhep-client-10.6.0.deb ${ROOTDIR}
 
-docker kill ${CONTAINERNAME_SERVER} 
+docker kill ${CONTAINERNAME} 
+docker rm   ${CONTAINERNAME} 
 rm -f ${SERVERLOGFILE}
 
 cat << EOF_INFO

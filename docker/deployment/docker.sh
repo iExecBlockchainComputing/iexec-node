@@ -1,7 +1,7 @@
 #!/bin/sh
 #=============================================================================
 #
-#  File    : docker-compose.sh
+#  File    : docker.sh
 #  Date    : July 25th, 2017
 #  Author  : Oleg Lodygensky
 #
@@ -67,6 +67,8 @@ fatal ()
   [ "$msg" ]  ||  msg="Ctrl+C"
   
   echo  "$(date "$DATE_FORMAT")  $SCRIPTNAME  FATAL : $msg"
+  docker kill ${CONTAINERNAME_SERVER}
+  docker rm   ${CONTAINERNAME_SERVER}
   
   exit 1
 }
@@ -92,7 +94,9 @@ warn ()
 usage()
 {
 cat << END_OF_USAGE
-  This script deploy an XWHEP platform with docker-compose
+  This script deploy an XWHEP platform.
+  XWHEP server, worker and client images must be available.
+  Please refer to docker/server-master.
 END_OF_USAGE
 
   exit 0
@@ -124,6 +128,11 @@ fi
 XWSERVERHEADERNAME="xwserver"
 XWWORKERHEADERNAME="xwworker"
 XWCLIENTHEADERNAME="xwclient"
+
+XWSERVERHOSTNAME=${XWSERVERHEADERNAME}
+XWWORKERHOSTNAME=${XWWORKERHEADERNAME}
+XWCLIENTHOSTNAME=${XWCLIENTHEADERNAME}
+
 
 while [ $# -gt 0 ]; do
   
@@ -160,22 +169,30 @@ IMAGENAME_SERVER=$(docker images | grep ${XWSERVERHEADERNAME} | cut -d ' ' -f 1 
 IMAGENAME_WORKER=$(docker images | grep ${XWWORKERHEADERNAME} | cut -d ' ' -f 1 | tail -1 )
 IMAGENAME_CLIENT=$(docker images | grep ${XWCLIENTHEADERNAME} | cut -d ' ' -f 1 | tail -1 )
 
-[ ${NBSERVERS} -gt 1 ] && warn "There is more than one server; will use ${IMAGENAME_SERVER}"
-[ ${NBWORKERS} -gt 1 ] && warn "There is more than one worker; will use ${IMAGENAME_WORKER}"
-[ ${NBCLIENTS} -gt 1 ] && warn "There is more than one client; will use ${IMAGENAME_CLIENT}"
+XWJOBUID="$(date '+%Y-%m-%d-%H-%M-%S')"
 
-cat > docker-compose.yml << EOF_DOCKERCOMPOSEYAML
-version: '2'
-services:
-    xwserver:
-      image: "${IMAGENAME_SERVER}"
-      ports:
-        - "4320:4329"
-    xwworker:
-      image: "${IMAGENAME_WORKER}"
-    #xwclient:
-    #  image: "${IMAGENAME_CLIENT}"
-EOF_DOCKERCOMPOSEYAML
+CONTAINERNAME_SERVER="xwservercontainer_${XWJOBUID}"
+CONTAINERNAME_WORKER="xwworkercontainer_${XWJOBUID}"
+CONTAINERNAME_CLIENT="xwclientcontainer_${XWJOBUID}"
+
+SERVERLOGFILE=${ROOTDIR}/${CONTAINERNAME_SERVER}.log
+WORKERLOGFILE=${ROOTDIR}/${CONTAINERNAME_WORKER}.log
+
+
+[ ${NBSERVERS} -gt 1 ] && warn "There is more than one server image; will use ${IMAGENAME_SERVER}"
+[ ${NBWORKERS} -gt 1 ] && warn "There is more than one worker image; will use ${IMAGENAME_WORKER}"
+[ ${NBCLIENTS} -gt 1 ] && warn "There is more than one client image; will use ${IMAGENAME_CLIENT}"
+
+docker run --name=${CONTAINERNAME_SERVER} --hostname=${XWSERVERHOSTNAME}  ${IMAGENAME_SERVER} > ${SERVERLOGFILE} 2>&1 &
+
+sleep 10
+
+NETWORKID=$(docker inspect ${CONTAINERNAME_SERVER} | grep NetworkID | cut -d ':' -f 2 | sed "s/\"//g"| sed "s/,//g")
+SERVERIPADDR=$(docker inspect ${CONTAINERNAME_SERVER} | grep -v SecondaryIPAddresses | grep IPAddress | cut -d ':' -f 2 | sed "s/\"//g"| sed "s/,//g"| tail -1)
+
+#docker run -ti --network=${NETORKID} --hostname=${XWWORKERHOSTNAME} --env XWSERVERADDR="${SERVERIPADDR}"  --name ${CONTAINERNAME_WORKER} ${IMAGENAME_WORKER} /bin/bash
+
+docker run -ti --network=${NETORKID} --hostname=${XWCLIENTHOSTNAME} --env XWSERVERADDR="${SERVERIPADDR}"  --name ${CONTAINERNAME_CLIENT} ${IMAGENAME_CLIENT} /bin/bash
 
 exit 0
 ###########################################################
