@@ -13,4 +13,7 @@ To create a Docker image for the server, please launch:
 ```
 
 This script builds a new Docker image for the XWHEP server.
+
+# Deployment
+
 You can deploy your platform using deployment [scripts](../deployment/).
