@@ -16,7 +16,6 @@ These Dockerfile can help you to:
 There must be Docker images for the server, the worker and the client.
 Please see [master](master/) to prepare all needed Debian packages
 and create Docker images for the three services.
-Don't be afraitd to read [master/README.md](master/)
 
 As soon as Docker images are ready, you can either make your deployment manually,
 or use Docker compose.
