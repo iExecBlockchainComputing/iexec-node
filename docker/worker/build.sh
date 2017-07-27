@@ -160,7 +160,6 @@ You can now start your worker running:
      docker run --name ${CONTAINERNAME_WORKER} ${IMAGENAME_WORKER}
 EOF_RUN
 
-tail -f ${WORKERLOGFILE}
 
 exit 0
 ###########################################################
