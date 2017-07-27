@@ -3,7 +3,7 @@ Docker XWHEP worker
 
 This directory contains everything to start an XWHEP worker inside a container from its Debian package.
 
-The worker Debian package can be generated from [docker/worker-master](../worker-master).
+The worker Debian package can be generated from [docker/worker-master](../server-master).
 
 # Create Docker image
 
