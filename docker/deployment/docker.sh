@@ -190,7 +190,7 @@ sleep 10
 NETWORKID=$(docker inspect ${CONTAINERNAME_SERVER} | grep NetworkID | cut -d ':' -f 2 | sed "s/\"//g"| sed "s/,//g")
 SERVERIPADDR=$(docker inspect ${CONTAINERNAME_SERVER} | grep -v SecondaryIPAddresses | grep IPAddress | cut -d ':' -f 2 | sed "s/\"//g"| sed "s/,//g"| tail -1)
 
-#docker run --network=${NETORKID} --hostname=${XWWORKERHOSTNAME} --env XWSERVERADDR="${SERVERIPADDR}" --name ${CONTAINERNAME_WORKER} ${IMAGENAME_WORKER}  > ${WORKERLOGFILE} 2>&1 &
+docker run --network=${NETORKID} --hostname=${XWWORKERHOSTNAME} --env XWSERVERADDR="${SERVERIPADDR}" --name ${CONTAINERNAME_WORKER} ${IMAGENAME_WORKER}  > ${WORKERLOGFILE} 2>&1 &
 docker run -ti --network=${NETORKID} --hostname=${XWCLIENTHOSTNAME} --env XWSERVERADDR="${SERVERIPADDR}" --name ${CONTAINERNAME_CLIENT} ${IMAGENAME_CLIENT} /bin/bash
 
 exit 0
