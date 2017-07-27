@@ -22,4 +22,4 @@ Make your deployement by launching docker.sh like:
 
 # Docker-compose deployment
 
-July 27th, 2017: it does not work yet
+This is not functional yet.
