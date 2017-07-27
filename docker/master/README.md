@@ -8,7 +8,7 @@ If you wish to deploy a production platform, don't forget to set your own config
 Please refer to the [administrator guide](../../doc/xwhep-admin-guide.odt).
 
 # Network
-You must set two variables in the _xwconfigure.values_ file:
+You can set two variables in the _xwconfigure.values_ file:
 - XWSERVER : the IP address or resolved name of the server;
 - CERTCN : should be equal to XWSERVER. Please refer to [opensll documentation](https://www.openssl.org).
 
