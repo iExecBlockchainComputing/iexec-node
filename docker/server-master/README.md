@@ -21,7 +21,7 @@ If you want to use [our docker compose deployment](../deployment/), you should:
 - or modify [deploy.sh](../deployment/deploy.sh) to reflect server name.
 
 
-# Deployment
+# Packages
 
 Launch build.sh like:
 ```
