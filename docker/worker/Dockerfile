@@ -66,11 +66,12 @@ RUN sed -i "s/DISPATCHERS.*/DISPATCHERS=xwserver/g" /opt/xwhep-worker-$XWVERSION
 # Entry point script
 # 
 RUN echo "#!/bin/sh" > /tmp/xwstart.sh
+RUN echo "if [ ! -z \$XWSERVERADDR ] ; then " >> /tmp/xwstart.sh
+RUN echo "   sed \"s/127\\.0\\.0\\.1.*localhost/127\\.0\\.0\\.1 localhost $HOSTNAME/g\" /etc/hosts" >> /tmp/xwstart.sh
+RUN echo "   echo \"\$XWSERVERADDR xwserver\" >> /etc/hosts" >> /tmp/xwstart.sh
+RUN echo "fi" >> /tmp/xwstart.sh
+RUN echo "cat /etc/hosts" >> /tmp/xwstart.sh
 RUN echo "/etc/init.d/xtremweb.worker console" >> /tmp/xwstart.sh
-RUN echo "if [ ! -z \$XWSERVERADDR ] ; then " >> /usr/bin/xwsetserveraddr.sh
-RUN echo "   sed \"s/127\\.0\\.0\\.1.*localhost/127\\.0\\.0\\.1 localhost $HOSTNAME/g\" /etc/hosts" >> /usr/bin/xwsetserveraddr.sh
-RUN echo "   echo \"\$XWSERVERADDR xwserver\" >> /etc/hosts" >> /usr/bin/xwsetserveraddr.sh
-RUN echo "fi" >> /usr/bin/xwsetserveraddr.sh
 RUN chmod +x /tmp/xwstart.sh
 
 ENTRYPOINT [ "/tmp/xwstart.sh" ]

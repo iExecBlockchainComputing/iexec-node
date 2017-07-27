@@ -20,60 +20,14 @@ and create Docker images for the three services.
 As soon as Docker images are ready, you can either make your deployment manually,
 or use Docker compose.
 
-## 2.1 - Manual deployment
+## 2.1 - Docker deployment
 
-We propose the following workflow:
-- launch a Docker container to run the XWHEP server  
- In next example:
-  * the server name, "xwserver", is the one used in [master](master/);
-  * the Docker image for the XWHEP server is "xwserverimg\_2017-07-26-15-32-39".  
- 
- 
-```
-  docker run --hostname=xwserver xwserverimg_2017-07-26-15-32-39
-```
-- retrieve the XWHEP server network
-```
-  docker inspect c46088ad8e94
-...
-            "Networks": {
-                "bridge": {
-                    "IPAMConfig": null,
-                    "Links": null,
-                    "Aliases": null,
-                    "NetworkID": "39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57",
-                    "EndpointID": "8f3823be4396d80c072d7eab78c1ed0da166649f811c54490b313b7472b9e596",
-                    "Gateway": "172.17.0.1",
-                    "IPAddress": "172.17.0.2",
-                    "IPPrefixLen": 16,
-                    "IPv6Gateway": "",
-                    "GlobalIPv6Address": "",
-                    "GlobalIPv6PrefixLen": 0,
-                    "MacAddress": "02:42:ac:11:00:02",
-                    "DriverOpts": null
-                }
-            }
-
-...
-```
-- launch a worker within the same network  
-(i.e. 39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57)  
-(in next example, the Docker image for the XWHEP worker is "xwworkerimg\_2017-07-26-15-30-12")
-```
-  docker run \
-    --network=39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57 \
-    xwworkerimg_2017-07-26-15-30-12
-```
-- launch a client within the same network  
-(i.e. 39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57)  
-(in next example, the Docker image for the XWHEP client is "xwclientimg\_2017-07-26-15-33-07")
-```
-  docker run \
-    -ti --network=39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57 \
-    xwclientimg_2017-07-26-15-33-07 /bin/bash
-```
+Please see [deployment](deployment/).
 
 ## 2.2 - Composed deployment
+
+This is not functional yet.
+
 
 # 3 - Connect to a platform
 
