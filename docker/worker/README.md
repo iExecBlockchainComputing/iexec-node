@@ -1,18 +1,19 @@
 Docker XWHEP worker
-====================
+===================
 
-This directory contains everything to start a worker inside a container from its Debian package.
+This directory contains everything to start an XWHEP worker inside a container from its Debian package.
 
-The worker Debian package can be generated from [docker/server-master](../server-master).
+The worker Debian package can be generated from [docker/worker-master](../worker-master).
 
-## Deployment
+# Create Docker image
 
-To start a worker, launch build.sh like:
+To create a Docker image for the worker, please launch:
 ```
   build.sh
 ```
 
-This script :
-- builds a new Docker image for the XWHEP worker;
-- starts the XWHEP worker in a new Docker container.
+This script builds a new Docker image for the XWHEP worker.
 
+# Deployment
+
+You can deploy your platform using [deployment scripts](../deployment/).
