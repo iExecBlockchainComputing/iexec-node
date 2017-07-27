@@ -16,7 +16,7 @@ Default is "xwserver".
 
 
 ## Docker-compose
-If you want to use [our docker compose deployment](../deployment/), you should:
+If you want to use [deployment scripts](../deployment/), you should:
 - set XWSERVER and CERTCN to "xwserver" as explained in [network section](#network);
 - or modify [deploy.sh](../deployment/deploy.sh) to reflect server name.
 
