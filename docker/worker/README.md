@@ -7,9 +7,9 @@ The worker Debian package can be generated from [docker/server-master](../server
 
 ## Deployment
 
-To start a worker, launch startworker.sh like:
+To start a worker, launch build.sh like:
 ```
-  startworker.sh
+  build.sh
 ```
 
 This script :

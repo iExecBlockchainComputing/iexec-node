@@ -1,7 +1,7 @@
 #!/bin/sh
 #=============================================================================
 #
-#  File    : xwdeploy.sh
+#  File    : build.sh
 #  Date    : July 24th, 2017
 #  Author  : Oleg Lodygensky
 #
@@ -109,9 +109,6 @@ CONTAINERNAME_CLIENT="xwclientcontainer_${XWJOBUID}"
 DOCKERFILE="${ROOTDIR}/Dockerfile"
 TMPDOCKERFILE="${ROOTDIR}/clientdockerfile_${XWJOBUID}"
 
-CLIENTLOGFILE="${ROOTDIR}/xwclient_${XWJOBUID}.log"
-
-
 while [ $# -gt 0 ]; do
   
   case "$1" in
@@ -156,9 +153,11 @@ mv ${TMPDOCKERFILE} ${DOCKERFILE}
 
 docker build --force-rm --tag ${IMAGENAME_CLIENT} .
 
-docker run -ti --name ${CONTAINERNAME_CLIENT} ${IMAGENAME_CLIENT} bash
-
-tail -f ${CLIENTLOGFILE}
+cat << EOF_RUN
+You can now start your client running:
+   docker run -ti --name ${CONTAINERNAME_CLIENT} ${IMAGENAME_CLIENT} /bin/bash
+#   docker run -ti --network=39956f4f2af50f54d7923685865b567659c3e9b17850fe89a2f27a85bfffbc57 --hostname=xwclient --env XWSERVERADDR="172.17.0.2"  --name xwclientcontainer_2017-07-27-11-25-32 xwclientimg_2017-07-27-11-32-59 /bin/bash
+EOF_RUN
 
 exit 0
 ###########################################################

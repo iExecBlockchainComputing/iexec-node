@@ -1,7 +1,7 @@
 #!/bin/sh
 #=============================================================================
 #
-#  File    : xwdeploy.sh
+#  File    : build.sh
 #  Date    : July 24th, 2017
 #  Author  : Oleg Lodygensky
 #
@@ -110,8 +110,6 @@ CONTAINERNAME_WORKER="xwworkercontainer_${XWJOBUID}"
 DOCKERFILE="${ROOTDIR}/Dockerfile"
 TMPDOCKERFILE="${ROOTDIR}/workerdockerfile_${XWJOBUID}"
 
-WORKERLOGFILE="${ROOTDIR}/xwworker_${XWJOBUID}.log"
-
 
 while [ $# -gt 0 ]; do
   
@@ -157,7 +155,10 @@ mv ${TMPDOCKERFILE} ${DOCKERFILE}
 
 docker build --force-rm --tag ${IMAGENAME_WORKER} .
 
-docker run --name ${CONTAINERNAME_WORKER} ${IMAGENAME_WORKER} > ${WORKERLOGFILE} 2>&1 &
+cat << EOF_RUN
+You can now start your worker running:
+     docker run --name ${CONTAINERNAME_WORKER} ${IMAGENAME_WORKER}
+EOF_RUN
 
 tail -f ${WORKERLOGFILE}
 

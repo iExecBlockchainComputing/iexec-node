@@ -7,12 +7,10 @@ The server Debian package can be generated from [docker/server-master](../server
 
 # Deployment
 
-To start a server, launch startserver.sh like:
+To start a server, launch build.sh like:
 ```
-  startserver.sh
+  build.sh
 ```
 
-This script :
-- builds a new Docker image for the XWHEP server;
-- starts the XWHEP server in a new Docker container.
+This script builds a new Docker image for the XWHEP server.
 

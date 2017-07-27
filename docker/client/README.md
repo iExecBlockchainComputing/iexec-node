@@ -7,11 +7,10 @@ The client Debian package can be generated from [docker/server-master](../server
 
 # Deployment
 
-To create a client Docker image, launch startclient.sh like:
+To create a client Docker image, launch build.sh like:
 ```
-  startclient.sh
+  build.sh
 ```
 
-This script :
-- builds a new Docker image for the XWHEP client.
+This script builds a new Docker image for the XWHEP client.
 
