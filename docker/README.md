@@ -4,7 +4,7 @@ Deploy XWHEP in Docker containers
 # 1 - Introduction
 
 We propose 4 Dockerfile to create images for the server, the client and the worker.
-The 4th docker file in server-master creates the server image from the github repository.
+The 4th docker file in master creates the server image from the github repository.
 
 These Dockerfile can help you to:
 - [deploy your own platform](#2---deploy-your-own-platform)
@@ -14,9 +14,9 @@ These Dockerfile can help you to:
 # 2 - Deploy your own platform
 
 There must be Docker images for the server, the worker and the client.
-Please see [server-master](server-master/) to prepare all needed Debian packages
+Please see [master](master/) to prepare all needed Debian packages
 and create Docker images for the three services.
-Don't be afraitd to read [server-master/README.md](server-master/)
+Don't be afraitd to read [master/README.md](master/)
 
 As soon as Docker images are ready, you can either make your deployment manually,
 or use Docker compose.
@@ -26,7 +26,7 @@ or use Docker compose.
 We propose the following workflow:
 - launch a Docker container to run the XWHEP server  
  In next example:
-  * the server name, "xwserver", is the one used in [server-master](server-master/);
+  * the server name, "xwserver", is the one used in [master](master/);
   * the Docker image for the XWHEP server is "xwserverimg\_2017-07-26-15-32-39".  
  
  
@@ -93,7 +93,7 @@ If you want to use an XWHEP platform, you must first request the XWHEP client De
 
 We propose the following workflow:
 - copy the client Debian package to [client/](client/).
-  This Debian package is either provided by an XWHEP administrator or created by [server-master](server-master/).
+  This Debian package is either provided by an XWHEP administrator or created by [master](master/).
 - execute the [client/startclient.sh](client/startclient.sh) to create a Docker image.
 
 
@@ -109,6 +109,6 @@ The XWHEP worker aims to propose IT resource to an XWHEP deployment:
 - send heartbeat signal for coherency.
 
 We propose the following workflow:
-- copy the worker Debian package to [worker/](worker/). This Debian package is either provided by an XWHEP deployment administrator or created by [server-master](server-master/).
+- copy the worker Debian package to [worker/](worker/). This Debian package is either provided by an XWHEP deployment administrator or created by [master](master/).
 - execute the [worker/startworker.sh](worker/startworker.sh) to create a Docker image and launch the worker in a Docker container.
 

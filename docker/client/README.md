@@ -3,7 +3,7 @@ Docker XWHEP client
 
 This directory contains everything to start an XWHEP client inside a container from its Debian package.
 
-The client Debian package can be generated from [docker/server-master](../server-master).
+The client Debian package can be generated from [docker/master](../master).
 
 # Create Docker image
 

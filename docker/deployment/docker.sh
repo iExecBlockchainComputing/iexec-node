@@ -96,7 +96,7 @@ usage()
 cat << END_OF_USAGE
   This script deploy an XWHEP platform.
   XWHEP server, worker and client images must be available.
-  Please refer to docker/server-master.
+  Please refer to docker/master.
 END_OF_USAGE
 
   exit 0
