@@ -1,24 +1,30 @@
-# xtremweb-hep
-Data driven volunteer cloud
-
-### Status
-[![Build Status](https://travis-ci.org/lodygens/xtremweb-hep.svg?branch=master)](https://travis-ci.org/lodygens/xtremweb-hep)
-
 Docker deployment
 =================
 
-This directory contains everything to deploy an XWHEP.
+This directory contains everything to deploy an XWHEP.  
 Each service in its own container:
 - one server
 - one worker
 - one client
 
-## Deployment
+Docker images for all services must exist. 
+You can create Docker images there:
+- [server image](../server/)
+- [worker image](../worker/)
+- [client image](../client/)
 
-Launch xwdeploy.sh like:
+
+# Docker deployment
+
+Launch docker.sh like:
 ```
-  xwdeploy.sh
+  docker.sh
 ```
 
-These Debian packages can avantageoulsy be used with [docker/worker](../worker) and [docker/client](../client) to
-create and launch Docker containers that connect to the XWHEP server inside its container.
+
+# Docker-compose deployment
+
+Launch docker-compose.sh like:
+```
+  docker-compose.sh
+```
