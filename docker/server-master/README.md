@@ -33,5 +33,3 @@ This script prepares all Debian packages : server, worker and client.
 These Debian packages can avantageoulsy be used with [docker/server](../server), [docker/worker](../worker) and [docker/client](../client) to
 create create Docker images for the worker and the client, respectively.
 
-One may note that a Docker image for the server is created by build.sh script.
-But using [docker/server](../server) creates a smaller Docker image since it installs Java JRE and not Java JDK.
