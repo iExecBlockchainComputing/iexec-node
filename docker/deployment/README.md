@@ -1,7 +1,7 @@
 Docker deployment
 =================
 
-This directory contains everything to deploy an XWHEP.  
+This directory contains everything to deploy an XWHEP platform.
 
 Docker images for all services must exist. 
 You can create Docker images there:
