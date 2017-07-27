@@ -28,9 +28,7 @@ Launch build.sh like:
   build.sh
 ```
 
-This script :
-- prepare all Debian packages : server, worker and client;
-- builds a new Docker image for the XWHEP server.
+This script prepares all Debian packages : server, worker and client.
 
 These Debian packages can avantageoulsy be used with [docker/server](../server), [docker/worker](../worker) and [docker/client](../client) to
 create create Docker images for the worker and the client, respectively.
