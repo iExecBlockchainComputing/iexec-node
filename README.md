@@ -12,7 +12,7 @@ install virtuabox 5.1.x on your machine
 
 * Mount your vm :
 
-'vagrant up' 
+vagrant up
 
 * connnect to your vm  :
 
@@ -33,11 +33,10 @@ cd test/robotframework/
 pybot -d Results ./Tests/
 
 
-Expected results :
+Expected results 
 Tests                                                                 | PASS |
 14 critical tests, 14 passed, 0 failed
 14 tests total, 14 passed, 0 failed
-==============================================================================
 Output:  /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/output.xml
 Log:     /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/log.html
 Report:  /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/report.html
