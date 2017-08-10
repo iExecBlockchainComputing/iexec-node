@@ -70,3 +70,7 @@ pip install pymysql
 
 mkdir /var/xwhep
 chmod 777 /var/xwhep
+
+mkdir -p /home/vagrant/iexecdev/.ethash
+chmod 777 /home/vagrant/iexecdev/.ethash
+ln -s /home/vagrant/iexecdev/.ethash /home/vagrant/.ethash

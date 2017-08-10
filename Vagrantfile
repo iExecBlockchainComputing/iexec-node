@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
     iexecdev.vm.provider "virtualbox" do |v|
       host = RbConfig::CONFIG['host_os']
-       v.memory = 2048
+       v.memory = 3048
        v.cpus = 2
     end
 
