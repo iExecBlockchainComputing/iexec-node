@@ -60,7 +60,7 @@ apt-get install -y mysql-server
 apt-get install -y solc
 apt-get install -y ethereum
 
-su - vagrant -c "npm install -g truffle@3.4.6"
+su - vagrant -c "npm install -g truffle@3.4.7"
 su - vagrant -c "npm install -g ethereumjs-testrpc@4.0.1"
 
 pip install robotframework

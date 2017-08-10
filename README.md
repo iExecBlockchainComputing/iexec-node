@@ -46,7 +46,7 @@ Report:  /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/report.
 ```
 npm init
 
-npm install truffle --save-dev
+npm install truffle@3.4.7 --save-dev
 
 ./node_modules/.bin/truffle init
  
@@ -94,28 +94,54 @@ truffle migrate
 truffle test
 ```
 
+if your miner42.sh do not mine and is is stuck.
+Clear your chain by removing 
+/home/vagrant/iexecdev/.ethereum/net42/geth/chaindata
+and /home/vagrant/iexecdev/.ethereum/net42/geth/lightchaindata
+and try again. by removing thoses files you will lost all your previous work on your local chain.
+
 ### create a simple web GUI on a truffle project
-```
+in /home/vagrant/iexecdev :
+``` 
+mkdir simplegui
+
+cd simplegui
+
+npm init
+
+npm install truffle@3.4.7 --save-dev
+
+./node_modules/.bin/truffle init
+ 
+truffle compile
+
 mkdir -p app/js
-touch app/js/app.js
-npm install create-html --save-dev
-./node_modules/.bin/create-html --title "Transfer MetaCoins" --script "js/app.js" --output app/index.html
+
+touch app/index.html
+
 ```
-In ./app/index.html
+In ./app/index.html, add :
 ```
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<title>Transfer MetaCoins</title>
+<meta charset="utf-8">
+</head>
+<body>
 <div>You have <span id="balance">Loading...</span> MetaCoins</div>
-<div>
-    Send <input name="amount" type="number" placeholder="0" /> MetaCoins
-    to <input name="recipient" type="text" placeholder="0x0011223344556677889900112233445566778899" />
-    <button id="send">Now</button>.
-</div>
 <div id="status"></div>
+
+<script src="js/app.js"></script>
+</body>
+</html>
 ```
 
 ```
-npm install web3 truffle-contract bluebird jquery --save
+npm install web3@0.18.4 truffle-contract@2.0.0 bluebird jquery --save
 npm install webpack --save-dev
 npm install file-loader --save-dev
+touch app/js/app.js
 ```
 
 in ./app/js/app.js
@@ -175,14 +201,29 @@ module.exports = {
     }
 };
 ```
+
+launch your testrpc or start your geth node with the cmd : 
+
 ```
+testrpc
+
+or 
+
+./mine42externalexposed.sh
+
+```
+
+
+```
+rm -rf ./build
 ./node_modules/.bin/truffle compile
-./node_modules/.bin/truffle migrate
+./node_modules/.bin/truffle migrate --reset
 ./node_modules/.bin/webpack
 php -S 0.0.0.0:8000 -t ./build/app
 ```
 
-check you 10,000 MetaCoins on http://127.0.0.1:8000
+check you 10,000 MetaCoins on http://127.0.0.1:8000.
+(with no metamask active so prefere on firefox)
 
 ### test a truffle project on a private network using parity
   TODO
