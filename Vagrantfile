@@ -12,10 +12,14 @@ Vagrant.configure("2") do |config|
 
     iexecdev.vm.provider "virtualbox" do |v|
       host = RbConfig::CONFIG['host_os']
+       v.memory = 2048
+       v.cpus = 2
     end
 
     iexecdev.vm.provision "file", source: "dotscreenrc", destination: "~/.screenrc"
-
+    iexecdev.vm.provision "file", source: "gethUtils", destination: "~/gethUtils"
     iexecdev.vm.provision :shell, path: "bootstrap.sh"
+
+
   end
 end
