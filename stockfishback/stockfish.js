@@ -140,7 +140,7 @@ var stockfishContract = web3.eth.contract([{
     "type": "event"
 }]);
 
-var contract_address = "0x91c545a43d09a8f6ea88320b13f26666f8109459";
+var contract_address = "0x91C545a43d09a8f6Ea88320B13f26666F8109459";
 var contractInstance = stockfishContract.at(contract_address);
 
 function submitTask(address) {
@@ -190,6 +190,7 @@ function submitTask(address) {
             }, function(error, result) {
                 if (!error) {
                     child.kill();
+		    console.log("transactionHash : " + result);
                 } else {
                     console.log("pushresult err = " + error);
                 }

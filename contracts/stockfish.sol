@@ -1,6 +1,6 @@
 pragma solidity ^0.4.6;
 
-import "github.com/Arachnid/solidity-stringutils/strings.sol";
+import "./strings.sol";
 
 contract owned{
   function owned() {

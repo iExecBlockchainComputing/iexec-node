@@ -1,0 +1,27 @@
+{
+  "name": "stockfish",
+  "version": "1.0.0",
+  "description": "iexec stockfish poc",
+  "main": "truffle.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iExecBlockchainComputing/bridge_stockfish.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iExecBlockchainComputing/bridge_stockfish/issues"
+  },
+  "homepage": "https://github.com/iExecBlockchainComputing/bridge_stockfish#readme",
+  "devDependencies": {
+    "truffle": "^3.4.7"
+  },
+  "dependencies": {
+    "truffle-contract": "2.0.0",
+    "truffle-default-builder": "^2.0.0",
+    "web3": "0.18.4"
+  }
+}
