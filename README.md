@@ -18,13 +18,19 @@ vagrant up
 ```
 vagrant ssh
 ```
-### test your vm ok for xtremweb :
+
+###configure your git identity
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+
+### launch xtremweb robotframework tests
 ```
-cd iexecdev/
+cd ~/iexecdev/
 
 git clone https://github.com/iExecBlockchainComputing/xtremweb-hep.git
 
-cd xtremweb-hep/
+cd ~/iexecdev/xtremweb-hep
 
 git checkout testsrobotframework
 
@@ -34,12 +40,103 @@ pybot -d Results ./Tests/
 ```
 
 Expected results 
+```
 Tests                                                                 | PASS |
 14 critical tests, 14 passed, 0 failed
 14 tests total, 14 passed, 0 failed
 Output:  /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/output.xml
 Log:     /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/log.html
 Report:  /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/report.html
+```
+
+###Configure your local xtremweb
+
+```
+cd ~/iexecdev/xtremweb-hep/
+
+git checkout testsrobotframework
+
+cd ~/iexecdev/xtremweb-hep/build
+
+sudo make clean && make
+
+export XTREMWEB_VERSION=$(ls ~/iexecdev/xtremweb-hep/build/dist/)
+
+#cp ~/iexecdev/xtremweb-hep/test/xwconfigure.values.vagrant  ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/conf/xwconfigure.values
+
+
+cd ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/bin
+
+sudo ./xwconfigure --yes --nopkg --rmdb 
+
+```
+
+wait for "That's all folks"
+
+start your xtremweb server in a console :
+```
+export XTREMWEB_VERSION=$(ls ~/iexecdev/xtremweb-hep/build/dist/)
+sed -i 's/LAUNCHERURL=/#LAUNCHERURL=/g' ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/conf/xtremweb.server.conf
+sudo ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/bin/xtremweb.server console
+```
+
+wait for "INFO : started, listening on port : 443"
+
+start your xtremweb server in another console :
+
+```
+export XTREMWEB_VERSION=$(ls ~/iexecdev/xtremweb-hep/build/dist/)
+sudo ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/bin/xtremweb.worker console
+```
+
+wait for "INFO : Server gave no work to compute"
+
+### register and test a simple 'ls' app on xtremweb
+
+```
+export XTREMWEB_VERSION=$(ls ~/iexecdev/xtremweb-hep/build/dist/)
+cd ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/bin/
+./xwsendapp ls deployable Linux x86_64 /bin/ls
+
+```
+you should see an id as answer like :
+```
+xw://vagrant-ubuntu-trusty-64/14447543-cd16-4c05-bbbc-7204895af9ba
+```
+
+check ls app is register
+```
+./xwapps
+ 
+```
+
+check that a worker is register 
+```
+./xwworkers
+```
+you should see an id as answer like :
+```
+ UID='014c4e9b-5dea-43a1-8fad-a531ee59aba3', NAME='vagrant-ubuntu-trusty-64'
+```
+
+
+invoke ls app 
+```
+ ./xwsubmit ls -lR –-xwenv .
+ 
+```
+you should see an id as answer like :
+```
+xw://vagrant-ubuntu-trusty-64/14447543-cd16-4c05-bbbc-7204895af9ba
+```
+
+check the status of the task :
+```
+./xwstatus xw://vagrant-ubuntu-trusty-64/83cfea36-a153-4c08-950c-8164a00741bf
+```
+
+TODO
+
 
 
 ### initialize a truffle project

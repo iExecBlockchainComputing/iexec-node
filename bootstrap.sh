@@ -62,6 +62,8 @@ apt-get install -y ethereum
 
 su - vagrant -c "npm install -g truffle@3.4.7"
 su - vagrant -c "npm install -g ethereumjs-testrpc@4.0.1"
+su - vagrant -c "npm install pm2 -g"
+
 
 pip install robotframework
 pip install robotframework-selenium2library
@@ -70,6 +72,9 @@ pip install pymysql
 
 mkdir /var/xwhep
 chmod 777 /var/xwhep
+mkdir /home/vagrant/castore
+chmod 777 /home/vagrant/castore
+
 
 mkdir -p /home/vagrant/iexecdev/.ethash
 chmod 777 /home/vagrant/iexecdev/.ethash
