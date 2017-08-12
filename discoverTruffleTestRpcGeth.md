@@ -1,6 +1,6 @@
-#Discover Truffle, Testrpc, geth
+# Discover Truffle, Testrpc, geth
 
-### initialize a truffle project
+### Initialize a truffle project
 ```
 npm init
 
@@ -11,7 +11,7 @@ npm install truffle@3.4.7 --save-dev
 truffle compile
 ```
  
-### test a truffle project on testrpc
+### Test a truffle project on testrpc
 run in another terminal (use tmux for instance)
 ```
 testrpc
@@ -23,7 +23,7 @@ truffle migrate
 truffle test
 ```
 
-### test a truffle project on a private network using geth
+### Test a truffle project on a private network using geth
 create a file ~iexecdev/password.txt
 
 ```
@@ -58,7 +58,7 @@ Clear your chain by removing
 and /home/vagrant/iexecdev/.ethereum/net42/geth/lightchaindata
 and try again. by removing thoses files you will lost all your previous work on your local chain.
 
-### create a simple web GUI on a truffle project with webpack
+### Create a simple web GUI on a truffle project with webpack
 in /home/vagrant/iexecdev :
 ``` 
 mkdir simplegui

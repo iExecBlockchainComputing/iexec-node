@@ -5,21 +5,21 @@
 Let Vagrant build an Ubuntu machine with all the developer needs :
 lib to compile, run, test xtremweb, git, python, truffle, web3, node, parity, geth, testrpc etc ...
 
-###Prerequisite:
+### Prerequisite:
 
 install Vagrant 1.9.7 on your machine 
 install virtuabox 5.1.x on your machine 
 
-###Mount your vm :
+### Mount your vm :
 ```
 vagrant up
 ```
-###connnect to your vm  :
+### Connnect to your vm  :
 ```
 vagrant ssh
 ```
 
-###configure your git identity
+### Configure your git identity
   git config --global user.email "you@example.com"
   git config --global user.name "Your Name"
 

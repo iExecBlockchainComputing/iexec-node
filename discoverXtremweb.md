@@ -1,6 +1,6 @@
-#Discover Xtremweb
+# Discover Xtremweb
 
-###Compile and install your local xtremweb
+### Compile and install your local xtremweb
 
 ```
 cd ~/iexecdev/
@@ -27,7 +27,7 @@ cd ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/bin
 
 wait for "That's all folks"
 
-###Start your local xtremweb server
+### Start your local xtremweb server
 
 start your xtremweb server in a console :
 ```
@@ -48,7 +48,7 @@ sudo ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/bin/xtremweb.worker 
 
 wait for "INFO : Server gave no work to compute"
 
-### register and test a simple 'ls' app on xtremweb
+### Register and test a simple 'ls' app on xtremweb
 
 in another console :
 ```
@@ -106,7 +106,7 @@ you will see the path where to find the result :
 [12/Aug/2017:23:18:14 +0000] [xtremweb.client.Client_main_1] INFO : Downloaded to : /home/vagrant/iexecdev/xtremweb-hep/build/dist/xwhep-10.6.0/bin/11fa614f-50b8-42ed-b581-27855dd1b317_stdout.txt.txt
 ```
 
-##launch xtremweb robotframework tests
+## Launch xtremweb robotframework tests
 ```
 cd ~/iexecdev/
 
