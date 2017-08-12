@@ -32,7 +32,10 @@ apt-get install -y icedtea-8-plugin
 apt-get install -y openjdk-8-jre
 apt-get install -y openjdk-8-jdk
 
+
 su - vagrant -c "echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' >> .bash_profile"
+su - vagrant -c "echo 'export XTREMWEB_VERSION=\$(ls ~/iexecdev/xtremweb-hep/build/dist/)' >> .bash_profile"
+
 
 apt-get install -y git
 apt-get install -y build-essential
@@ -74,6 +77,7 @@ mkdir /var/xwhep
 chmod 777 /var/xwhep
 mkdir /home/vagrant/castore
 chmod 777 /home/vagrant/castore
+chmod 777 /var/log
 
 
 mkdir -p /home/vagrant/iexecdev/.ethash
