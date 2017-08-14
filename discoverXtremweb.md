@@ -27,7 +27,11 @@ cd ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/bin
 
 wait for "That's all folks"
 
-### Start your local xtremweb server
+### Start your local xtremweb server and worker with docker compose 
+
+TODO
+
+### Start your local xtremweb server manually
 
 start your xtremweb server in a console :
 ```
@@ -38,7 +42,7 @@ sudo ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/bin/xtremweb.server 
 wait for "INFO : started, listening on port : 443"
 
 
-### Start your local xtremweb worker
+### Start your local xtremweb worker manually
 
 start your xtremweb server in another console :
 

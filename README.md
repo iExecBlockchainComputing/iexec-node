@@ -7,8 +7,12 @@ lib to compile, run, test xtremweb, git, python, truffle, web3, node, parity, ge
 
 ### Prerequisite:
 
-install Vagrant 1.9.7 on your machine 
-install virtuabox 5.1.x on your machine 
+* install Vagrant 1.9.7 on your machine 
+* install virtuabox 5.1.x on your machine  
+* download the latest ubuntu/trusty64 image :
+```
+vagrant box update
+```
 
 ### Mount your vm :
 ```
