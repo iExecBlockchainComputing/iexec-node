@@ -9,7 +9,7 @@ fi
 VERBOSE=''
 RESULTURI=''
 ROOTDIR=`dirname $0`
-XWHEPDIR="$ROOTDIR/xwhep-10.5.1"
+XWHEPDIR="/home/vagrant/iexecdev/xtremweb-hep/build/dist/xwhep-10.6.0"
 XWBIN="$XWHEPDIR/bin"
 XWSUBMIT="$XWBIN/xwsubmit"
 XWRM="$XWBIN/xwrm"
@@ -140,7 +140,7 @@ while (true) ; do
 
 done
 
-cd /home/ubuntu
+cd /home/vagrant
 
 [ -z "$VERBOSE" ]  || echo "RESULTURI    = $RESULTURI"
 if [ ! -z "$RESULTURI" ] ; then

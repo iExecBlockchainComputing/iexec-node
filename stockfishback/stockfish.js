@@ -13,7 +13,8 @@ if (typeof web3 !== 'undefined') {
     web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 }
 
-web3.eth.defaultAccount="a23cd2575007818740158957179211b27a8de233";
+
+//web3.eth.defaultAccount="a23cd2575007818740158957179211b27a8de233";
 
 var stockfishContract = web3.eth.contract([{
     "constant": false,
@@ -140,11 +141,11 @@ var stockfishContract = web3.eth.contract([{
     "type": "event"
 }]);
 
-var contract_address = "0x91C545a43d09a8f6Ea88320B13f26666F8109459";
+var contract_address ="0x218c734b57f4ca12d33af092dc959deb2dda4f18";
 var contractInstance = stockfishContract.at(contract_address);
 
 function submitTask(address) {
-    var task = '/home/ubuntu/run_stockfish_with_replication.sh /dev/shm/' + address;
+    var task = '/home/vagrant/iexecdev/bridge_stockfish/stockfishback/run_stockfish_with_replication.sh /dev/shm/' + address;
     console.log("submit TASK ", task);
     var child = exec(task);
     child.stdout.on('data', function(data) {
