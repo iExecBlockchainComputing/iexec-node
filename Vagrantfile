@@ -8,11 +8,10 @@ Vagrant.configure("2") do |config|
     iexecdev.vm.network :forwarded_port, guest: 3000, host: 3000
     iexecdev.vm.network :forwarded_port, guest: 8101, host: 8101
     iexecdev.vm.network :forwarded_port, guest: 8545, host: 8545
-    iexecdev.vm.network :forwarded_port, guest: 3306, host: 3307
 
     iexecdev.vm.provider "virtualbox" do |v|
       host = RbConfig::CONFIG['host_os']
-       v.memory = 3048
+       v.memory = 5000
        v.cpus = 2
     end
 
