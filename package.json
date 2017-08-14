@@ -17,11 +17,13 @@
   },
   "homepage": "https://github.com/iExecBlockchainComputing/bridge_stockfish#readme",
   "devDependencies": {
-    "truffle": "^3.4.7"
+    "css-loader": "^0.28.4",
+    "style-loader": "^0.18.2",
+    "truffle": "^3.4.7",
+    "file-loader": "0.11.1",
+    "webpack": "2.5.1"
   },
   "dependencies": {
-    "truffle-contract": "2.0.0",
-    "truffle-default-builder": "^2.0.0",
     "web3": "0.18.4"
   }
 }

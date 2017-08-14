@@ -14,7 +14,7 @@ if (typeof web3 !== 'undefined') {
 }
 
 
-//web3.eth.defaultAccount="a23cd2575007818740158957179211b27a8de233";
+web3.eth.defaultAccount = web3.eth.accounts[0];
 
 var stockfishContract = web3.eth.contract([{
     "constant": false,
@@ -141,7 +141,7 @@ var stockfishContract = web3.eth.contract([{
     "type": "event"
 }]);
 
-var contract_address ="0x218c734b57f4ca12d33af092dc959deb2dda4f18";
+var contract_address ="0x77ce934092f9a669e6dd9b547814dc4ebcb0d782";
 var contractInstance = stockfishContract.at(contract_address);
 
 function submitTask(address) {

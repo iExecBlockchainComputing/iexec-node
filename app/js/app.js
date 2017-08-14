@@ -1,3 +1,11 @@
+const Web3 = require("web3");
+
+require("file-loader?name=../index.html!../index.html");
+require("file-loader?name=./chess.js!./chess.js");
+require("../css/app.css");
+
+
+
 window.addEventListener('load', function() {
 
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
@@ -10,12 +18,17 @@ window.addEventListener('load', function() {
         window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
     }
 
+
+    web3.eth.defaultAccount = web3.eth.accounts[0];
+
     // Now you can start your app & access web3 freely:
     startApp()
 
 })
 
 function startApp() {
+
+
 
     var stockfishContract = web3.eth.contract([{
         "constant": false,
@@ -142,8 +155,9 @@ function startApp() {
         "type": "event"
     }]);
 
-    var contract_address = "0x91c545a43d09a8f6ea88320b13f26666f8109459"
+var contract_address ="0x77ce934092f9a669e6dd9b547814dc4ebcb0d782";
     var contractInstance = stockfishContract.at(contract_address);
+
 
     var chess = new Chess();
 
@@ -235,6 +249,8 @@ function startApp() {
                     if (possibilities[it] == posTo) {
                         for (var loop = 0; loop < inputs.length; loop++)
                             inputs[loop].disabled = true;
+                        console.log("contract_address : " + contract_address);
+                        console.log("contractInstance : " + contractInstance);
                         contractInstance.setParam(document.getElementById("moveBox").value, function(error, result) {
                             if (!error) {
                                 console.log("Move sent !");

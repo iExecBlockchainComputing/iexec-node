@@ -1,17 +1,17 @@
 # stockfish
 
 
-###Prerequisite:
+### Prerequisite:
 
 init your iexec vagrant local vm see :
 https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv
 
 
-###Configure ans start your local xtremweb server and worker
+### Configure ans start your local xtremweb server and worker
 
 see : https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv/discoverXtremweb.md
 
-###Provision stockfish app into xtremweb
+### Provision stockfish app into xtremweb
 
 compile Stockfish
 ```
@@ -19,14 +19,13 @@ cd ~/iexecdev/
 git clone https://github.com/iExecBlockchainComputing/Stockfish.git
 cd Stockfish/src
 
-#remove -static bug see https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/1228201
-#make -e EXTRALDFLAGS="-static -static-libgcc -static-libstdc++ " ARCH=x86-64 build
+#remove -static in EXTRALDFLAGS because of ubuntu gcc bug see here : https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/1228201
 
 make -e EXTRALDFLAGS="-static-libgcc -static-libstdc++ " ARCH=x86-64 build
 
 ```
 
-check a move on your compiled stockfish compile
+Check a move on your compiled stockfish compile
 
 ```
 cd ~/iexecdev/Stockfish/src
@@ -52,7 +51,7 @@ xw://vagrant-ubuntu-trusty-64/14447543-cd16-4c05-bbbc-7204895af9ba
 ```
 
 
-###check stockfish app in xtremweb ok
+### Manually check that stockfish app in xtremweb works well
  
 check your stockfish app is register in xtremweb :
 ```
@@ -74,7 +73,7 @@ you should see an id as answer like :
 
 submit a test move to xtremweb :
 ```
-./xwsubmit stockfish <~/iexecdev/bridge_stockfish/test/stockfishSimpleTest.txt
+./xwsubmit stockfish --xwstdin ~/iexecdev/bridge_stockfish/test/stockfishSimpleTest.txt
 
 ```
 you should see an id as answer like :
@@ -93,30 +92,54 @@ UID='2d34665e-78b8-43b1-96db-5940a4967866', STATUS='COMPLETED', COMPLETEDDATE='2
 
 call xwdownload command to download and see the move result :
 ```
-./xwdownload xw://vagrant-ubuntu-trusty-64/5dbfe0e9-3fde-4824-af36-c8fa49f0cba0
+./xwdownload xw://vagrant-ubuntu-trusty-64/bf28a23b-b12b-4efb-8707-297a0db00b7b
 ```
 
 ```
- UID='fbee2e9b-38a3-4a42-9abb-19e66a545f93', STATUS='COMPLETED', COMPLETEDDATE='2017-08-14 11:32:50', LABEL=NULL
-[14/Aug/2017:11:32:51 +0000] [xtremweb.client.Client_main_1] INFO : Downloaded to : /home/vagrant/iexecdev/xtremweb-hep/build/dist/xwhep-10.6.0/bin/47683c61-3829-4fbc-8f5a-e627ddad8c55_stdout.txt.txt
-vagrant@vagrant-ubuntu-trusty-64:~/iexecdev/xtremweb-hep/build/dist/xwhep-10.6.0/bin$ cat /home/vagrant/iexecdev/xtremweb-hep/build/dist/xwhep-10.6.0/bin/47683c61-3829-4fbc-8f5a-e627ddad8c55_stdout.txt.txt
+ UID='bf28a23b-b12b-4efb-8707-297a0db00b7b', STATUS='COMPLETED', COMPLETEDDATE='2017-08-14 13:19:09', LABEL=NULL
+.....
+ INFO : Downloaded to : /home/vagrant/iexecdev/xtremweb-hep/build/dist/xwhep-10.5.2/bin/bcdc474c-5a5c-4cf5-bb6a-0ef132d930d4_ResultsOf_bf28a23b-b12b-4efb-8707-297a0db00b7b.zip
+```
+
+In the zip you must find a stdout.txt file wih the following content :
+```
 Stockfish 140817 64 by T. Romstad, M. Costalba, J. Kiiski, G. Linscott
+Unknown command:
+info depth 1 seldepth 1 multipv 1 score cp 10 nodes 31 nps 3875 tbhits 0 time 8 pv d7d5
+info depth 2 seldepth 2 multipv 1 score cp 64 nodes 59 nps 7375 tbhits 0 time 8 pv d7d5 e4d5
+info depth 3 seldepth 3 multipv 1 score cp 41 nodes 186 nps 23250 tbhits 0 time 8 pv d7d5 c2c3 d5e4
+info depth 4 seldepth 5 multipv 1 score cp 13 nodes 565 nps 62777 tbhits 0 time 9 pv d7d5 e4d5 d8d5 d2d3
+info depth 5 seldepth 5 multipv 1 score cp -29 nodes 1521 nps 138272 tbhits 0 time 11 pv g8f6 d2d3 d7d5 b1d2 c8d7
+info depth 6 seldepth 8 multipv 1 score cp -15 nodes 3100 nps 258333 tbhits 0 time 12 pv b8c6 b1c3 e7e5 d2d3 d7d6 c1d2
+info depth 7 seldepth 8 multipv 1 score cp -33 nodes 6697 nps 352473 tbhits 0 time 19 pv d7d5 d2d4 d5e4 b1c3 e7e5 f1b5 b8c6 d4e5 d8d1 e1d1
+info depth 8 seldepth 10 multipv 1 score cp -7 nodes 8638 nps 411333 tbhits 0 time 21 pv d7d5
+bestmove d7d5 ponder d2d4
 ```
 
+### Deploy and launch your local stockfish front end and backend
 
-
-
-
-###Deploy and launch your local stockfish front end
-
-in another console launch testrpc or your local ethereum node:
+in another console launch your local ethereum node or use testrpc
+more details here :
+https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv/blob/master/discoverTruffleTestRpcGeth.md
 ```
-testrpc 
+cd gethUtils/
+./mine42externalexposed.sh
 ```
+when you see your miner active :
+```
+... 🔨 mined potential block,  ...
+```
+you can continue.
+
+or 
+```
+testrpc
+```
+
 
 in another console  :
 ```
-cd iexecdev/
+cd ~/iexecdev/
 git clone https://github.com/iExecBlockchainComputing/bridge_stockfish.git
 cd ~/iexecdev/bridge_stockfish
 npm install
@@ -127,34 +150,12 @@ npm install
 wait for : 
 ```
 Listening on http://0.0.0.0:8000
-Document root is /home/vagrant/iexecdev/bridge_stockfish/build
+Document root is /home/vagrant/iexecdev/bridge_stockfish/build/app
 Press Ctrl-C to quit.
-```
-
-### see and export your current stockfish deployed address
-```
-cat ~/iexecdev/bridge_stockfish/build/contracts/stockfish.json | grep "address\":"
-export STOCKFISH_CONTRACT_ADDRESS=$(cat ~/iexecdev/bridge_stockfish/build/contracts/stockfish.json | grep "address\":" | cut -d: -f2 | cut -d\" -f2)
-echo $STOCKFISH_CONTRACT_ADDRESS
-```
-
-### configure stockfish script to target local xwtremweb client
-```
-export XTREMWEB_VERSION=$(ls ~/iexecdev/xtremweb-hep/build/dist/)
-sed -i "s/.*XWHEPDIR=.*/XWHEPDIR=\"\/home\/vagrant\/iexecdev\/xtremweb-hep\/build\/dist\/${XTREMWEB_VERSION}\"/g" ~/iexecdev/bridge_stockfish/stockfishback/run_stockfish_with_replication.sh
-
-```
-
-
-### run the stockfish backend
-maj web3.eth.defaultAccount needed ?
-```
-sed -i "s/.*var contract_address =.*/var contract_address =\"${STOCKFISH_CONTRACT_ADDRESS}\";/g" ~/iexecdev/bridge_stockfish/stockfishback/stockfish.js 
-pm2 restart ~/iexecdev/bridge_stockfish/stockfishback/stockfish.js 
 ```
 
 ### Play with stockfish 
 
-enjoy at :
+play chess at : 
 
 http://localhost:8000
