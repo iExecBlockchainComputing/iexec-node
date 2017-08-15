@@ -7,7 +7,7 @@ init your iexec vagrant local vm see :
 https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv
 
 
-### Configure ans start your local xtremweb server and worker
+### Configure and start your local xtremweb server and worker
 
 see : https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv/discoverXtremweb.md
 
