@@ -24,8 +24,8 @@ vagrant ssh
 ```
 
 ### Configure your git identity
-  git config --global user.email "you@example.com"
-  git config --global user.name "Your Name"
+* git config --global user.email "you@example.com"
+* git config --global user.name "Your Name"
 
 
 ### Discover your dev vm
@@ -35,6 +35,6 @@ vagrant ssh
 
 ### Deploy project on your dev vm
 
-* next to test/come : stockfish on your local vagrant vm (with local private net ethereum)
+* stockfish on your local vagrant vm. see here : https://github.com/iExecBlockchainComputing/bridge_stockfish/pull/1
 * next to test/come : vanitygen v2 on your local vagrant vm
 * next to test/come : new bridge api solidy on your local vagrant vm
