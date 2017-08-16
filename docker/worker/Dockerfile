@@ -3,19 +3,19 @@
 #  Author         : Oleg Lodygensky
 #  Acknowledgment : XtremWeb-HEP is based on XtremWeb 1.8.0 by inria : http://www.xtremweb.net/
 #  Web            : http://www.xtremweb-hep.org
-#   
+#
 #  This file is part of XtremWeb-HEP.
-# 
+#
 #  XtremWeb-HEP is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
 #  (at your option) any later version.
-# 
+#
 #  XtremWeb-HEP is distributed in the hope that it will be useful,
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-# 
+#
 #  You should have received a copy of the GNU General Public License
 #  along with XtremWeb-HEP.  If not, see <http://www.gnu.org/licenses/>.
 #
@@ -46,8 +46,6 @@ ENV XWVERSION "10.6.0"
 # for the new mysql admin password;
 # and mysql admin password will be empty
 #
-#RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y apt-utils
-#RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip wget make ant gcc uuid uuid-runtime vim git
 RUN apt-get update
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip
 
@@ -60,18 +58,6 @@ RUN dpkg -i xwhep-worker-$XWVERSION.deb
 
 RUN sed -i "s/^V_NICE=.*//g" /opt/xwhep-worker-$XWVERSION/bin/xtremwebconf.sh
 RUN sed -i "s/LAUNCHER.*//g" /opt/xwhep-worker-$XWVERSION/conf/xtremweb.worker.conf
-RUN sed -i "s/DISPATCHERS.*/DISPATCHERS=xwserver/g" /opt/xwhep-worker-$XWVERSION/conf/xtremweb.worker.conf
+RUN sed -i "s/DISPATCHERS.*/DISPATCHERS=server/g" /opt/xwhep-worker-$XWVERSION/conf/xtremweb.worker.conf
 
-#
-# Entry point script
-# 
-RUN echo "#!/bin/sh" > /tmp/xwstart.sh
-RUN echo "if [ ! -z \$XWSERVERADDR ] ; then " >> /tmp/xwstart.sh
-RUN echo "   sed \"s/127\\.0\\.0\\.1.*localhost/127\\.0\\.0\\.1 localhost $HOSTNAME/g\" /etc/hosts" >> /tmp/xwstart.sh
-RUN echo "   echo \"\$XWSERVERADDR xwserver\" >> /etc/hosts" >> /tmp/xwstart.sh
-RUN echo "fi" >> /tmp/xwstart.sh
-RUN echo "cat /etc/hosts" >> /tmp/xwstart.sh
-RUN echo "/etc/init.d/xtremweb.worker console" >> /tmp/xwstart.sh
-RUN chmod +x /tmp/xwstart.sh
-
-ENTRYPOINT [ "/tmp/xwstart.sh" ]
+ENTRYPOINT [ "/etc/init.d/xtremweb.worker", "console" ]
