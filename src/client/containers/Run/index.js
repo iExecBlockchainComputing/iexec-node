@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import allActions from '../../actions';
 import Vanity from '../../../build/contracts/VanityGen.json';
+import { getSmartContractAddressByJsonNetworks } from '../../vanity/utils';
 import './Run.css';
 
 class Run extends Component {
@@ -52,7 +53,9 @@ class Run extends Component {
 
   event() {
     const vanityContract = web3.eth.contract(Vanity.abi);
-    const VanityInstance = vanityContract.at('0x8099be7909174ed81980e21bedded95c2f987c0f');
+    //  const VanityInstance = vanityContract.at('0x8099be7909174ed81980e21bedded95c2f987c0f');
+    const VanityInstance = vanityContract.at(
+      getSmartContractAddressByJsonNetworks(Vanity.networks));
 
     VanityInstance.Logs({ user: web3.eth.accounts[0] }, (err, result) => {
       if (err) {
@@ -95,7 +98,9 @@ class Run extends Component {
     this.setState({ phase4: 'fa fa-check fa-2x', phase5: 'fa fa-refresh fa-spin fa-2x' });
 
     const vanityContract = web3.eth.contract(Vanity.abi);
-    const VanityInstance = vanityContract.at('0x8099be7909174ed81980e21bedded95c2f987c0f');
+    //    const VanityInstance = vanityContract.at('0x8099be7909174ed81980e21bedded95c2f987c0f');
+    const VanityInstance = vanityContract.at(
+      getSmartContractAddressByJsonNetworks(Vanity.networks));
 
     VanityInstance.getResult((err, result) => {
       if (err) this.setState({ redirect: true });
