@@ -46,7 +46,8 @@ su - vagrant -c "echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' >> .b
 su - vagrant -c "echo 'export XTREMWEB_VERSION=\$(ls ~/iexecdev/xtremweb-hep/build/dist/)' >> .bash_profile"
 
 # utils
-apt-get install -y coreutils
+
+apt-get install -y realpath
 apt-get install -y git
 apt-get install -y build-essential
 apt-get install -y ant
