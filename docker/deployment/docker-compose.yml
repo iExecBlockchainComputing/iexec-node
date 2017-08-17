@@ -1,0 +1,22 @@
+version: '2'
+services:
+  server:
+    build: ../server
+    image: xwserverimg_2017-08-16-23-47-44
+    container_name: xwserverctn_2017-08-16-23-47-44
+
+  worker:
+    build: ../worker
+    image: xwworkerimg_2017-08-16-23-47-44
+    container_name: xwworkerctn_2017-08-16-23-47-44
+    depends_on:
+            - server
+    tty: true
+
+  client:
+    build: ../client
+    image: xwclientimg_2017-08-16-23-47-44
+    container_name: xwclientctn_2017-08-16-23-47-44
+    depends_on:
+            - server
+    tty: true
