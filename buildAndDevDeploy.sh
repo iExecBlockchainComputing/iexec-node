@@ -8,4 +8,4 @@ cp -rf ./build/contracts ./src/build/contracts
 ./node_modules/.bin/webpack --config ./config/webpack.config.dev.js 
 #node ./scripts/test.js
 #node ./script/build.js
-pm2 start ./script/start.js
+pm2 start ./scripts/start.js
