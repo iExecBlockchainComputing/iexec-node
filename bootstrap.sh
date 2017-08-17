@@ -11,7 +11,9 @@ add-apt-repository -y ppa:openjdk-r/ppa
 # for docker
 add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
+# for docker compose
+curl -L https://github.com/docker/compose/releases/download/1.15.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
 export DEBIAN_FRONTEND="noninteractive"
 
 
@@ -44,6 +46,7 @@ su - vagrant -c "echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' >> .b
 su - vagrant -c "echo 'export XTREMWEB_VERSION=\$(ls ~/iexecdev/xtremweb-hep/build/dist/)' >> .bash_profile"
 
 # utils
+apt-get install -y coreutils
 apt-get install -y git
 apt-get install -y build-essential
 apt-get install -y ant
@@ -64,6 +67,8 @@ service ntp reload
 apt-get install -y linux-image-extra-$(uname -r)
 apt-get install -y linux-image-extra-virtual
 apt-get -y install docker-ce
+# add vagrant to docker group
+usermod -aG docker vagrant
 
 
 # mysql client
