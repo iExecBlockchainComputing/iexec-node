@@ -55,8 +55,9 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
 
 RUN dpkg -i xwhep-server-$XWVERSION.deb
 RUN dpkg -i xwhep-server-conf-$XWVERSION.deb
-RUN service mysql start && mysql -u root < /opt/xwhep-server-$XWVERSION/bin/db-maintenance/xwhep-core-tables-create-tables.sql
-
+# chown -R mysql:mysql /var/lib/mysql needed for macos
+RUN chown -R mysql:mysql /var/lib/mysql && service mysql start && mysql -u root < /opt/xwhep-server-$XWVERSION/bin/db-maintenance/xwhep-core-tables-create-tables.sql
+#
 #
 # -1- don't renice in container
 # -2- we must remove LAUNCHERURL since Apache is not installed
@@ -68,6 +69,7 @@ RUN sed -i "s/LAUNCHER.*//g" /opt/xwhep-server-$XWVERSION/conf/xtremweb.server.c
 # Entry point script
 #
 RUN echo "#!/bin/sh" > /tmp/xwstart.sh
+RUN echo "chown -R mysql:mysql /var/lib/mysql" >> /tmp/xwstart.sh
 RUN echo "service mysql start" >> /tmp/xwstart.sh
 RUN echo "/etc/init.d/xtremweb.server console" >> /tmp/xwstart.sh
 RUN chmod +x /tmp/xwstart.sh

@@ -64,7 +64,7 @@ RUN wget https://github.com/lodygens/xtremweb-hep/archive/master.zip
 RUN unzip master.zip
 RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /xwhep/xtremweb-hep-master/build/ && make clean && make
 RUN cp /xwhep/xwconfigure.values /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/conf/
-RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && ./bin/xwconfigure --yes || ./bin/xwconfigure --yes
+RUN chown -R mysql:mysql /var/lib/mysql && service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && ./bin/xwconfigure --yes || ./bin/xwconfigure --yes
 
 RUN cd /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && dpkg -i xwhep-server-$XWVERSION.deb && dpkg -i xwhep-server-conf-$XWVERSION.deb
 
