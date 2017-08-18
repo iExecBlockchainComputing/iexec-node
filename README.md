@@ -35,6 +35,6 @@ vagrant ssh
 
 ### Deploy project on your dev vm
 
-* stockfish on your local vagrant vm. see here : https://github.com/iExecBlockchainComputing/bridge_stockfish/pull/1
-* next to test/come : vanitygen v2 on your local vagrant vm
+* [stockfish on your local vagrant vm ](https://github.com/iExecBlockchainComputing/bridge_stockfish/pull/1)
+*  Vanitygen v2 [front end](https://github.com/iExecBlockchainComputing/vanitygen/tree/local-vagrant) and [bridge](https://github.com/iExecBlockchainComputing/bridge_vanity/tree/local-vagrant) on your local vagrant vm : 
 * next to test/come : new bridge api solidy on your local vagrant vm
