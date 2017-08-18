@@ -27,10 +27,6 @@ cd ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/bin
 
 wait for "That's all folks"
 
-### Start your local xtremweb server and worker with docker compose 
-
-TODO
-
 ### Start your local xtremweb server manually
 
 start your xtremweb server in a console :
@@ -134,3 +130,7 @@ Output:  /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/output.
 Log:     /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/log.html
 Report:  /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/report.html
 ```
+
+### Start your local xtremweb server and worker using docker and docker compose 
+
+see [here](https://github.com/iExecBlockchainComputing/xtremweb-hep/blob/docker-compose/docker/deployment/README.md)
