@@ -9,6 +9,7 @@ Vagrant.configure("2") do |config|
     iexecdev.vm.network :forwarded_port, guest: 8101, host: 8101
     iexecdev.vm.network :forwarded_port, guest: 8545, host: 8545
     iexecdev.vm.network :forwarded_port, guest: 8081, host: 8081
+    iexecdev.vm.network :forwarded_port, guest: 443, host: 443
 
     iexecdev.vm.provider "virtualbox" do |v|
       host = RbConfig::CONFIG['host_os']
