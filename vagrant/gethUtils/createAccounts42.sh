@@ -1,4 +1,4 @@
-./init42.sh
+init42.sh
 numberOfAccounts=$1
 if [ "$(echo $numberOfAccounts | grep "^[ [:digit:] ]*$")" ]
 then
