@@ -64,7 +64,7 @@ RUN wget https://github.com/lodygens/xtremweb-hep/archive/master.zip
 RUN unzip master.zip
 RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /xwhep/xtremweb-hep-master/build/ && make clean && make
 RUN cp /xwhep/xwconfigure.values /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/conf/
-RUN chown -R mysql:mysql /var/lib/mysql && service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && ./bin/xwconfigure --yes || ./bin/xwconfigure --yes
+RUN service mysql start && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/ && cd /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && ./bin/xwconfigure --yes || ./bin/xwconfigure --yes
 
 RUN cd /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && dpkg -i xwhep-server-$XWVERSION.deb && dpkg -i xwhep-server-conf-$XWVERSION.deb
 
@@ -74,3 +74,14 @@ RUN cd /xwhep/xtremweb-hep-master/build/dist/xwhep-$XWVERSION/  && dpkg -i xwhep
 #
 RUN sed -i "s/^V_NICE=.*//g" /opt/xwhep-server-$XWVERSION/bin/xtremwebconf.sh
 RUN sed -i "s/LAUNCHER.*//g" /opt/xwhep-server-$XWVERSION/conf/xtremweb.server.conf
+
+#
+# Entry point script
+#
+RUN echo "#!/bin/sh" > /tmp/xwstart.sh
+RUN echo "service mysql start" >> /tmp/xwstart.sh
+RUN echo "/etc/init.d/xtremweb.server console" >> /tmp/xwstart.sh
+RUN chmod +x /tmp/xwstart.sh
+
+ENTRYPOINT [ "/tmp/xwstart.sh" ]
+

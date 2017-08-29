@@ -42,11 +42,19 @@ ENV XWVERSION "10.6.0"
 
 
 RUN apt-get update
+#RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip vim iputils-ping
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip vim
 
 ADD . /xwhep
 WORKDIR /xwhep
 RUN dpkg -i xwhep-client-$XWVERSION.deb
 
-RUN sed -i "s/^\(LOGIN=\)\(.*\)/\1admin/" /opt/xwhep-client-$XWVERSION/conf/xtremweb.client.conf
-RUN sed -i "s/^\(PASSWORD=\)\(.*\)/\1adminp/" /opt/xwhep-client-$XWVERSION/conf/xtremweb.client.conf
+#
+# A script to set server address
+#
+RUN echo "#!/bin/sh" > /usr/bin/xwsetserveraddr.sh
+RUN echo "if [ ! -z \$XWSERVERADDR ] ; then " >> /usr/bin/xwsetserveraddr.sh
+RUN echo "   sed \"s/127\\.0\\.0\\.1.*localhost/127\\.0\\.0\\.1 localhost $HOSTNAME/g\" /etc/hosts" >> /usr/bin/xwsetserveraddr.sh
+RUN echo "   echo \"\$XWSERVERADDR xwserver\" >> /etc/hosts" >> /usr/bin/xwsetserveraddr.sh
+RUN echo "fi" >> /usr/bin/xwsetserveraddr.sh
+RUN chmod +x /usr/bin/xwsetserveraddr.sh

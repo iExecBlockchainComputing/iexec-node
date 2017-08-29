@@ -46,6 +46,8 @@ ENV XWVERSION "10.6.0"
 # for the new mysql admin password;
 # and mysql admin password will be empty
 #
+#RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get install -y apt-utils
+#RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip wget make ant gcc uuid uuid-runtime vim git
 RUN apt-get update
 RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y openjdk-8-jre zip unzip
 
@@ -58,6 +60,18 @@ RUN dpkg -i xwhep-worker-$XWVERSION.deb
 
 RUN sed -i "s/^V_NICE=.*//g" /opt/xwhep-worker-$XWVERSION/bin/xtremwebconf.sh
 RUN sed -i "s/LAUNCHER.*//g" /opt/xwhep-worker-$XWVERSION/conf/xtremweb.worker.conf
-RUN sed -i "s/DISPATCHERS.*/DISPATCHERS=server/g" /opt/xwhep-worker-$XWVERSION/conf/xtremweb.worker.conf
+RUN sed -i "s/DISPATCHERS.*/DISPATCHERS=xwserver/g" /opt/xwhep-worker-$XWVERSION/conf/xtremweb.worker.conf
 
-ENTRYPOINT [ "/etc/init.d/xtremweb.worker", "console" ]
+#
+# Entry point script
+#
+RUN echo "#!/bin/sh" > /tmp/xwstart.sh
+RUN echo "if [ ! -z \$XWSERVERADDR ] ; then " >> /tmp/xwstart.sh
+RUN echo "   sed \"s/127\\.0\\.0\\.1.*localhost/127\\.0\\.0\\.1 localhost $HOSTNAME/g\" /etc/hosts" >> /tmp/xwstart.sh
+RUN echo "   echo \"\$XWSERVERADDR xwserver\" >> /etc/hosts" >> /tmp/xwstart.sh
+RUN echo "fi" >> /tmp/xwstart.sh
+RUN echo "cat /etc/hosts" >> /tmp/xwstart.sh
+RUN echo "/etc/init.d/xtremweb.worker console" >> /tmp/xwstart.sh
+RUN chmod +x /tmp/xwstart.sh
+
+ENTRYPOINT [ "/tmp/xwstart.sh" ]
