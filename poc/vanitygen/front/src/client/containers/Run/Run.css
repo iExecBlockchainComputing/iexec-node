@@ -1,0 +1,16 @@
+.inline-content {
+  display: flex;
+  justify-content: space-between;
+  height: 24px;
+}
+
+.form {
+  justify-content: space-between;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.padd {
+  padding-top: 40px;
+}
