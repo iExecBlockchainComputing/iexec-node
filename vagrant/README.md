@@ -5,8 +5,10 @@
 Let Vagrant build an Ubuntu machine with all the developer needs :
 lib to compile, run, test xtremweb, git, python, truffle, web3, node, parity, geth, testrpc etc ...
 
+
 ### Prerequisite:
 
+* git
 * install Vagrant 1.9.7 on your machine 
 * install virtuabox 5.1.x on your machine  
 * download the latest ubuntu/trusty64 image :
@@ -16,6 +18,8 @@ vagrant box update
 
 ### Mount your vm :
 ```
+git clone https://github.com/iExecBlockchainComputing/iexec-node.git
+cd iexec-node/vagrant
 vagrant up
 ```
 ### Connnect to your vm  :
@@ -35,6 +39,6 @@ vagrant ssh
 
 ### Deploy project on your dev vm
 
-* [stockfish on your local vagrant vm ](https://github.com/iExecBlockchainComputing/bridge_stockfish/pull/1)
-*  Vanitygen v2 [front end](https://github.com/iExecBlockchainComputing/vanitygen/tree/local-vagrant) and [bridge](https://github.com/iExecBlockchainComputing/bridge_vanity/tree/local-vagrant) on your local vagrant vm : 
-* next to test/come : new bridge api solidy on your local vagrant vm
+* [stockfish on your local vagrant vm ](https://github.com/iExecBlockchainComputing/iexec-node/tree/master/poc/stockfish/front)
+* [Vanitygen on your local vagrant vm ](https://github.com/iExecBlockchainComputing/iexec-node/tree/master/poc/vanitygen/front)
+* Next to test/come : new bridge api solidy on your local vagrant vm

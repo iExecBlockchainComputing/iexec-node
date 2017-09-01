@@ -1,15 +1,11 @@
 # Discover Xtremweb
 
 ### Compile and install your local xtremweb
-
+In your local vagrant
 ```
 cd ~/iexecdev/
 
 git clone https://github.com/iExecBlockchainComputing/xtremweb-hep.git
-
-cd ~/iexecdev/xtremweb-hep/
-
-git checkout testsrobotframework
 
 cd ~/iexecdev/xtremweb-hep/build
 
@@ -17,7 +13,7 @@ make clean && make
 
 export XTREMWEB_VERSION=$(ls ~/iexecdev/xtremweb-hep/build/dist/)
 
-cp ~/iexecdev/xtremweb-hep/test/xwconfigure.values.vagrant  ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/conf/xwconfigure.values
+cp ~/iexecdev/iexec-node/vagrant/xwconfigure.values.vagrant  ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/conf/xwconfigure.values
 
 cd ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/bin
 
@@ -106,31 +102,6 @@ you will see the path where to find the result :
 [12/Aug/2017:23:18:14 +0000] [xtremweb.client.Client_main_1] INFO : Downloaded to : /home/vagrant/iexecdev/xtremweb-hep/build/dist/xwhep-10.6.0/bin/11fa614f-50b8-42ed-b581-27855dd1b317_stdout.txt.txt
 ```
 
-## Launch xtremweb robotframework tests
-```
-cd ~/iexecdev/
-
-git clone https://github.com/iExecBlockchainComputing/xtremweb-hep.git
-
-cd ~/iexecdev/xtremweb-hep
-
-git checkout testsrobotframework
-
-cd test/robotframework/
-
-pybot -d Results ./Tests/
-```
-
-Expected results 
-```
-Tests                                                                 | PASS |
-14 critical tests, 14 passed, 0 failed
-14 tests total, 14 passed, 0 failed
-Output:  /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/output.xml
-Log:     /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/log.html
-Report:  /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/report.html
-```
-
 ### Start your local xtremweb server and worker using docker and docker compose 
 
-see [here](https://github.com/iExecBlockchainComputing/xtremweb-hep/blob/docker-compose/docker/deployment/README.md)
+see [here](https://github.com/iExecBlockchainComputing/iexec-node/tree/master/docker)
