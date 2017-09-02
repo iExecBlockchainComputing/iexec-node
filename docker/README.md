@@ -47,7 +47,7 @@ If you want to use an XWHEP platform, you must first request the XWHEP client De
 We propose the following workflow:
 - copy the client Debian package to [client/](client/).
   This Debian package is either provided by an XWHEP administrator or created by [master](master/).
-- execute the [client/startclient.sh](client/startclient.sh) to create a Docker image.
+- execute the [client/build.sh](client/build.sh) to create a client Docker image.
 
 
 ## 3.2 - Provide your volunteer resource
@@ -63,5 +63,5 @@ The XWHEP worker aims to propose IT resource to an XWHEP deployment:
 
 We propose the following workflow:
 - copy the worker Debian package to [worker/](worker/). This Debian package is either provided by an XWHEP deployment administrator or created by [master](master/).
-- execute the [worker/startworker.sh](worker/startworker.sh) to create a Docker image and launch the worker in a Docker container.
+- execute the [worker/build.sh](worker/build.sh) to create a worker Docker image and launch the worker in a Docker container.
 
