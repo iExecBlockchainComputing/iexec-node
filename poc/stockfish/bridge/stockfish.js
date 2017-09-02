@@ -141,11 +141,11 @@ var stockfishContract = web3.eth.contract([{
     "type": "event"
 }]);
 
-var contract_address ="0x77ce934092f9a669e6dd9b547814dc4ebcb0d782";
+var contract_address ="0x7c9d582cae3b95706409ba46b224f797147fac52";
 var contractInstance = stockfishContract.at(contract_address);
 
 function submitTask(address) {
-    var task = '/home/vagrant/iexecdev/bridge_stockfish/stockfishback/run_stockfish_with_replication.sh /dev/shm/' + address;
+    var task = '/home/vagrant/iexecdev/iexec-node/poc/stockfish/bridge/run_stockfish_with_replication.sh /dev/shm/' + address;
     console.log("submit TASK ", task);
     var child = exec(task);
     child.stdout.on('data', function(data) {

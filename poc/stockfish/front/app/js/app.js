@@ -9,14 +9,16 @@ require("../css/app.css");
 window.addEventListener('load', function() {
 
     // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-    if (typeof web3 !== 'undefined') {
+//    if (typeof web3 !== 'undefined') {
         // Use Mist/MetaMask's provider
-        window.web3 = new Web3(web3.currentProvider);
-    } else {
-        console.log('No web3? You should consider trying MetaMask!')
+ //       window.web3 = new Web3(web3.currentProvider);
+  //  } else {
+   //     console.log('No web3? You should consider trying MetaMask!')
         // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
         window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-    }
+
+
+   // }
 
 
     web3.eth.defaultAccount = web3.eth.accounts[0];
@@ -155,7 +157,7 @@ function startApp() {
         "type": "event"
     }]);
 
-var contract_address ="0x77ce934092f9a669e6dd9b547814dc4ebcb0d782";
+var contract_address ="0x7c9d582cae3b95706409ba46b224f797147fac52";
     var contractInstance = stockfishContract.at(contract_address);
 
 
@@ -249,9 +251,7 @@ var contract_address ="0x77ce934092f9a669e6dd9b547814dc4ebcb0d782";
                     if (possibilities[it] == posTo) {
                         for (var loop = 0; loop < inputs.length; loop++)
                             inputs[loop].disabled = true;
-                        console.log("contract_address : " + contract_address);
-                        console.log("contractInstance : " + contractInstance);
-                        contractInstance.setParam(document.getElementById("moveBox").value, function(error, result) {
+                             contractInstance.setParam(document.getElementById("moveBox").value, function(error, result) {
                             if (!error) {
                                 console.log("Move sent !");
                             } else {

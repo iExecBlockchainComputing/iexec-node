@@ -4,12 +4,12 @@
 ### Prerequisite:
 
 init your iexec vagrant local vm see :
-https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv
+https://github.com/iExecBlockchainComputing/iexec-node/blob/master/vagrant/README.md
 
 
 ### Configure and start your local xtremweb server and worker
 
-see : https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv/discoverXtremweb.md
+see : https://github.com/iExecBlockchainComputing/iexec-node/blob/master/vagrant/discoverXtremweb.md
 
 ### Provision stockfish app into xtremweb
 
@@ -18,8 +18,6 @@ compile Stockfish
 cd ~/iexecdev/
 git clone https://github.com/iExecBlockchainComputing/Stockfish.git
 cd Stockfish/src
-
-#remove -static in EXTRALDFLAGS because of ubuntu gcc bug see here : https://bugs.launchpad.net/ubuntu/+source/gcc-defaults/+bug/1228201
 
 make -e EXTRALDFLAGS="-static-libgcc -static-libstdc++ " ARCH=x86-64 build
 
@@ -120,7 +118,7 @@ bestmove d7d5 ponder d2d4
 
 in another console launch your local ethereum node or use testrpc
 more details here :
-https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv/blob/master/discoverTruffleTestRpcGeth.md
+https://github.com/iExecBlockchainComputing/iexec-node/blob/master/vagrant/discoverTruffleTestRpcGeth.md
 ```
 cd gethUtils/
 ./mine42externalexposed.sh
@@ -139,9 +137,7 @@ testrpc
 
 in another console  :
 ```
-cd ~/iexecdev/
-git clone https://github.com/iExecBlockchainComputing/bridge_stockfish.git
-cd ~/iexecdev/bridge_stockfish
+cd ~/iexecdev/iexec-node/poc/stockfish/front
 npm install
 ./buildAndDeploy.sh  
 
@@ -150,7 +146,7 @@ npm install
 wait for : 
 ```
 Listening on http://0.0.0.0:8000
-Document root is /home/vagrant/iexecdev/bridge_stockfish/build/app
+Document root is /home/vagrant/iexecdev/iexec-node/poc/stockfish/front/build/app
 Press Ctrl-C to quit.
 ```
 
