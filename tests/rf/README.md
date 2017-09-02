@@ -1,25 +1,36 @@
 
-## Launch xtremweb robotframework tests
+## Robotframework tests
+
+### Prerequisite 
+
+ubuntu with :
+
 ```
-cd ~/iexecdev/
+apt-get -y install openjdk-8-jdk
+apt-get install -y -qy python-pip groff-base
+apt-get -y install uuid-runtime
+apt-get install -y mysql-client
+echo "mysql-server mysql-server/root_password password root" | debconf-set-selections
+echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections
+apt-get install -y mysql-server
+pip install robotframework
+pip install robotframework-selenium2library
+pip install robotframework-databaselibrary
+pip install pymysql
 
-git clone https://github.com/iExecBlockchainComputing/xtremweb-hep.git
+```
+The above dependency are already in your local vagrant
 
-cd ~/iexecdev/xtremweb-hep
+### Launch xtremweb robotframework tests
+```
 
-git checkout testsrobotframework
-
-cd test/robotframework/
-
+cd ~/iexecdev/iexec-node/tests/rf
 pybot -d Results ./Tests/
 ```
 
 Expected results 
 ```
-Tests                                                                 | PASS |
-14 critical tests, 14 passed, 0 failed
-14 tests total, 14 passed, 0 failed
-Output:  /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/output.xml
-Log:     /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/log.html
-Report:  /home/vagrant/iexecdev/xtremweb-hep/test/robotframework/Results/report.html
+Output:  /home/vagrant/iexecdev/iexec-node/tests/rf/Results/output.xml
+Log:     /home/vagrant/iexecdev/iexec-node/tests/rf/Results/log.html
+Report:  /home/vagrant/iexecdev/iexec-node/tests/rf/Results/report.html
 ```
