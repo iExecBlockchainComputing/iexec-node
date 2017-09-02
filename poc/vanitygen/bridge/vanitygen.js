@@ -26,10 +26,10 @@ console.log(web3.eth.defaultAccount);
 
 var vanitygenContract = web3.eth.contract([{"constant":false,"inputs":[{"name":"userValue","type":"string"},{"name":"params","type":"string"}],"name":"setParam","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"userAddr","type":"address"},{"name":"keys","type":"string"},{"name":"url","type":"string"}],"name":"pushResult","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_from","type":"address"},{"name":"_value","type":"uint256"},{"name":"_token","type":"address"},{"name":"_extraData","type":"string"},{"name":"_extraData2","type":"string"}],"name":"receiveApproval","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[],"name":"kill","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"launched","outputs":[{"name":"","type":"bool"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"owner","outputs":[{"name":"","type":"address"}],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"status","type":"string"},{"name":"user","type":"address"}],"name":"broadcast","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"getResult","outputs":[{"name":"keyz","type":"string"},{"name":"url","type":"string"}],"payable":false,"type":"function"},{"inputs":[{"name":"_iextoken","type":"address"}],"payable":false,"type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"value","type":"string"},{"indexed":false,"name":"param","type":"string"},{"indexed":false,"name":"addr","type":"address"}],"name":"Launch","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"status","type":"string"},{"indexed":true,"name":"user","type":"address"}],"name":"Logs","type":"event"}]);
 
-var contract_address ="0x65e1317709c7c320bf9b46c87761f87a08896de4";
+var contract_address ="0xdce6329dcd30da0e4aa5f64825d0f5e14695b643";
 var contractInstance = vanitygenContract.at(contract_address);
 function submitTask( param, address) {
-	var task = '/home/vagrant/iexecdev/bridge_vanity/run_vanitygen_with_replication.sh "' +  param + '"';
+	var task = '/home/vagrant/iexecdev/iexec-node/poc/vanitygen/bridge/run_vanitygen_with_replication.sh "' +  param + '"';
 	console.log("submit TASK ", task);
 	var child = exec(task);
 	child.stdout.on('data', function(data) {

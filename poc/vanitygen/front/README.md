@@ -27,12 +27,12 @@ Vanitygen is a vanity bitcoin address generator.
 ### Prerequisite:
 
 init your iexec vagrant local vm see :
-https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv
+https://github.com/iExecBlockchainComputing/iexec-node/blob/master/vagrant
 
 
 ### Configure ans start your local xtremweb server and worker
 
-see : https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv/discoverXtremweb.md
+see : https://github.com/iExecBlockchainComputing/iexec-node/blob/master/vagrant/discoverXtremweb.md
 
 
 
@@ -40,10 +40,7 @@ see : https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv/discoverX
 ### Provision vanity app into xtremweb
 
 ```
-cd ~/iexecdev/
-git clone https://github.com/iExecBlockchainComputing/bridge_vanity.git
-git checkout local-vagrant
-ls -l ~/iexecdev/bridge_vanity/vanitybin/vanitygen_linux_amd64.bin
+ls -l ~/iexecdev/iexec-node/poc/vanitygen/bridge/vanitybin/vanitygen_linux_amd64.bin
 ```
 test vanity 
 ```
@@ -53,7 +50,7 @@ test vanity
 sent vanity to xtremweb
 ```
 cd ~/iexecdev/xtremweb-hep/build/dist/${XTREMWEB_VERSION}/bin/
-./xwsendapp vanitygen deployable Linux amd64 /home/vagrant/iexecdev/bridge_vanity/vanitybin/vanitygen_linux_amd64.bin
+./xwsendapp vanitygen deployable Linux amd64 /home/vagrant/iexecdev/iexec-node/poc/vanitygen/bridge/vanitybin/vanitygen_linux_amd64.bin
 ```
 
 you should see an id as answer like :
@@ -121,9 +118,9 @@ Privkey: *******your Privkey here***********
 
 ### Deploy and launch your local vanity front end and backend
 
-in another console launch your local ethereum node or use testrpc
+in another console launch your local ethereum node. ( it doesn't work with testrpc as it, because networks 1 or 2 or 42 ... are checked in js to detected smart contracts addresses )
 more details here :
-https://github.com/iExecBlockchainComputing/iexec-vagrant-devenv/blob/master/discoverTruffleTestRpcGeth.md
+https://github.com/iExecBlockchainComputing/iexec-node/blob/master/vagrant/discoverTruffleTestRpcGeth.md
 ```
 cd gethUtils/
 ./mine42externalexposed.sh
@@ -134,21 +131,20 @@ when you see your miner active :
 ```
 you can continue.
 
-or 
-```
-testrpc
-```
 in another console launch vanity frontend:
 ```
-cd ~/iexecdev/vanitygen
+cd ~/iexecdev/iexec-node/poc/vanitygen/front
 npm install
 ./buildAndDevDeploy.sh
 ```
 
+send some ETH to your metamask address using 
+~/gethUtils/giveMeFive42.sh yourmetamaskaddress
+
 
 launch vanity backend bridge  :
 ```
-cd ~/iexecdev/bridge_vanity
+cd ~/iexecdev/iexec-node/poc/vanitygen/bridge
 npm install
 ./buildAndDevDeploy.sh
 
