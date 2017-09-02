@@ -19,6 +19,7 @@ Vagrant.configure("2") do |config|
 
     iexecdev.vm.provision "file", source: "dotscreenrc", destination: "~/.screenrc"
     iexecdev.vm.provision "file", source: "gethUtils", destination: "~/gethUtils"
+    iexecdev.vm.provision "file", source: "testrpcUtils", destination: "~/testrpcUtils"
     iexecdev.vm.provision :shell, path: "bootstrap.sh"
 
 
