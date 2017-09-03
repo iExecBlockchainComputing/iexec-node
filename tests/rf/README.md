@@ -28,7 +28,7 @@ cd ~/iexecdev/iexec-node/tests/rf
 pybot -d Results ./Tests/
 ```
 
-Expected results 
+Open report.html to see results :
 ```
 Output:  /home/vagrant/iexecdev/iexec-node/tests/rf/Results/output.xml
 Log:     /home/vagrant/iexecdev/iexec-node/tests/rf/Results/log.html
