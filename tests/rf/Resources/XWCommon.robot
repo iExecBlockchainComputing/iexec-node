@@ -10,9 +10,11 @@ Resource  ./DB/MySql.robot
 
 ${RF_RESULT_PATH} =  ../Results
 ${XW_GIT_BRANCH} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
+${XW_FORCE_GIT_CLONE} =  true
 ${BUILD_PATH} =  ./xtremweb-hep/build
 ${DIST_PATH} =  ${BUILD_PATH}/dist
 ${DIST_XWHEP_PATH}
+
 
 ## xwconfigure.values
 ${XWCONFIGURE.VALUES.XWUSER} =  root
@@ -47,6 +49,7 @@ ${XWCONFIGURE.VALUES.HTTPSPORT} =  9443
 
 *** Keywords ***
 Start XWtremWeb Server And XWtremWeb Worker
+    Run Keyword If  '${XW_FORCE_GIT_CLONE}' == 'true'  Git Clone XWtremWeb
     Compile XWtremWeb
     Install XWtremWeb
     Ping XWtremWeb Database
@@ -74,12 +77,14 @@ Begin XWtremWeb Command Test
 End XWtremWeb Command Test
     LOG  Nothing to do
 
-Compile XWtremWeb
+Git Clone XWtremWeb
     Remove Directory  xtremweb-hep  recursive=true
     ${git_result} =  Run Process  git clone ${XW_GIT_BRANCH}  shell=yes
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0
+
+Compile XWtremWeb
     ${compile_result} =  Run Process  cd ${BUILD_PATH} && make clean && make  shell=yes
     Log  ${compile_result.stderr}
     #Should Be Empty	${compile_result.stderr} some warnings ...

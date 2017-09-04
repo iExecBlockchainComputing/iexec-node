@@ -8,32 +8,46 @@ Test Setup  XWCommon.Begin XWtremWeb Command Test
 Test Teardown  XWCommon.End XWtremWeb Command Test
 
 
-# to launch tests : pybot -d Results ./Tests/xwcommandsSuite.robot
-*** Variables ***
+# to launch tests :
+# pybot  -d Results ./Tests/xwcommandsSuite.robot
+# Quicker for second launch :
+# pybot --variable XW_FORCE_GIT_CLONE:false -d Results ./Tests/xwcommandsSuite.robot
+#
 
 
 *** Test Cases ***
 
-Test envoyer des données
-    [Documentation]  Envoyer des données avec la commande senddata
+Test XWSenddata Command With LS Binary
+    [Documentation]  Testing XWSenddata cmd
     [Tags]  CommandLine Tests
-    ${uid} =  XWSENDDATACommand  ls  macosx  x86_64  binary  /bin/ls
+    ${uid} =  XWSENDDATACommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
     XWServer.Count From Datas Where Uid  ${uid}  1
     # TODO check also values : ls  macosx  x86_64  binary  /bin/ls in datas table
 
 
-Test 1.1 Enregistrer l’application
-    [Documentation]  Les premiers tests doivent permettre de tester la prise en compte de la ligne de commande et de l’environnement, un ensemble de fichiers copiés dans le répertoire courant du job, du côté du worker. L’application “LS” correspond à ces pré requis.
+Test XWSendapp Command With LS Binary
+    [Documentation]  Testing XWSendapp cmd
     [Tags]  CommandLine Tests
-    LOG  Test 1.1 Enregistrer l’application
-    ${uid} =  XWSENDAPPCommand  ls  deployable  macosx  x86_64  /bin/ls
+    ${uid} =  XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
     XWServer.Count From Apps Where Uid  ${uid}  1
     # TODO check also values : ls  deployable  macosx  x86_64  /bin/ls in apps table
 
-Test 2.1 Soumettre un job sans ligne de commande
-    [Documentation]  Ces tests doivent prouver que la ligne de commande est prise en charge correctement.
+Test XWSubmit and XWResults Command On LS Binary
+    [Documentation]  Testing XWSubmit cmd
     [Tags]  CommandLine Tests
-    LOG  TODO
+    ${uid} =  XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
+    XWServer.Count From Apps Where Uid  ${uid}  1
+    ${workuid} =  XWSUBMITCommand  ls
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+    ${results_file} =  XWRESULTSCommand  ${workuid}
+    ${results_file_content} =  Get File  ${results_file}
+    ${results_file_content_lines_count} =  Get Line Count  ${results_file_content}
+    Should Be Equal As Integers	${results_file_content_lines_count}  2
+    @{results_file_lines} =  Split To Lines  ${results_file_content}
+    Should Be Equal As Strings  @{results_file_lines}[0]  stderr.txt
+    Should Be Equal As Strings	@{results_file_lines}[1]  stdout.txt
+
 
 Test 2.2 Soumettre un job avec ligne de commande
     [Documentation]  Ces tests doivent prouver que la ligne de commande est prise en charge correctement. Ces tests doivent se faire avec un application qui accepte des arguments sur la ligne de commande
@@ -84,7 +98,6 @@ XWSENDAPPCommand
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers	${cmd_result.rc}	0
     ${uid} =  Get Substring  ${cmd_result.stdout}  -36
-    Log  ${uid}
     [Return]  ${uid}
 
 XWSENDDATACommand
@@ -95,5 +108,40 @@ XWSENDDATACommand
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers	${cmd_result.rc}	0
     ${uid} =  Get Substring  ${cmd_result.stdout}  -36
-    Log  ${uid}
     [Return]  ${uid}
+
+XWSUBMITCommand
+    [Documentation]  Usage :  XWSUBMIT appName
+    [Arguments]  ${appName}
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwsubmit ${appName}  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers	${cmd_result.rc}	0
+    ${uid} =  Get Substring  ${cmd_result.stdout}  -36
+    [Return]  ${uid}
+
+XWSTATUSCommand
+    [Documentation]  Usage :  XWSTATUS uid
+    [Arguments]  ${uid}
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwstatus ${uid}  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers	${cmd_result.rc}	0
+    #UID='a3d8e3d1-4d6a-409b-88b7-2cef2378ccef', STATUS='PENDING', COMPLETEDDATE=NULL, LABEL=NULL
+    @{status_result} =  Get Regexp Matches  ${cmd_result.stdout}  STATUS='(?P<status>.*)', COMPLETEDDATE  status
+    [Return]  @{status_result}[0]
+
+Check XWSTATUS Completed
+    [Arguments]  ${uid}
+    ${status_result} =  XWSTATUSCommand  ${uid}
+    Should Be Equal As Strings  ${status_result}  COMPLETED
+
+XWRESULTSCommand
+    [Documentation]  Usage :  XWRESULT uid
+    [Arguments]  ${uid}
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwresults ${uid}  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers	${cmd_result.rc}	0
+    @{results_file} =  Get Regexp Matches  ${cmd_result.stdout}  INFO : Downloaded to : (?P<file>.*)  file
+    [Return]  @{results_file}[0]
