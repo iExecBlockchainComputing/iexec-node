@@ -14,6 +14,7 @@ ${XW_FORCE_GIT_CLONE} =  true
 ${BUILD_PATH} =  ./xtremweb-hep/build
 ${DIST_PATH} =  ${BUILD_PATH}/dist
 ${DIST_XWHEP_PATH}
+${XW_CACHE_DIR} =  /tmp
 
 
 ## xwconfigure.values
@@ -48,10 +49,14 @@ ${XWCONFIGURE.VALUES.HTTPSPORT} =  9443
 
 
 *** Keywords ***
-Start XWtremWeb Server And XWtremWeb Worker
+
+Prepare And Start XWtremWeb Server And XWtremWeb Worker
     Run Keyword If  '${XW_FORCE_GIT_CLONE}' == 'true'  Git Clone XWtremWeb
     Compile XWtremWeb
     Install XWtremWeb
+    Start XWtremWeb Server And XWtremWeb Worker
+
+Start XWtremWeb Server And XWtremWeb Worker
     Ping XWtremWeb Database
     XWServer.Start XtremWeb Server  ${DIST_XWHEP_PATH}
     XWWorker.Start XtremWeb Worker  ${DIST_XWHEP_PATH}
@@ -72,7 +77,21 @@ Begin XWtremWeb Command Test
     # TODO ping XWtremWeb worker up
     LOG  TODO ping XWtremWeb worker up before one test
     MySql.Delete Fonctionnal Xtremweb Tables
+    Stop XWtremWeb Server And XWtremWeb Worker
+    Start XWtremWeb Server And XWtremWeb Worker
 
+
+Clear XWtremWeb Cache
+    ${rm_result} =  Run Process  rm -rf ${XW_CACHE_DIR}/XW*  shell=yes
+    Log  ${rm_result.stderr}
+    Should Be Empty	${rm_result.stderr}
+    Log  ${rm_result.stdout}
+    Should Be Equal As Integers	${rm_result.rc}	0
+    ${rm_result} =  Run Process  rm -rf ${XW_CACHE_DIR}/xw*  shell=yes
+    Log  ${rm_result.stderr}
+    Should Be Empty	${rm_result.stderr}
+    Log  ${rm_result.stdout}
+    Should Be Equal As Integers	${rm_result.rc}	0
 
 End XWtremWeb Command Test
     LOG  Nothing to do
