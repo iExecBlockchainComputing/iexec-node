@@ -11,6 +11,7 @@ Suite Teardown  Stop Oracle Bridge And Xtremweb
 # to launch tests : pybot -d Results ./Tests/helloWorldSuiteOnTestRpc.robot
 # Quicker for second launch :
 # pybot --variable XW_FORCE_GIT_CLONE:false --variable IEXEC_ORACLE_FORCE_GIT_CLONE:false -d Results ./Tests/helloWorldSuiteOnTestRpc.robot
+
 *** Variables ***
 
 
