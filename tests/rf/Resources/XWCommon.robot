@@ -83,14 +83,10 @@ Begin XWtremWeb Command Test
 
 Clear XWtremWeb Cache
     ${rm_result} =  Run Process  rm -rf ${XW_CACHE_DIR}/XW*  shell=yes
-    Log  ${rm_result.stderr}
     Should Be Empty	${rm_result.stderr}
-    Log  ${rm_result.stdout}
     Should Be Equal As Integers	${rm_result.rc}	0
     ${rm_result} =  Run Process  rm -rf ${XW_CACHE_DIR}/xw*  shell=yes
-    Log  ${rm_result.stderr}
     Should Be Empty	${rm_result.stderr}
-    Log  ${rm_result.stdout}
     Should Be Equal As Integers	${rm_result.rc}	0
 
 End XWtremWeb Command Test

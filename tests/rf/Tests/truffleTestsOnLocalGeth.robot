@@ -5,7 +5,7 @@ Library  OperatingSystem
 Library  String
 Suite Setup  Start Geth42
 Suite Teardown  Stop Geth42
-Resource  ../Resources/ETHTruffleTests.robot
+Resource  ../Resources/IexecOracle.robot
 
 *** Variables ***
 
@@ -14,7 +14,7 @@ Resource  ../Resources/ETHTruffleTests.robot
 Test Iexec Oracle Truffle Tests On Local Geth
     [Documentation]  call truffle test on a started local geth and show the result here.
     [Tags]  Smart contract Tests
-    ETHTruffleTests.Iexec Oracle Truffle Tests
+    IexecOracle.Iexec Oracle Truffle Tests
 
 *** Keywords ***
 Start Geth42
