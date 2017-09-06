@@ -4,6 +4,8 @@
 ${IEXEC_ORACLE_GIT_BRANCH} =  https://github.com/iExecBlockchainComputing/iexec-oracle.git
 ${IEXEC_ORACLE_FORCE_GIT_CLONE} =  true
 ${BRIDGE_PROCESS}
+${IEXEC_ORACLE_SM_ADDRESS}
+${HELLO_WORLD_SM_ADDRESS}
 *** Keywords ***
 
 
@@ -43,35 +45,44 @@ Iexec Oracle Truffle Migrate
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
-    Iexec Oracle Set Build Contract Address In Bridge
 
-Iexec Oracle Set Build Contract Address In Bridge
+Iexec Oracle Set Contract Address In Bridge
+    #IexecOracle.sol
     ${iexecOracle_json_content} =  Get File  iexec-oracle/API/build/contracts/IexecOracle.json
     @{smartContractAddress} =  Get Regexp Matches  ${iexecOracle_json_content}  "address": "(?P<smartContractAddress>.*)",  smartContractAddress
     LOG  @{smartContractAddress}
     LOG  @{smartContractAddress}[0]
-    Run  sed -i 's/.*"ContractAddress":.*/"ContractAddress":\"@{smartContractAddress}[0]\"/g' iexec-oracle/Bridge/config.json
-
-#"ContractAddress": "0x7883d350e42c3e198e1f8c8b1812abbc34b68284"
-    #echo "update address in ~/iexecdev/iexec-node/poc/stockfish/front/app/js/app.js"
-    #sed -i "s/.*var contract_address =.*/var contract_address =\"${STOCKFISH_CONTRACT_ADDRESS}\";/g" ~/iexecdev/iexec-node/poc/stockfish/front/app/js/app.js
-    #echo "update address in ~/iexecdev/iexec-node/poc/stockfish/bridge/stockfish.js"
-    #sed -i "s/.*var contract_address =.*/var contract_address =\"${STOCKFISH_CONTRACT_ADDRESS}\";/g" ~/iexecdev/iexec-node/poc/stockfish/bridge/stockfish.js
-
-
-    #"address":
-
-   # "ContractAddress": "0x7883d350e42c3e198e1f8c8b1812abbc34b68284"
+    Set Suite Variable  ${IEXEC_ORACLE_SM_ADDRESS}  @{smartContractAddress}[0]
+    Run  sed -i 's/.*"ContractAddress":.*/"ContractAddress":\"${IEXEC_ORACLE_SM_ADDRESS}\"/g' iexec-oracle/Bridge/config.json
+    Run  sed -i 's/.*return IexecOracle.at(.*/return IexecOracle.at(\"${IEXEC_ORACLE_SM_ADDRESS}\")/g' iexec-oracle/API/test/rf/*
+    #HelloWorld.sol
+    ${helloworld_json_content} =  Get File  iexec-oracle/API/build/contracts/HelloWorld.json
+    @{smartContractAddress} =  Get Regexp Matches  ${helloworld_json_content}  "address": "(?P<smartContractAddress>.*)",  smartContractAddress
+    LOG  @{smartContractAddress}
+    LOG  @{smartContractAddress}[0]
+    Set Suite Variable  ${HELLO_WORLD_SM_ADDRESS}  @{smartContractAddress}[0]
+    Run  sed -i 's/.*return HelloWorld.at(.*/return HelloWorld.at(\"${HELLO_WORLD_SM_ADDRESS}\")/g' iexec-oracle/API/test/rf/*
 
 Iexec Oracle Set XtremWeb Config In Bridge
     LOG  ${XWCONFIGURE.VALUES.XWSERVER}
+    Run  sed -i "s/.*const LOCALHOSTNAME = .*/const LOCALHOSTNAME = '${XWCONFIGURE.VALUES.XWSERVER}';/g" iexec-oracle/Bridge/xwhep.js
     LOG  ${XWCONFIGURE.VALUES.HTTPSPORT}
-    Run  sed -i 's/.*const LOCALHOSTNAME = .*/const LOCALHOSTNAME = ${XWCONFIGURE.VALUES.XWSERVER};/g' iexec-oracle/Bridge/xwhep.js
-    Run  sed -i 's/.*const LOCALHOSTPORT = .*/const LOCALHOSTPORT = ${XWCONFIGURE.VALUES.HTTPSPORT};/g' iexec-oracle/Bridge/xwhep.js
+    Run  sed -i "s/.*const LOCALHOSTPORT = .*/const LOCALHOSTPORT = ${XWCONFIGURE.VALUES.HTTPSPORT};/g" iexec-oracle/Bridge/xwhep.js
+    LOG  ${XWCONFIGURE.VALUES.XWADMINLOGIN}
+    Run  sed -i "s/.*const LOGIN = .*/const LOGIN = '${XWCONFIGURE.VALUES.XWADMINLOGIN}';/g" iexec-oracle/Bridge/xwhep.js
+    LOG  ${XWCONFIGURE.VALUES.XWADMINPASSWORD}
+    Run  sed -i "s/.*const PASSWD = .*/const PASSWD = '${XWCONFIGURE.VALUES.XWADMINPASSWORD}';/g" iexec-oracle/Bridge/xwhep.js
 
 Start Bridge
-    ${created_process} =  Start Process  cd iexec-oracle/Bridge && npm run devbridge  shell=yes
+    # clear log
+    Remove File  iexec-oracle/Bridge/bridge.log
+    ${created_process} =  Start Process  cd iexec-oracle/Bridge && npm run devbridgelog  shell=yes
     Set Suite Variable  ${BRIDGE_PROCESS}  ${created_process}
 
 Stop Bridge
     Terminate Process  ${BRIDGE_PROCESS}
+
+Get Bridge Log
+    ${bridge_log} =  GET FILE  iexec-oracle/Bridge/bridge.log
+    LOG  ${bridge_log}
+    [Return]  ${bridge_log}

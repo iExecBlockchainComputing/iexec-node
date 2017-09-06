@@ -57,3 +57,7 @@ Count From Datas Where Uid
 Count From Apps Where Uid
     [Arguments]  ${uid}  ${countExpected}
     MySql.Count From Table Where Uid  apps  ${uid}  ${countExpected}
+
+Count From Works Where Uid
+    [Arguments]  ${uid}  ${countExpected}
+    MySql.Count From Table Where Uid  works  ${uid}  ${countExpected}
