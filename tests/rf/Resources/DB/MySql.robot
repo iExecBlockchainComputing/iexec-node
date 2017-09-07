@@ -26,6 +26,11 @@ Count From Table Where Uid
     Row Count Is Equal To X  SELECT * FROM ${table} WHERE uid = '${uid}'  ${countExpected}
     Disconnect
 
+Count From Table
+    [Arguments]  ${table}  ${countExpected}
+    Connect
+    Row Count Is Equal To X  SELECT * FROM ${table}  ${countExpected}
+    Disconnect
 
 Delete Fonctionnal Xtremweb Tables
     Connect

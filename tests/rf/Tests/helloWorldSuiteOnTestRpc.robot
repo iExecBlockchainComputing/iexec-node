@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation    End-to-End test HelloWorld usacase Oracle+bridge+xtremweb
+Documentation    End-to-End test HelloWorld usecase Oracle+bridge+xtremweb
 Resource  ../Resources/XWCommon.robot
 Resource  ../Resources/XWServer.robot
 Resource  ../Resources/IexecOracle.robot
@@ -29,25 +29,41 @@ Test HelloWorld Iexec
     Set Suite Variable  ${USER}  ${user}
     ${creator} =  IexceOracleSmartContract.Get Creator Address
     Set Suite Variable  ${CREATOR}  ${creator}
-    # 1 : deploy /bin/echo binary in XWtremweb
+    # 1) : deploy /bin/echo binary in XWtremweb
     ${app_uid} =  XWClient.XWSENDAPPCommand  echo  DEPLOYABLE  LINUX  AMD64  /bin/echo
     XWServer.Count From Apps Where Uid  ${app_uid}  1
-    # 2 : start a echo work
+    XWServer.Count From Works  0
+    # 2) : start a echo work
     HelloWorldSmartContract.RegisterEcho
+    IexecOracle.Get Bridge Log
     Check Register Launch Event In IexceOracleSmartContract
     ${work_uid} =  Check Register CallbackEvent Event In IexceOracleSmartContract
     LOG  ${work_uid}
+
     Check Work Is Recorded in IexceOracleSmartContract After Register  ${work_uid}
-    # 3 : set Param HelloWorld!!! for the  work
+    XWServer.Count From Works Where Uid  ${work_uid}  1
+    # 3) : set Param HelloWorld!!! for the  work
     HelloWorldSmartContract.SetParamHelloWorld  ${work_uid}  HelloWorld!!!
     Check SetParam Launch Event In IexceOracleSmartContract  ${work_uid}
-    IexecOracle.Get Bridge Log
-    Check SetParam CallbackEvent Event In IexceOracleSmartContract
-    # 4 : Work configured : change work status in order to be treat by a worker
-    #HelloWorldSmartContract.Set Pending
-    # 5 : Wait completed by checking status
-    #HelloWorldSmartContract.Get status
-    # 6 : get the result of the echo HelloWorld!!!
+    Check SetParam CallbackEvent Event In IexceOracleSmartContract  ${work_uid}
+    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${work_uid}
+    # status 1 = still UNAVAILABLE after setParam
+    Should Be Equal As Strings  ${work_status}  1
+    # 4) : Work configured : change work status in order to be treat by a worker
+    HelloWorldSmartContract.Set Pending  ${work_uid}
+    Check SetPending Launch Event In IexceOracleSmartContract  ${work_uid}
+    Check SetPending CallbackEvent Event In IexceOracleSmartContract  ${work_uid}
+    # 5) : Wait completed by checking status
+    Wait Until Keyword Succeeds  3 min	5 sec  XWClient.Check XWSTATUS Completed  ${work_uid}
+    HelloWorldSmartContract.Get Status  ${work_uid}
+    Check Status Launch Event In IexceOracleSmartContract  ${work_uid}
+    Check Status CallbackEvent Event In IexceOracleSmartContract  ${work_uid}
+    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${work_uid}
+    # status 4 = COMPLETED
+    Should Be Equal As Strings  ${work_status}  4
+
+
+    # 6) : get the result of the echo HelloWorld!!!
     #HelloWorldSmartContract.Get Result
 
 
@@ -58,6 +74,7 @@ Test HelloWorld Iexec
     # ???? Failed :  XWServer.Count From Works Where Uid  @{work_uid}[0]  1
     # ???? Failed : XWClient.Check XWSTATUS Pending  xw://vagrant-ubuntu-trusty-64/@{work_uid}[0]
 
+    # TODO check  HelloWorldSmartContract.RegisterEcho call twice
 
 
 *** Keywords ***
@@ -76,6 +93,52 @@ Stop Oracle Bridge And Xtremweb
     ETHTestrpc.Stop Testrpc
     XWCommon.Stop XWtremWeb Server And XWtremWeb Worker
 
+
+Check Status Launch Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  IexceOracleSmartContract.Watch LaunchEvent
+    Should Contain  ${watch_launch_event}  functionName: 'status'
+    Should Contain  ${watch_launch_event}  param1: ''
+    Should Contain  ${watch_launch_event}  param2: ''
+    Should Contain  ${watch_launch_event}  user: '${USER}'
+    Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_launch_event}  provider: '${HELLO_WORLD_SM_ADDRESS}'
+    Should Contain  ${watch_launch_event}  workUid: '${work_uid}'
+
+Check Status CallbackEvent Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  IexceOracleSmartContract.Watch CallbackEvent
+    Should Contain  ${watch_callback_event}  callbackType: 'StatusCallback'
+    Should Contain  ${watch_callback_event}  appName: 'echo'
+    Should Contain  ${watch_callback_event}  user: '${USER}'
+    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_callback_event}  provider: '${HELLO_WORLD_SM_ADDRESS}'
+    Should Contain  ${watch_callback_event}  workUid: '${work_uid}'
+
+
+Check SetPending Launch Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  IexceOracleSmartContract.Watch LaunchEvent
+    Should Contain  ${watch_launch_event}  functionName: 'setPending'
+    Should Contain  ${watch_launch_event}  param1: 'status'
+    Should Contain  ${watch_launch_event}  param2: 'pending'
+    Should Contain  ${watch_launch_event}  user: '${USER}'
+    Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_launch_event}  provider: '${HELLO_WORLD_SM_ADDRESS}'
+    Should Contain  ${watch_launch_event}  workUid: '${work_uid}'
+
+
+Check SetPending CallbackEvent Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  IexceOracleSmartContract.Watch CallbackEvent
+    Should Contain  ${watch_callback_event}  callbackType: 'SetPendingCallback'
+    Should Contain  ${watch_callback_event}  appName: 'echo'
+    Should Contain  ${watch_callback_event}  user: '${USER}'
+    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_callback_event}  provider: '${HELLO_WORLD_SM_ADDRESS}'
+    Should Contain  ${watch_callback_event}  workUid: '${work_uid}'
+
+
 Check SetParam Launch Event In IexceOracleSmartContract
     [Arguments]  ${work_uid}
     ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  IexceOracleSmartContract.Watch LaunchEvent
@@ -84,7 +147,18 @@ Check SetParam Launch Event In IexceOracleSmartContract
     Should Contain  ${watch_launch_event}  user: '${USER}'
     Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
     Should Contain  ${watch_launch_event}  provider: '${HELLO_WORLD_SM_ADDRESS}'
-    Should Contain  ${watch_launch_event}  uid: '${work_uid}'
+    Should Contain  ${watch_launch_event}  workUid: '${work_uid}'
+
+Check SetParam CallbackEvent Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  IexceOracleSmartContract.Watch CallbackEvent
+    Should Contain  ${watch_callback_event}  callbackType: 'SetParamCallback'
+    Should Contain  ${watch_callback_event}  appName: 'echo'
+    Should Contain  ${watch_callback_event}  user: '${USER}'
+    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_callback_event}  provider: '${HELLO_WORLD_SM_ADDRESS}'
+    Should Contain  ${watch_callback_event}  workUid: '${work_uid}'
+
 
 Check Register Launch Event In IexceOracleSmartContract
     ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  IexceOracleSmartContract.Watch LaunchEvent
@@ -101,16 +175,8 @@ Check Register CallbackEvent Event In IexceOracleSmartContract
     Should Contain  ${watch_callback_event}  user: '${USER}'
     Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
     Should Contain  ${watch_callback_event}  provider: '${HELLO_WORLD_SM_ADDRESS}'
-    @{work_uid} =  Get Regexp Matches  ${watch_callback_event}  uid: '(?P<work_uid>.*)',  work_uid
+    @{work_uid} =  Get Regexp Matches  ${watch_callback_event}  workUid: '(?P<work_uid>.*)',  work_uid
     [Return]  @{work_uid}[0]
-
-Check SetParam CallbackEvent Event In IexceOracleSmartContract
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  IexceOracleSmartContract.Watch CallbackEvent
-    Should Contain  ${watch_callback_event}  callbackType: 'SetParamCallback'
-    Should Contain  ${watch_callback_event}  appName: 'echo'
-    Should Contain  ${watch_callback_event}  user: '${USER}'
-    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
-    Should Contain  ${watch_callback_event}  provider: '${HELLO_WORLD_SM_ADDRESS}'
 
 Check Work Is Recorded in IexceOracleSmartContract After Register
     [Arguments]  ${work_uid}
@@ -130,4 +196,3 @@ Check Work Is Recorded in IexceOracleSmartContract After Register
     ${work_stderr} =  IexceOracleSmartContract.Get Work Stderr  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${work_uid}
     Should Be Equal As Strings  ${work_stderr}  @{work_result}[4]
     Should Be Empty  ${work_stderr}
-

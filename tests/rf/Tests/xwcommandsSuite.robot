@@ -56,7 +56,7 @@ Test XWSubmit and XWResults Command On LS Binary With Param
     XWServer.Count From Apps Where Uid  ${uid}  1
     ${workuid} =  XWSUBMITCommand  ls -atr
     LOG  ${workuid}
-    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+    Wait Until Keyword Succeeds  3 min	5 sec  XWClient.Check XWSTATUS Completed  ${workuid}
     ${results_file} =  XWRESULTSCommand  ${workuid}
     ${results_file_content} =  Get File  ${results_file}
     ${results_file_content_lines_count} =  Get Line Count  ${results_file_content}
