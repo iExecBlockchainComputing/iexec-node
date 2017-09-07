@@ -35,3 +35,11 @@ Get Status
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
+
+Get Result
+    [Arguments]  ${uid}
+    Run  sed -i "s/.*return aHelloWorldInstance.resultHelloWorld(.*/return aHelloWorldInstance.resultHelloWorld(\\"${uid}\\",{/g" iexec-oracle/API/test/rf/resultHelloWorldTest.js
+    ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/resultHelloWorldTest.js  shell=yes
+    Log  ${truffletest_result.stderr}
+    Log  ${truffletest_result.stdout}
+    Should Be Equal As Integers	${truffletest_result.rc}	0

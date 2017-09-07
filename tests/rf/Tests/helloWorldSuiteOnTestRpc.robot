@@ -61,18 +61,16 @@ Test HelloWorld Iexec
     ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${work_uid}
     # status 4 = COMPLETED
     Should Be Equal As Strings  ${work_status}  4
-
-
     # 6) : get the result of the echo HelloWorld!!!
-    #HelloWorldSmartContract.Get Result
+    HelloWorldSmartContract.Get Result  ${work_uid}
+    Check Result Launch Event In IexceOracleSmartContract  ${work_uid}
+    Check Result CallbackEvent Event In IexceOracleSmartContract  ${work_uid}
+    ${work_stdout} =  IexceOracleSmartContract.Get Work Stdout  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${work_uid}
+    Should Be Equal As Strings  ${work_stdout}  HelloWorld!!!
 
 
+    #better example ? : echo  hello| tr "[a-z]" "[A-Z]"
 
-
-
-
-    # ???? Failed :  XWServer.Count From Works Where Uid  @{work_uid}[0]  1
-    # ???? Failed : XWClient.Check XWSTATUS Pending  xw://vagrant-ubuntu-trusty-64/@{work_uid}[0]
 
     # TODO check  HelloWorldSmartContract.RegisterEcho call twice
 
@@ -92,6 +90,28 @@ Stop Oracle Bridge And Xtremweb
     IexecOracle.Stop Bridge
     ETHTestrpc.Stop Testrpc
     XWCommon.Stop XWtremWeb Server And XWtremWeb Worker
+
+
+Check Result Launch Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  IexceOracleSmartContract.Watch LaunchEvent
+    Should Contain  ${watch_launch_event}  functionName: 'stdout'
+    Should Contain  ${watch_launch_event}  param1: ''
+    Should Contain  ${watch_launch_event}  param2: ''
+    Should Contain  ${watch_launch_event}  user: '${USER}'
+    Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_launch_event}  provider: '${HELLO_WORLD_SM_ADDRESS}'
+    Should Contain  ${watch_launch_event}  workUid: '${work_uid}'
+
+Check Result CallbackEvent Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  IexceOracleSmartContract.Watch CallbackEvent
+    Should Contain  ${watch_callback_event}  callbackType: 'StdoutCallback'
+    Should Contain  ${watch_callback_event}  appName: 'echo'
+    Should Contain  ${watch_callback_event}  user: '${USER}'
+    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_callback_event}  provider: '${HELLO_WORLD_SM_ADDRESS}'
+    Should Contain  ${watch_callback_event}  workUid: '${work_uid}'
 
 
 Check Status Launch Event In IexceOracleSmartContract
