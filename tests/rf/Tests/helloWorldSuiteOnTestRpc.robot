@@ -29,34 +29,35 @@ Test HelloWorld Iexec
     Set Suite Variable  ${USER}  ${user}
     ${creator} =  IexceOracleSmartContract.Get Creator Address
     Set Suite Variable  ${CREATOR}  ${creator}
+    # 1 : deploy /bin/echo binary in XWtremweb
     ${app_uid} =  XWClient.XWSENDAPPCommand  echo  DEPLOYABLE  LINUX  AMD64  /bin/echo
     XWServer.Count From Apps Where Uid  ${app_uid}  1
+    # 2 : start a echo work
     HelloWorldSmartContract.RegisterEcho
     Check Register Launch Event In IexceOracleSmartContract
     ${work_uid} =  Check Register CallbackEvent Event In IexceOracleSmartContract
     LOG  ${work_uid}
     Check Work Is Recorded in IexceOracleSmartContract After Register  ${work_uid}
+    # 3 : set Param HelloWorld!!! for the  work
     HelloWorldSmartContract.SetParamHelloWorld  ${work_uid}  HelloWorld!!!
     Check SetParam Launch Event In IexceOracleSmartContract  ${work_uid}
+    IexecOracle.Get Bridge Log
     Check SetParam CallbackEvent Event In IexceOracleSmartContract
+    # 4 : Work configured : change work status in order to be treat by a worker
+    #HelloWorldSmartContract.Set Pending
+    # 5 : Wait completed by checking status
+    #HelloWorldSmartContract.Get status
+    # 6 : get the result of the echo HelloWorld!!!
+    #HelloWorldSmartContract.Get Result
 
-    #IexecOracle.Get Bridge Log
+
+
+
 
 
     # ???? Failed :  XWServer.Count From Works Where Uid  @{work_uid}[0]  1
     # ???? Failed : XWClient.Check XWSTATUS Pending  xw://vagrant-ubuntu-trusty-64/@{work_uid}[0]
 
-
-    #get work
-
-
-    #Sleep  1 minutes
-    # check stats with workuid
-    #IexecOracle.Get Bridge Log
-    #XWClient.XWWORKSCommand
-    #Sleep  2 minutes
-    #IexecOracle.Get Bridge Log
-    #XWClient.XWWORKSCommand
 
 
 *** Keywords ***
