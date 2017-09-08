@@ -3,8 +3,8 @@ Documentation    End-to-End test HelloWorld usecase Oracle+bridge+xtremweb
 Resource  ../Resources/XWCommon.robot
 Resource  ../Resources/XWServer.robot
 Resource  ../Resources/IexecOracle.robot
-Resource  ../Resources/ETHTestrpc.robot
 Resource  ../Resources/cli/XWClient.robot
+Resource  ../Resources/ETHGeth.robot
 Resource  ../Resources/smartcontracts/HelloWorldSmartContract.robot
 Resource  ../Resources/smartcontracts/IexceOracleSmartContract.robot
 Suite Setup  Start Oracle Bridge And Xtremweb
@@ -93,7 +93,7 @@ Test HelloWorld Iexec
 
 Start Oracle Bridge And Xtremweb
     XWCommon.Prepare And Start XWtremWeb Server And XWtremWeb Worker
-    ETHTestrpc.Start Testrpc
+    ETHGeth.Start Geth42
     IexecOracle.Iexec Oracle Truffle Migrate
     IexecOracle.Iexec Oracle Set Contract Address In Bridge
     IexecOracle.Iexec Oracle Set XtremWeb Config In Bridge
@@ -102,6 +102,9 @@ Start Oracle Bridge And Xtremweb
 
 Stop Oracle Bridge And Xtremweb
     IexecOracle.Stop Bridge
-    ETHTestrpc.Stop Testrpc
+    ETHGeth.Stop Geth42
     XWCommon.Stop XWtremWeb Server And XWtremWeb Worker
+
+
+
 

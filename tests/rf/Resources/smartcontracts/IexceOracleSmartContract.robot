@@ -4,6 +4,133 @@
 
 *** Keywords ***
 
+Check Result Launch Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}  ${provider}
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch LaunchEvent
+    Should Contain  ${watch_launch_event}  functionName: 'stdout'
+    Should Contain  ${watch_launch_event}  param1: ''
+    Should Contain  ${watch_launch_event}  param2: ''
+    Should Contain  ${watch_launch_event}  user: '${USER}'
+    Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_launch_event}  provider: '${provider}'
+    Should Contain  ${watch_launch_event}  workUid: '${work_uid}'
+
+Check Result CallbackEvent Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}  ${provider}
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch CallbackEvent
+    Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
+    Should Contain  ${watch_callback_event}  callbackType: 'StdoutCallback'
+    Should Contain  ${watch_callback_event}  appName: 'echo'
+    Should Contain  ${watch_callback_event}  user: '${USER}'
+    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_callback_event}  provider: '${provider}'
+    Should Contain  ${watch_callback_event}  workUid: '${work_uid}'
+
+Check Status Launch Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}  ${provider}
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch LaunchEvent
+    Should Contain  ${watch_launch_event}  functionName: 'status'
+    Should Contain  ${watch_launch_event}  param1: ''
+    Should Contain  ${watch_launch_event}  param2: ''
+    Should Contain  ${watch_launch_event}  user: '${USER}'
+    Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_launch_event}  provider: '${provider}'
+    Should Contain  ${watch_launch_event}  workUid: '${work_uid}'
+
+Check Status CallbackEvent Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}  ${provider}
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch CallbackEvent
+    Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
+    Should Contain  ${watch_callback_event}  callbackType: 'StatusCallback'
+    Should Contain  ${watch_callback_event}  appName: 'echo'
+    Should Contain  ${watch_callback_event}  user: '${USER}'
+    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_callback_event}  provider: '${provider}'
+    Should Contain  ${watch_callback_event}  workUid: '${work_uid}'
+
+Check SetPending Launch Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}  ${provider}
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch LaunchEvent
+    Should Contain  ${watch_launch_event}  functionName: 'setPending'
+    Should Contain  ${watch_launch_event}  param1: 'status'
+    Should Contain  ${watch_launch_event}  param2: 'pending'
+    Should Contain  ${watch_launch_event}  user: '${USER}'
+    Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_launch_event}  provider: '${provider}'
+    Should Contain  ${watch_launch_event}  workUid: '${work_uid}'
+
+
+Check SetPending CallbackEvent Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}  ${provider}
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch CallbackEvent
+    Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
+    Should Contain  ${watch_callback_event}  callbackType: 'SetPendingCallback'
+    Should Contain  ${watch_callback_event}  appName: 'echo'
+    Should Contain  ${watch_callback_event}  user: '${USER}'
+    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_callback_event}  provider: '${provider}'
+    Should Contain  ${watch_callback_event}  workUid: '${work_uid}'
+
+Check SetParam Launch Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}  ${provider}
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch LaunchEvent
+    Should Contain  ${watch_launch_event}  functionName: 'setParam'
+    Should Contain  ${watch_launch_event}  param2: 'HelloWorld!!!'
+    Should Contain  ${watch_launch_event}  user: '${USER}'
+    Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_launch_event}  provider: '${provider}'
+    Should Contain  ${watch_launch_event}  workUid: '${work_uid}'
+
+Check SetParam CallbackEvent Event In IexceOracleSmartContract
+    [Arguments]  ${work_uid}  ${provider}
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch CallbackEvent
+    Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
+    Should Contain  ${watch_callback_event}  callbackType: 'SetParamCallback'
+    Should Contain  ${watch_callback_event}  appName: 'echo'
+    Should Contain  ${watch_callback_event}  user: '${USER}'
+    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_callback_event}  provider: '${provider}'
+    Should Contain  ${watch_callback_event}  workUid: '${work_uid}'
+
+
+Check Register Launch Event In IexceOracleSmartContract
+    [Arguments]  ${provider}
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch LaunchEvent
+    Should Contain  ${watch_launch_event}  functionName: 'register'
+    Should Contain  ${watch_launch_event}  param1: 'echo'
+    Should Contain  ${watch_launch_event}  user: '${USER}'
+    Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_launch_event}  provider: '${provider}'
+
+Check Register CallbackEvent Event In IexceOracleSmartContract
+    [Arguments]  ${provider}
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch CallbackEvent
+    Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
+    Should Contain  ${watch_callback_event}  callbackType: 'RegisterCallback'
+    Should Contain  ${watch_callback_event}  appName: 'echo'
+    Should Contain  ${watch_callback_event}  user: '${USER}'
+    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_callback_event}  provider: '${provider}'
+    @{work_uid} =  Get Regexp Matches  ${watch_callback_event}  workUid: '(?P<work_uid>.*)',  work_uid
+    [Return]  @{work_uid}[0]
+
+Check Work Is Recorded in IexceOracleSmartContract After Register
+    [Arguments]  ${work_uid}  ${provider}
+    @{work_result} =  Get Work  ${USER}  ${provider}  ${work_uid}
+    ${work_name} =  Get Work Name  ${USER}  ${provider}  ${work_uid}
+    Should Be Equal As Strings  ${work_name}  @{work_result}[0]
+    Should Be Equal As Strings  ${work_name}  echo
+    ${work_timestamp} =  Get Work Timestamp  ${USER}  ${provider}  ${work_uid}
+    Should Be Equal As Strings  ${work_timestamp}  @{work_result}[1]
+    ${work_status} =  Get Work Status  ${USER}  ${provider}  ${work_uid}
+    Should Be Equal As Strings  ${work_status}  @{work_result}[2]
+    ${work_stdout} =  Get Work Stdout  ${USER}  ${provider}  ${work_uid}
+    Should Be Equal As Strings  ${work_stdout}  @{work_result}[3]
+    Should Be Empty  ${work_stdout}
+    ${work_stderr} =  Get Work Stderr  ${USER}  ${provider}  ${work_uid}
+    Should Be Equal As Strings  ${work_stderr}  @{work_result}[4]
+    Should Be Empty  ${work_stderr}
+
 Watch CallbackEvent
     ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/watchCallbackEventInIexecOracle.js  shell=yes
     Log  ${truffletest_result.stderr}
