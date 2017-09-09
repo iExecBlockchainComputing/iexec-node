@@ -6,7 +6,7 @@
 
 Check Result Launch Event In IexceOracleSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch LaunchEvent
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  3 min	 1 min  Watch LaunchEvent
     Should Contain  ${watch_launch_event}  functionName: 'stdout'
     Should Contain  ${watch_launch_event}  param1: ''
     Should Contain  ${watch_launch_event}  param2: ''
@@ -17,7 +17,7 @@ Check Result Launch Event In IexceOracleSmartContract
 
 Check Result CallbackEvent Event In IexceOracleSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch CallbackEvent
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch CallbackEvent
     Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'StdoutCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'
@@ -28,7 +28,7 @@ Check Result CallbackEvent Event In IexceOracleSmartContract
 
 Check Status Launch Event In IexceOracleSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch LaunchEvent
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch LaunchEvent
     Should Contain  ${watch_launch_event}  functionName: 'status'
     Should Contain  ${watch_launch_event}  param1: ''
     Should Contain  ${watch_launch_event}  param2: ''
@@ -39,7 +39,7 @@ Check Status Launch Event In IexceOracleSmartContract
 
 Check Status CallbackEvent Event In IexceOracleSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch CallbackEvent
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch CallbackEvent
     Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'StatusCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'
@@ -50,7 +50,7 @@ Check Status CallbackEvent Event In IexceOracleSmartContract
 
 Check SetPending Launch Event In IexceOracleSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch LaunchEvent
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch LaunchEvent
     Should Contain  ${watch_launch_event}  functionName: 'setPending'
     Should Contain  ${watch_launch_event}  param1: 'status'
     Should Contain  ${watch_launch_event}  param2: 'pending'
@@ -62,7 +62,7 @@ Check SetPending Launch Event In IexceOracleSmartContract
 
 Check SetPending CallbackEvent Event In IexceOracleSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch CallbackEvent
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch CallbackEvent
     Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'SetPendingCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'
@@ -73,7 +73,7 @@ Check SetPending CallbackEvent Event In IexceOracleSmartContract
 
 Check SetParam Launch Event In IexceOracleSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch LaunchEvent
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch LaunchEvent
     Should Contain  ${watch_launch_event}  functionName: 'setParam'
     Should Contain  ${watch_launch_event}  param2: 'HelloWorld!!!'
     Should Contain  ${watch_launch_event}  user: '${USER}'
@@ -83,7 +83,7 @@ Check SetParam Launch Event In IexceOracleSmartContract
 
 Check SetParam CallbackEvent Event In IexceOracleSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch CallbackEvent
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch CallbackEvent
     Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'SetParamCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'
@@ -95,7 +95,7 @@ Check SetParam CallbackEvent Event In IexceOracleSmartContract
 
 Check Register Launch Event In IexceOracleSmartContract
     [Arguments]  ${provider}
-    ${watch_launch_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch LaunchEvent
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch LaunchEvent
     Should Contain  ${watch_launch_event}  functionName: 'register'
     Should Contain  ${watch_launch_event}  param1: 'echo'
     Should Contain  ${watch_launch_event}  user: '${USER}'
@@ -104,7 +104,7 @@ Check Register Launch Event In IexceOracleSmartContract
 
 Check Register CallbackEvent Event In IexceOracleSmartContract
     [Arguments]  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch CallbackEvent
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch CallbackEvent
     Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'RegisterCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'

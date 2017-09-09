@@ -8,7 +8,7 @@
 
 Check Result CallbackEvent Event In HelloWorldSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch IExecCallbackEvent
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IExecCallbackEvent
     Should Contain  ${watch_callback_event}  event: 'IexecCallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'StdoutCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'
@@ -19,7 +19,7 @@ Check Result CallbackEvent Event In HelloWorldSmartContract
 
 Check Status CallbackEvent Event In HelloWorldSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch IExecCallbackEvent
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IExecCallbackEvent
     Should Contain  ${watch_callback_event}  event: 'IexecCallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'StatusCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'
@@ -30,7 +30,7 @@ Check Status CallbackEvent Event In HelloWorldSmartContract
 
 Check SetPending CallbackEvent Event In HelloWorldSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch IExecCallbackEvent
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IExecCallbackEvent
     Should Contain  ${watch_callback_event}  event: 'IexecCallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'SetPendingCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'
@@ -41,7 +41,7 @@ Check SetPending CallbackEvent Event In HelloWorldSmartContract
 
 Check SetParam CallbackEvent Event In HelloWorldSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch IExecCallbackEvent
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IExecCallbackEvent
     Should Contain  ${watch_callback_event}  event: 'IexecCallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'SetParamCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'
@@ -52,7 +52,7 @@ Check SetParam CallbackEvent Event In HelloWorldSmartContract
 
 Check Register CallbackEvent Event In HelloWorldSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  1 min	10 sec  Watch IExecCallbackEvent
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IExecCallbackEvent
     Should Contain  ${watch_callback_event}  event: 'IexecCallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'RegisterCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'
