@@ -93,6 +93,27 @@ Check SetParam CallbackEvent Event In IexceOracleSmartContract
     Should Contain  ${watch_callback_event}  workUid: '${work_uid}'
 
 
+Check Submit Launch Event In IexceOracleSmartContract
+    [Arguments]  ${provider}
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch LaunchEvent
+    Should Contain  ${watch_launch_event}  functionName: 'submit'
+    Should Contain  ${watch_launch_event}  param1: 'echo'
+    Should Contain  ${watch_launch_event}  user: '${USER}'
+    Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_launch_event}  provider: '${provider}'
+
+Check Submit CallbackEvent Event In IexceOracleSmartContract
+    [Arguments]  ${provider}
+    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch CallbackEvent
+    Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
+    Should Contain  ${watch_callback_event}  callbackType: 'SubmitCallback'
+    Should Contain  ${watch_callback_event}  appName: 'echo'
+    Should Contain  ${watch_callback_event}  user: '${USER}'
+    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_callback_event}  provider: '${provider}'
+    @{work_uid} =  Get Regexp Matches  ${watch_callback_event}  workUid: '(?P<work_uid>.*)',  work_uid
+    [Return]  @{work_uid}[0]
+
 Check Register Launch Event In IexceOracleSmartContract
     [Arguments]  ${provider}
     ${watch_launch_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch LaunchEvent

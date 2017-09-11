@@ -36,34 +36,19 @@ Test HelloWorld Iexec
     XWServer.Count From Works  0
 
     # 2) : start a echo work
-    HelloWorldSmartContract.RegisterEcho
+    HelloWorldSmartContract.SubmitEcho  HelloWorld!!!
     IexecOracle.Get Bridge Log
-    Check Register Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
-    ${work_uid} =  Check Register CallbackEvent Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
+    Check Submit Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
+    ${work_uid} =  Check Submit CallbackEvent Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
     LOG  ${work_uid}
-    Check Register CallbackEvent Event In HelloWorldSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
+    Check Submit CallbackEvent Event In HelloWorldSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
     Check Work Is Recorded in IexceOracleSmartContract After Register  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
-    # status 1 = UNAVAILABLE
+    # status 2 = PENDING
     ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${work_uid}
-    Should Be Equal As Strings  ${work_status}  1
+    Should Be Equal As Strings  ${work_status}  2
     XWServer.Count From Works Where Uid  ${work_uid}  1
 
-    # 3) : set Param HelloWorld!!! for the  work
-    HelloWorldSmartContract.SetParamHelloWorld  ${work_uid}  HelloWorld!!!
-    Check SetParam Launch Event In IexceOracleSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
-    Check SetParam CallbackEvent Event In IexceOracleSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
-    Check SetParam CallbackEvent Event In HelloWorldSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
-    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${work_uid}
-    # status 1 = still UNAVAILABLE after setParam
-    Should Be Equal As Strings  ${work_status}  1
-
-    # 4) : Work configured : change work status in order to be treat by a worker
-    HelloWorldSmartContract.Set Pending  ${work_uid}
-    Check SetPending Launch Event In IexceOracleSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
-    Check SetPending CallbackEvent Event In IexceOracleSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
-    Check SetPending CallbackEvent Event In HelloWorldSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
-
-    # 5) : Wait completed by checking status
+    # 3) : Wait completed by checking status
     Wait Until Keyword Succeeds  3 min	5 sec  XWClient.Check XWSTATUS Completed  ${work_uid}
     HelloWorldSmartContract.Get Status  ${work_uid}
     Check Status Launch Event In IexceOracleSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
@@ -73,7 +58,7 @@ Test HelloWorld Iexec
     # status 4 = COMPLETED
     Should Be Equal As Strings  ${work_status}  4
 
-    # 6) : get the result of the echo HelloWorld!!!
+    # 4) : get the result of the echo HelloWorld!!!
     HelloWorldSmartContract.Get Result  ${work_uid}
     Check Result Launch Event In IexceOracleSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
     Check Result CallbackEvent Event In IexceOracleSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
