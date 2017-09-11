@@ -3,6 +3,7 @@ Documentation    End-to-End test HelloWorld usecase Oracle+bridge+xtremweb
 Resource  ../Resources/XWCommon.robot
 Resource  ../Resources/XWServer.robot
 Resource  ../Resources/IexecOracle.robot
+Resource  ../Resources/IexecBridge.robot
 Resource  ../Resources/ETHTestrpc.robot
 Resource  ../Resources/cli/XWClient.robot
 Resource  ../Resources/smartcontracts/HelloWorldSmartContract.robot
@@ -22,8 +23,8 @@ ${CREATOR}
 
 *** Test Cases ***
 
-Test HelloWorld Iexec
-    [Documentation]  Test HelloWorld Iexec
+Test HelloWorld Submit Iexec
+    [Documentation]  Test HelloWorld Submit Iexec
     [Tags]  HelloWorld Tests
     ${user} =  IexceOracleSmartContract.Get User Address
     Set Suite Variable  ${USER}  ${user}
@@ -37,12 +38,12 @@ Test HelloWorld Iexec
 
     # 2) : start a echo work
     HelloWorldSmartContract.SubmitEcho  HelloWorld!!!
-    IexecOracle.Get Bridge Log
+    IexecBridge.Get Bridge Log
     Check Submit Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
     ${work_uid} =  Check Submit CallbackEvent Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
     LOG  ${work_uid}
     Check Submit CallbackEvent Event In HelloWorldSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
-    Check Work Is Recorded in IexceOracleSmartContract After Register  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
+    Check Work Is Recorded in IexceOracleSmartContract After Submit  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
     # status 2 = PENDING
     ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${work_uid}
     Should Be Equal As Strings  ${work_status}  2
@@ -74,19 +75,19 @@ Test HelloWorld Iexec
     # TODO add error usecase HelloWorld tests
 
 
+
 *** Keywords ***
 
 Start Oracle Bridge And Xtremweb
     XWCommon.Prepare And Start XWtremWeb Server And XWtremWeb Worker
     ETHTestrpc.Start Testrpc
-    IexecOracle.Iexec Oracle Truffle Migrate
-    IexecOracle.Iexec Oracle Set Contract Address In Bridge
-    IexecOracle.Iexec Oracle Set XtremWeb Config In Bridge
-    IexecOracle.Start Bridge
+    IexecOracle.Init Oracle
+    IexecBridge.Init Bridge
+    IexecBridge.Start Bridge
 
 
 Stop Oracle Bridge And Xtremweb
-    IexecOracle.Stop Bridge
+    IexecBridge.Stop Bridge
     ETHTestrpc.Stop Testrpc
     XWCommon.Stop XWtremWeb Server And XWtremWeb Worker
 

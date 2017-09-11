@@ -102,11 +102,32 @@ Check Submit Launch Event In IexceOracleSmartContract
     Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
     Should Contain  ${watch_launch_event}  provider: '${provider}'
 
+Check SubmitAndWait Launch Event In IexceOracleSmartContract
+    [Arguments]  ${provider}
+    ${watch_launch_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch LaunchEvent
+    Should Contain  ${watch_launch_event}  functionName: 'submitAndWait'
+    Should Contain  ${watch_launch_event}  param1: 'echo'
+    Should Contain  ${watch_launch_event}  user: '${USER}'
+    Should Contain  ${watch_launch_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_launch_event}  provider: '${provider}'
+
 Check Submit CallbackEvent Event In IexceOracleSmartContract
     [Arguments]  ${provider}
     ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch CallbackEvent
     Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'SubmitCallback'
+    Should Contain  ${watch_callback_event}  appName: 'echo'
+    Should Contain  ${watch_callback_event}  user: '${USER}'
+    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
+    Should Contain  ${watch_callback_event}  provider: '${provider}'
+    @{work_uid} =  Get Regexp Matches  ${watch_callback_event}  workUid: '(?P<work_uid>.*)',  work_uid
+    [Return]  @{work_uid}[0]
+
+Check SubmitAndWait CallbackEvent Event In IexceOracleSmartContract
+    [Arguments]  ${provider}
+    ${watch_callback_event} =  Watch CallbackEvent
+    Should Contain  ${watch_callback_event}  event: 'CallbackEvent'
+    Should Contain  ${watch_callback_event}  callbackType: 'SubmitAndWaitCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'
     Should Contain  ${watch_callback_event}  user: '${USER}'
     Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
@@ -135,7 +156,7 @@ Check Register CallbackEvent Event In IexceOracleSmartContract
     @{work_uid} =  Get Regexp Matches  ${watch_callback_event}  workUid: '(?P<work_uid>.*)',  work_uid
     [Return]  @{work_uid}[0]
 
-Check Work Is Recorded in IexceOracleSmartContract After Register
+Check Work Is Recorded in IexceOracleSmartContract After Submit
     [Arguments]  ${work_uid}  ${provider}
     @{work_result} =  Get Work  ${USER}  ${provider}  ${work_uid}
     ${work_name} =  Get Work Name  ${USER}  ${provider}  ${work_uid}
@@ -153,7 +174,7 @@ Check Work Is Recorded in IexceOracleSmartContract After Register
     Should Be Empty  ${work_stderr}
 
 Watch CallbackEvent
-    ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/watchCallbackEventInIexecOracle.js  shell=yes
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/watchCallbackEventInIexecOracle.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
@@ -161,7 +182,7 @@ Watch CallbackEvent
     [Return]  ${truffletest_result.stdout}
 
 Watch LaunchEvent
-    ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/watchLaunchEventInIexecOracle.js  shell=yes
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/watchLaunchEventInIexecOracle.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
@@ -169,7 +190,7 @@ Watch LaunchEvent
     [Return]  ${truffletest_result.stdout}
 
 Get User Address
-    ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/getUserAddress.js  shell=yes
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/getUserAddress.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
@@ -177,7 +198,7 @@ Get User Address
     [Return]  @{address}[0]
 
 Get Creator Address
-    ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/getCreatorAddress.js  shell=yes
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/getCreatorAddress.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
@@ -186,8 +207,8 @@ Get Creator Address
 
 Get Work
     [Arguments]  ${user}  ${provider}  ${uid}
-    Run  sed -i "s/.*getWork.call(.*/return aIexecOracleInstance.getWork.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/API/test/rf/getWorkInIexecOracle.js
-    ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/getWorkInIexecOracle.js  shell=yes
+    Run  sed -i "s/.*getWork.call(.*/return aIexecOracleInstance.getWork.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/test/rf/getWorkInIexecOracle.js
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/getWorkInIexecOracle.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
@@ -202,8 +223,8 @@ Get Work
 
 Get Work Name
     [Arguments]  ${user}  ${provider}  ${uid}
-    Run  sed -i "s/.*getWorkName.call(.*/return aIexecOracleInstance.getWorkName.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/API/test/rf/getWorkNameInIexecOracle.js
-    ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/getWorkNameInIexecOracle.js  shell=yes
+    Run  sed -i "s/.*getWorkName.call(.*/return aIexecOracleInstance.getWorkName.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/test/rf/getWorkNameInIexecOracle.js
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/getWorkNameInIexecOracle.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
@@ -212,8 +233,8 @@ Get Work Name
 
 Get Work Timestamp
     [Arguments]  ${user}  ${provider}  ${uid}
-    Run  sed -i "s/.*getWorkTimestamp.call(.*/return aIexecOracleInstance.getWorkTimestamp.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/API/test/rf/getWorkTimestampInIexecOracle.js
-    ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/getWorkTimestampInIexecOracle.js  shell=yes
+    Run  sed -i "s/.*getWorkTimestamp.call(.*/return aIexecOracleInstance.getWorkTimestamp.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/test/rf/getWorkTimestampInIexecOracle.js
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/getWorkTimestampInIexecOracle.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
@@ -222,8 +243,8 @@ Get Work Timestamp
 
 Get Work Status
     [Arguments]  ${user}  ${provider}  ${uid}
-    Run  sed -i "s/.*getWorkStatus.call(.*/return aIexecOracleInstance.getWorkStatus.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/API/test/rf/getWorkStatusInIexecOracle.js
-    ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/getWorkStatusInIexecOracle.js  shell=yes
+    Run  sed -i "s/.*getWorkStatus.call(.*/return aIexecOracleInstance.getWorkStatus.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/test/rf/getWorkStatusInIexecOracle.js
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/getWorkStatusInIexecOracle.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
@@ -232,8 +253,8 @@ Get Work Status
 
 Get Work Stdout
     [Arguments]  ${user}  ${provider}  ${uid}
-    Run  sed -i "s/.*getWorkStdout.call(.*/return aIexecOracleInstance.getWorkStdout.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/API/test/rf/getWorkStdoutInIexecOracle.js
-    ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/getWorkStdoutInIexecOracle.js  shell=yes
+    Run  sed -i "s/.*getWorkStdout.call(.*/return aIexecOracleInstance.getWorkStdout.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/test/rf/getWorkStdoutInIexecOracle.js
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/getWorkStdoutInIexecOracle.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
@@ -242,8 +263,8 @@ Get Work Stdout
 
 Get Work Stderr
     [Arguments]  ${user}  ${provider}  ${uid}
-    Run  sed -i "s/.*getWorkStderr.call(.*/return aIexecOracleInstance.getWorkStderr.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/API/test/rf/getWorkStderrInIexecOracle.js
-    ${truffletest_result} =  Run Process  cd iexec-oracle/API && ./node_modules/.bin/truffle test test/rf/getWorkStderrInIexecOracle.js  shell=yes
+    Run  sed -i "s/.*getWorkStderr.call(.*/return aIexecOracleInstance.getWorkStderr.call('${user}','${provider}',\\"${uid}\\");/g" iexec-oracle/test/rf/getWorkStderrInIexecOracle.js
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/getWorkStderrInIexecOracle.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
