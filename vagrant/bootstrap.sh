@@ -107,3 +107,8 @@ chmod 777 /var/log
 mkdir -p /home/vagrant/iexecdev/.ethash
 chmod 777 /home/vagrant/iexecdev/.ethash
 ln -s /home/vagrant/iexecdev/.ethash /home/vagrant/.ethash
+
+#install terraform
+su - vagrant -c "cd ~ && mkdir terraform"
+su - vagrant -c "cd ~/terraform && curl -o terraform.zip https://releases.hashicorp.com/terraform/0.9.11/terraform_0.9.11_linux_amd64.zip && unzip terraform.zip"
+su - vagrant -c "sudo cp -f ~/terraform/terraform /usr/local/bin/ && rm -rf ~/terraform"
