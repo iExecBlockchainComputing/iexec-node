@@ -104,7 +104,7 @@ Check Submit Launch Event In IexceOracleSmartContract
 
 Check SubmitAndWait Launch Event In IexceOracleSmartContract
     [Arguments]  ${provider}
-    ${watch_launch_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch LaunchEvent
+    ${watch_launch_event} =  Watch LaunchEvent
     Should Contain  ${watch_launch_event}  functionName: 'submitAndWait'
     Should Contain  ${watch_launch_event}  param1: 'echo'
     Should Contain  ${watch_launch_event}  user: '${USER}'

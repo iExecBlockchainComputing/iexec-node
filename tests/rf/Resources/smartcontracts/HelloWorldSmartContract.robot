@@ -75,7 +75,7 @@ Check Submit CallbackEvent Event In HelloWorldSmartContract
 
 Check SubmitAndWait CallbackEvent Event In HelloWorldSmartContract
     [Arguments]  ${work_uid}  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  5 min  1 min  Watch IExecCallbackEvent
+    ${watch_callback_event} =  Watch IExecCallbackEvent
     Should Contain  ${watch_callback_event}  event: 'IexecCallbackEvent'
     Should Contain  ${watch_callback_event}  callbackType: 'SubmitAndWaitCallback'
     Should Contain  ${watch_callback_event}  appName: 'echo'
