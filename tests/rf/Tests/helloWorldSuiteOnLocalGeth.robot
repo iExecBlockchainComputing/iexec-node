@@ -59,7 +59,7 @@ Start Oracle Bridge And Xtremweb
 
 
 Stop Oracle Bridge And Xtremweb
-    IexecOracle.Stop Bridge
+    IexecBridge.Stop Bridge
     ETHGeth.Stop Geth42
     XWCommon.Stop XWtremWeb Server And XWtremWeb Worker
 

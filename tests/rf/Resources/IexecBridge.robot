@@ -2,7 +2,7 @@
 
 *** Variables ***
 ${IEXEC_BRIDGE_GIT_BRANCH} =  https://github.com/iExecBlockchainComputing/iexec-bridge.git
-${IEXEC_BRIDGE_FORCE_GIT_CLONE} =  true
+${IEXEC_BRIDGE_FORCE_GIT_CLONE} =  false
 ${BRIDGE_PROCESS}
 ${IEXEC_ORACLE_SM_ADDRESS}
 ${HELLO_WORLD_SM_ADDRESS}
@@ -11,6 +11,7 @@ ${HELLO_WORLD_SM_ADDRESS}
 
 Init Bridge
     Run Keyword If  '${IEXEC_BRIDGE_FORCE_GIT_CLONE}' == 'true'  Git Clone Iexec Bridge
+    Npm Install Bridge
     Set Oracle Address In Bridge
     Set XtremWeb Config In Bridge
 
@@ -20,6 +21,8 @@ Git Clone Iexec Bridge
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0
+
+Npm Install Bridge
     ${npm_result} =  Run Process  cd iexec-bridge && npm install  shell=yes
     Log  ${npm_result.stderr}
     Log  ${npm_result.stdout}

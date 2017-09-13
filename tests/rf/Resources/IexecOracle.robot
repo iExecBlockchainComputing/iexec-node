@@ -2,12 +2,14 @@
 
 *** Variables ***
 ${IEXEC_ORACLE_GIT_BRANCH} =  https://github.com/iExecBlockchainComputing/iexec-oracle.git
-${IEXEC_ORACLE_FORCE_GIT_CLONE} =  true
+${IEXEC_ORACLE_FORCE_GIT_CLONE} =  false
 ${IEXEC_ORACLE_SM_ADDRESS}
 ${HELLO_WORLD_SM_ADDRESS}
 *** Keywords ***
 
 Init Oracle
+    Run Keyword If  '${IEXEC_ORACLE_FORCE_GIT_CLONE}' == 'true'  Git Clone Iexec Oracle
+    Npm Install Iexec Oracle
     Iexec Oracle Truffle Migrate
     Iexec Oracle Set Contract Address In Test
 
@@ -17,6 +19,8 @@ Git Clone Iexec Oracle
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0
+
+Npm Install Iexec Oracle
     ${npm_result} =  Run Process  cd iexec-oracle && npm install  shell=yes
     Log  ${npm_result.stderr}
     Log  ${npm_result.stdout}
@@ -35,7 +39,6 @@ Iexec Oracle Truffle Tests
 Iexec Oracle Truffle Migrate
     [Documentation]  call truffle migrate
     [Tags]  Smart contract Tests
-    Run Keyword If  '${IEXEC_ORACLE_FORCE_GIT_CLONE}' == 'true'  Git Clone Iexec Oracle
     ${rm_result} =  Run Process  rm -rf iexec-oracle/build  shell=yes
     Should Be Empty	${rm_result.stderr}
     Should Be Equal As Integers	${rm_result.rc}	0

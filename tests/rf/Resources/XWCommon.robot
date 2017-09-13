@@ -10,7 +10,7 @@ Resource  ./DB/MySql.robot
 
 ${RF_RESULT_PATH} =  ../Results
 ${XW_GIT_BRANCH} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
-${XW_FORCE_GIT_CLONE} =  true
+${XW_FORCE_GIT_CLONE} =  false
 ${BUILD_PATH} =  ./xtremweb-hep/build
 ${DIST_PATH} =  ${BUILD_PATH}/dist
 ${DIST_XWHEP_PATH}
