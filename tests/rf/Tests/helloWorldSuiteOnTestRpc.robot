@@ -23,7 +23,7 @@ ${CREATOR}
 
 *** Test Cases ***
 
-Test HelloWorld Submit Iexec
+Test HelloWorld Submit Iexec On Testrpc
     [Documentation]  Test HelloWorld Submit Iexec
     [Tags]  HelloWorld Tests
     ${user} =  IexceOracleSmartContract.Get User Address
@@ -39,14 +39,15 @@ Test HelloWorld Submit Iexec
     # 2) : start a echo work
     HelloWorldSmartContract.SubmitEcho  HelloWorld!!!
     Check Submit Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
-    ${work_uid} =  Check Submit CallbackEvent Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
-    LOG  ${work_uid}
-    Check Submit CallbackEvent Event In HelloWorldSmartContract  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
-    Check Work Is Recorded in IexceOracleSmartContract After Submit  ${work_uid}  ${HELLO_WORLD_SM_ADDRESS}
+    ${index} =  Check Submit CallbackEvent Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
+    LOG  ${index}
+    Check Submit CallbackEvent Event In HelloWorldSmartContract  ${index}  ${HELLO_WORLD_SM_ADDRESS}
+    Check Work Is Recorded in IexceOracleSmartContract After Submit  ${index}  ${HELLO_WORLD_SM_ADDRESS}
     # status 4 = COMPLETED
-    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${work_uid}
+    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${index}
     Should Be Equal As Strings  ${work_status}  4
-    XWServer.Count From Works Where Uid  ${work_uid}  1
+    ${workuid} =  IexceOracleSmartContract.Get Work Uid  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${index}
+    XWServer.Count From Works Where Uid  ${workuid}  1
 
 
     #better example ? : echo  hello | cat /etc/passwd | tr "[a-z]" "[A-Z]"

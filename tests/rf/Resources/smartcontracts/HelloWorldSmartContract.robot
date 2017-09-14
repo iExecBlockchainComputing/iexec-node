@@ -4,28 +4,27 @@
 
 *** Keywords ***
 
-
-
 Check Submit CallbackEvent Event In HelloWorldSmartContract
-    [Arguments]  ${work_uid}  ${provider}
-    ${watch_callback_event} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IExecCallbackEvent
-    Should Contain  ${watch_callback_event}  event: 'IexecCallbackEvent'
-    Should Contain  ${watch_callback_event}  callbackType: 'SubmitCallback'
-    Should Contain  ${watch_callback_event}  appName: 'echo'
-    Should Contain  ${watch_callback_event}  user: '${USER}'
-    Should Contain  ${watch_callback_event}  creator: '${CREATOR}'
-    Should Contain  ${watch_callback_event}  provider: '${provider}'
-    Should Contain  ${watch_callback_event}  workUid: '${work_uid}'
-
+    [Arguments]  ${index}  ${provider}
+    ${watch_callback_events} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IExecCallbackEvent
+    Should Be Equal As Strings  ${watch_callback_events[0]["event"]}  IexecCallbackEvent
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["callbackType"]}  SubmitCallback
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["appName"]}  echo
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["user"]}  ${USER}
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["creator"]}  ${CREATOR}
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["provider"]}  ${provider}
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["index"]}  ${index}
 
 Watch IExecCallbackEvent
     ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/watchIExecCallbackEventHelloWorldTest.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
-    #TODO PARSE JSON
-    [Return]  ${truffletest_result.stdout}
-
+    ${after_begin_log} =  Fetch From Right  ${truffletest_result.stdout}  BEGIN_LOG
+    ${before_end_log} =  Fetch From Left  ${after_begin_log}  END_LOG
+    ${events}=  evaluate  json.loads('''${before_end_log}''')  json
+    Log  ${events}
+    [Return]  ${events}
 
 SubmitEcho
     [Arguments]  ${text}
