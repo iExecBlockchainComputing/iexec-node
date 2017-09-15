@@ -56,9 +56,9 @@ Iexec Oracle Set Contract Address In Test
     Set Suite Variable  ${IEXEC_ORACLE_SM_ADDRESS}  @{smartContractAddress}[0]
     Run  sed -i 's/.*return IexecOracle.at(.*/return IexecOracle.at(\"${IEXEC_ORACLE_SM_ADDRESS}\")/g' iexec-oracle/test/rf/*
     #HelloWorld.sol
-    ${helloworld_json_content} =  Get File  iexec-oracle/build/contracts/HelloWorldTest.json
-    @{smartContractAddress} =  Get Regexp Matches  ${helloworld_json_content}  "address": "(?P<smartContractAddress>.*)",  smartContractAddress
+    ${iexecoracleapiimpl_json_content} =  Get File  iexec-oracle/build/contracts/IexecOracleAPIimpl.json
+    @{smartContractAddress} =  Get Regexp Matches  ${iexecoracleapiimpl_json_content}  "address": "(?P<smartContractAddress>.*)",  smartContractAddress
     LOG  @{smartContractAddress}
     LOG  @{smartContractAddress}[0]
     Set Suite Variable  ${HELLO_WORLD_SM_ADDRESS}  @{smartContractAddress}[0]
-    Run  sed -i 's/.*return HelloWorldTest.at(.*/return HelloWorldTest.at(\"${HELLO_WORLD_SM_ADDRESS}\")/g' iexec-oracle/test/rf/*
+    Run  sed -i 's/.*return IexecOracleAPIimpl.at(.*/return IexecOracleAPIimpl.at(\"${HELLO_WORLD_SM_ADDRESS}\")/g' iexec-oracle/test/rf/*

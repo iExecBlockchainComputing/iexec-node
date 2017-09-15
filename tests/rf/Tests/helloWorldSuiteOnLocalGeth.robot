@@ -6,7 +6,7 @@ Resource  ../Resources/IexecOracle.robot
 Resource  ../Resources/IexecBridge.robot
 Resource  ../Resources/cli/XWClient.robot
 Resource  ../Resources/ETHGeth.robot
-Resource  ../Resources/smartcontracts/HelloWorldSmartContract.robot
+Resource  ../Resources/smartcontracts/IexecOracleAPIimplSmartContract.robot
 Resource  ../Resources/smartcontracts/IexceOracleSmartContract.robot
 Suite Setup  Start Oracle Bridge And Xtremweb
 Suite Teardown  Stop Oracle Bridge And Xtremweb
@@ -36,11 +36,11 @@ Test HelloWorld Submit Iexec On Local Geth
     XWServer.Count From Works  0
 
     # 2) : start a echo work
-    HelloWorldSmartContract.SubmitEcho  HelloWorld!!!
+    IexecOracleAPIimplSmartContract.Submit  echo  HelloWorld!!!
     Check Submit Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
     ${index} =  Check Submit CallbackEvent Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
     LOG  ${index}
-    Check Submit CallbackEvent Event In HelloWorldSmartContract  ${index}  ${HELLO_WORLD_SM_ADDRESS}
+    Check Submit CallbackEvent Event In IexecOracleAPIimplSmartContract  ${index}  ${HELLO_WORLD_SM_ADDRESS}
     Check Work Is Recorded in IexceOracleSmartContract After Submit  ${index}  ${HELLO_WORLD_SM_ADDRESS}
     # status 4 = COMPLETED
     ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${index}

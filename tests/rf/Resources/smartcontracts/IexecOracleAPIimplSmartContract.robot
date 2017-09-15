@@ -4,7 +4,7 @@
 
 *** Keywords ***
 
-Check Submit CallbackEvent Event In HelloWorldSmartContract
+Check Submit CallbackEvent Event In IexecOracleAPIimplSmartContract
     [Arguments]  ${index}  ${provider}
     ${watch_callback_events} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IExecCallbackEvent
     Should Be Equal As Strings  ${watch_callback_events[0]["event"]}  IexecCallbackEvent
@@ -16,7 +16,7 @@ Check Submit CallbackEvent Event In HelloWorldSmartContract
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["index"]}  ${index}
 
 Watch IExecCallbackEvent
-    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/watchIExecCallbackEventHelloWorldTest.js  shell=yes
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/watchIExecCallbackEventTest.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
@@ -26,10 +26,10 @@ Watch IExecCallbackEvent
     Log  ${events}
     [Return]  ${events}
 
-SubmitEcho
-    [Arguments]  ${text}
-    Run  sed -i "s/.*return aHelloWorldInstance.iexecSubmit(.*/return aHelloWorldInstance.iexecSubmit(\\"echo\\",\\"${text}\\",{/g" iexec-oracle/test/rf/submitHelloWorldTest.js
-    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/submitHelloWorldTest.js  shell=yes
+Submit
+    [Arguments]  ${appName}  ${param}
+    Run  sed -i "s/.*return aIexecOracleAPIimplInstance.iexecSubmit(.*/return aIexecOracleAPIimplInstance.iexecSubmit(\\"${appName}\\",\\"${param}\\",{/g" iexec-oracle/test/rf/submitTest.js
+    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/submitTest.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
