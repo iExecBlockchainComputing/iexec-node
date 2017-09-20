@@ -45,6 +45,8 @@ apt-get install -y openjdk-8-jdk
 su - vagrant -c "echo 'export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64' >> .bash_profile"
 su - vagrant -c "echo 'export XTREMWEB_VERSION=\$(ls ~/iexecdev/xtremweb-hep/build/dist/)' >> .bash_profile"
 
+
+
 # utils
 
 apt-get install -y realpath
@@ -89,12 +91,18 @@ apt-get install -y ethereum
 su - vagrant -c "npm install -g truffle@3.4.7"
 su - vagrant -c "npm install -g ethereumjs-testrpc@4.0.1"
 su - vagrant -c "npm install pm2 -g"
+su - vagrant -c "npm install iexec -g"
 
 # robotframework lib
 pip install robotframework
 pip install robotframework-selenium2library
 pip install robotframework-databaselibrary
 pip install pymysql
+
+#aws
+su - vagrant -c "pip install --upgrade --user awscli"
+su - vagrant -c "echo 'export PATH=~/.local/bin:$PATH' >> .bash_profile"
+
 
 # xtremweb dir needed
 mkdir /var/xwhep
@@ -110,5 +118,7 @@ ln -s /home/vagrant/iexecdev/.ethash /home/vagrant/.ethash
 
 #install terraform
 su - vagrant -c "cd ~ && mkdir terraform"
-su - vagrant -c "cd ~/terraform && curl -o terraform.zip https://releases.hashicorp.com/terraform/0.9.11/terraform_0.9.11_linux_amd64.zip && unzip terraform.zip"
+su - vagrant -c "cd ~/terraform && curl -o terraform.zip https://releases.hashicorp.com/terraform/0.10.6/terraform_0.10.6_linux_amd64.zip && unzip terraform.zip"
 su - vagrant -c "sudo cp -f ~/terraform/terraform /usr/local/bin/ && rm -rf ~/terraform"
+
+
