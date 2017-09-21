@@ -30,6 +30,7 @@ Iexec Oracle Truffle Tests
     [Documentation]  call truffle test and show the result here.
     [Tags]  Smart contract Tests
     Run Keyword If  '${IEXEC_ORACLE_FORCE_GIT_CLONE}' == 'true'  Git Clone Iexec Oracle
+    Npm Install Iexec Oracle
     ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/iexecoracleapi.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
