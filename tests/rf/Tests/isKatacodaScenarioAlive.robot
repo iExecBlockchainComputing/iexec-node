@@ -30,7 +30,7 @@ Test Katacoda Hello World Scenario On Ropsten
     Prepare Iexec Factorial
     IexecSdk.Iexec An App  iexec-factorial  migrate
     IexecSdk.Iexec An App  iexec-factorial  submit factorial 10
-    Wait Until Keyword Succeeds  5 min	10 sec  Check Factorial 10 In Result  --network ropsten
+    Wait Until Keyword Succeeds  30 min	10 sec  Check Factorial 10 In Result  --network ropsten
 
 
 
@@ -40,7 +40,7 @@ Test Katacoda Hello World Scenario On Kovan
     Prepare Iexec Factorial Kovan
     IexecSdk.Iexec An App  iexec-factorial  migrate --network kovan
     IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network kovan
-    Wait Until Keyword Succeeds  5 min	10 sec  Check Factorial 10 In Result  --network kovan
+    Wait Until Keyword Succeeds  30 min	10 sec  Check Factorial 10 In Result  --network kovan
 
 
 Test Katacoda Hello World Scenario On Rinkeby
@@ -49,7 +49,7 @@ Test Katacoda Hello World Scenario On Rinkeby
     Prepare Iexec Factorial Rinkeby
     IexecSdk.Iexec An App  iexec-factorial  migrate --network rinkeby
     IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network rinkeby
-    Wait Until Keyword Succeeds  5 min	10 sec  Check Factorial 10 In Result  --network rinkeby
+    Wait Until Keyword Succeeds  30 min	10 sec  Check Factorial 10 In Result  --network rinkeby
 
 *** Keywords ***
 
