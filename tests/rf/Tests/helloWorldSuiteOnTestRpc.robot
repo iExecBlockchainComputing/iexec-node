@@ -62,7 +62,7 @@ Test HelloWorld Submit Iexec On Testrpc
 
 Start Oracle Bridge And Xtremweb
     XWCommon.Prepare And Start XWtremWeb Server And XWtremWeb Worker
-    ETHTestrpc.Start Testrpc
+    ETHTestrpc.Init And Start Testrpc
     IexecOracle.Init Oracle
     IexecBridge.Init Bridge
     IexecBridge.Start Bridge

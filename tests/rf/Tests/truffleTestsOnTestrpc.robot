@@ -5,7 +5,7 @@ Library  OperatingSystem
 Library  String
 Resource  ../Resources/IexecOracle.robot
 Resource  ../Resources/ETHTestrpc.robot
-Suite Setup  ETHTestrpc.Start Testrpc
+Suite Setup  ETHTestrpc.Init And Start Testrpc
 Suite Teardown  ETHTestrpc.Stop Testrpc
 
 *** Variables ***
