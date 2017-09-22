@@ -88,8 +88,8 @@ apt-get install -y solc
 apt-get install -y ethereum
 
 # truffle, testrpc pm2
-su - vagrant -c "npm install -g truffle@3.4.7"
-su - vagrant -c "npm install -g ethereumjs-testrpc@4.0.1"
+su - vagrant -c "npm install -g truffle@3.4.9"
+su - vagrant -c "npm install -g ethereumjs-testrpc@4.1.1"
 su - vagrant -c "npm install pm2 -g"
 su - vagrant -c "npm install iexec -g"
 
