@@ -38,6 +38,7 @@ Test HelloWorld Submit Iexec On Testrpc
 
     # 2) : start a echo work
     IexecOracleAPIimplSmartContract.Submit  echo  HelloWorld!!!
+    ETHTestrpc.Test Testrpc Up
     Check Submit Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
     ${index} =  Check Submit CallbackEvent Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
     LOG  ${index}
