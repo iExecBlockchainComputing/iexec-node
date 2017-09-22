@@ -7,7 +7,7 @@ ${TESTRPC_PROCESS}
 *** Keywords ***
 
 Init And Start Testrpc
-    ${result} =  Run Process  npm install -g ethereumjs-testrpc@4.0.1  shell=yes
+    ${result} =  Run Process  npm install -g ethereumjs-testrpc@4.1.1  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers	${result.rc}	0
