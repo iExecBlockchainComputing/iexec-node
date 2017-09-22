@@ -2,7 +2,7 @@
 Documentation   local geth 42 node
 
 *** Variables ***
-${GETH_UTILS_PATH} =  ../../vagrant/gethUtils
+${GETH_UTILS_PATH} =  ../../../vagrant/gethUtils
 
 *** Keywords ***
 Start Geth42
