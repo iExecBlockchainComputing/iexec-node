@@ -8,7 +8,8 @@ Library  String
 *** Keywords ***
 
 Init Sdk
-    Npm Install Iexec Sdk
+    Wait Until Keyword Succeeds  8 min	2 min  Npm Install Iexec Sdk
+
 
 
 Npm Install Iexec Sdk
