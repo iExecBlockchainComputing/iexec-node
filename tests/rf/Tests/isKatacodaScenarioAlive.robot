@@ -25,15 +25,14 @@ ${IEXEC_ORACLE_ON_RINKEBY} =  0x0b1ea4ff347e05ca175e3d3cfb4499bc4ad5ada5
 
 *** Test Cases ***
 
-Test log
-      Log  test
-#Test Katacoda Hello World Scenario On Kovan
-#    [Documentation]  Test Katacoda Hello World Scenario On Kovan
-#    [Tags]  Katacoda
-#    Prepare Iexec Factorial Kovan
-#    IexecSdk.Iexec An App  iexec-factorial  migrate --network kovan
-#    IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network kovan
-#    Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  --network kovan
+
+Test Katacoda Hello World Scenario On Kovan
+    [Documentation]  Test Katacoda Hello World Scenario On Kovan
+    [Tags]  Katacoda
+    Prepare Iexec Factorial Kovan
+    IexecSdk.Iexec An App  iexec-factorial  migrate --network kovan
+    IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network kovan
+    Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  --network kovan
 
 #Test Katacoda Hello World Scenario On Ropsten
 #    [Documentation]  Test Katacoda Hello World Scenario On Ropsten
