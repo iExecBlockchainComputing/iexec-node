@@ -6,6 +6,7 @@ ${GETH_UTILS_PATH} =  ./vagrant/gethUtils
 
 *** Keywords ***
 Start Geth42
+    Create File  ~/iexecdev/password.txt  content=whatever
     ${geth_result} =  Run Process  cd ${GETH_UTILS_PATH} && ./resetANewChain42AndMine.sh  shell=yes
     Log  ${geth_result.stderr}
     Log  ${geth_result.stdout}
