@@ -33,13 +33,13 @@ echo "start a coinbase miner in background"
 ./mine42background.sh
 sleep 5
 
-while [ $( ./getBlockNumber42.sh | grep -v Fatal | grep -v INFO ) -lt 5 ]
+while [ $( ./getBlockNumber42.sh | grep -v Fatal | grep -v INFO ) -lt 15 ]
 do
-echo "wait for 5 mined blocks"
+echo "wait for 15 mined blocks"
 sleep 10
 done
 
-echo "5 blocks mined in geth 42 !"
+echo "15 blocks mined in geth 42 !"
 
 echo "unlocked 9 accounts"
 ./unlockAccounts42.sh 9
