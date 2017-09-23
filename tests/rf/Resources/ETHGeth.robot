@@ -13,6 +13,7 @@ Start Geth42
     Should Be Equal As Integers	${geth_result.rc}	0
 
 Stop Geth42
+    Log  ~/iexecdev/mine42background.log
     ${geth_result} =  Run Process  cd ${GETH_UTILS_PATH} && ./killGeth.sh  shell=yes
     Log  ${geth_result.stderr}
     Log  ${geth_result.stdout}
