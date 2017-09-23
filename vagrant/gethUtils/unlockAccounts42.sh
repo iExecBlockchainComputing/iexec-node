@@ -6,7 +6,7 @@ then
     for n in $(seq $numberOfAccounts)
     do
         echo "unlock account $n"
-        geth --exec "personal.unlockAccount(eth.accounts[$n], '$passwd', 100000)" attach ipc:/root/iexecdev/.ethereum/net42/geth.ipc
+        geth --exec "personal.unlockAccount(eth.accounts[$n], '$passwd', 100000)" attach http://localhost:8545
      done
      exit 0
 else
