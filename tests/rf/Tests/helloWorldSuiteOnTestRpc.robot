@@ -38,23 +38,16 @@ Test HelloWorld Submit Iexec On Testrpc
 
     # 2) : start a echo work
     IexecOracleAPIimplSmartContract.Submit  echo  HelloWorld!!!
-    ETHTestrpc.Test Testrpc Up
-    Check Submit Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
-    ${index} =  Check Submit CallbackEvent Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
-    LOG  ${index}
-    Check Submit CallbackEvent Event In IexecOracleAPIimplSmartContract  ${index}  ${HELLO_WORLD_SM_ADDRESS}
-    Check Work Is Recorded in IexceOracleSmartContract After Submit  ${index}  ${HELLO_WORLD_SM_ADDRESS}
+    ${opid} =  IexceOracleSmartContract.Check Submit Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
+    IexceOracleSmartContract.Check Submit CallbackEvent Event In IexceOracleSmartContract  ${opid}  ${HELLO_WORLD_SM_ADDRESS}
+    IexecOracleAPIimplSmartContract.Check Submit CallbackEvent Event In IexecOracleAPIimplSmartContract  ${opid}  ${HELLO_WORLD_SM_ADDRESS}
+    IexceOracleSmartContract.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${opid}  ${HELLO_WORLD_SM_ADDRESS}
     # status 4 = COMPLETED
-    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${index}
+    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${opid}
     Should Be Equal As Strings  ${work_status}  4
-    ${workuid} =  IexceOracleSmartContract.Get Work Uid  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${index}
+    ${workuid} =  IexceOracleSmartContract.Get Work Uid  ${opid}
     XWServer.Count From Works Where Uid  ${workuid}  1
 
-
-    #better example ? : echo  hello | cat /etc/passwd | tr "[a-z]" "[A-Z]"
-
-
-    # TODO check  HelloWorldSmartContract.RegisterEcho call twice
     # TODO add error usecase HelloWorld tests
 
 

@@ -12,9 +12,8 @@ Suite Setup  Start Oracle Bridge And Xtremweb
 Suite Teardown  Stop Oracle Bridge And Xtremweb
 
 
-# to launch tests : pybot -d Results ./Tests/helloWorldSuiteOnLocalGeth.robot
-# Quicker for second launch :
-# pybot --variable XW_FORCE_GIT_CLONE:false --variable IEXEC_ORACLE_FORCE_GIT_CLONE:false -d Results ./Tests/helloWorldSuiteOnLocalGeth.robot
+
+# to launch tests : pybot -d Results ./tests/rf/Tests/helloWorldSuiteOnLocalGeth.robot
 
 *** Variables ***
 ${USER}
@@ -37,15 +36,14 @@ Test HelloWorld Submit Iexec On Local Geth
 
     # 2) : start a echo work
     IexecOracleAPIimplSmartContract.Submit  echo  HelloWorld!!!
-    Check Submit Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
-    ${index} =  Check Submit CallbackEvent Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
-    LOG  ${index}
-    Check Submit CallbackEvent Event In IexecOracleAPIimplSmartContract  ${index}  ${HELLO_WORLD_SM_ADDRESS}
-    Check Work Is Recorded in IexceOracleSmartContract After Submit  ${index}  ${HELLO_WORLD_SM_ADDRESS}
+    ${opid} =  IexceOracleSmartContract.Check Submit Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
+    IexceOracleSmartContract.Check Submit CallbackEvent Event In IexceOracleSmartContract  ${opid}  ${HELLO_WORLD_SM_ADDRESS}
+    IexecOracleAPIimplSmartContract.Check Submit CallbackEvent Event In IexecOracleAPIimplSmartContract  ${opid}  ${HELLO_WORLD_SM_ADDRESS}
+    IexceOracleSmartContract.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${opid}  ${HELLO_WORLD_SM_ADDRESS}
     # status 4 = COMPLETED
-    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${index}
+    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${opid}
     Should Be Equal As Strings  ${work_status}  4
-    ${workuid} =  IexceOracleSmartContract.Get Work Uid  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${index}
+    ${workuid} =  IexceOracleSmartContract.Get Work Uid  ${opid}
     XWServer.Count From Works Where Uid  ${workuid}  1
 
 *** Keywords ***

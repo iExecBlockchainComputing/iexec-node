@@ -5,15 +5,11 @@
 *** Keywords ***
 
 Check Submit CallbackEvent Event In IexecOracleAPIimplSmartContract
-    [Arguments]  ${index}  ${provider}
+    [Arguments]  ${opid}  ${provider}
     ${watch_callback_events} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IExecCallbackEvent
     Should Be Equal As Strings  ${watch_callback_events[0]["event"]}  IexecCallbackEvent
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["callbackType"]}  SubmitCallback
-    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["appName"]}  echo
-    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["user"]}  ${USER}
-    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["creator"]}  ${CREATOR}
-    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["provider"]}  ${provider}
-    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["index"]}  ${index}
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["opid"]}  ${opid}
 
 Watch IExecCallbackEvent
     ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/watchIExecCallbackEventTest.js  shell=yes
@@ -28,7 +24,7 @@ Watch IExecCallbackEvent
 
 Submit
     [Arguments]  ${appName}  ${param}
-    Run  sed -i "s/.*return aIexecOracleAPIimplInstance.iexecSubmit(.*/return aIexecOracleAPIimplInstance.iexecSubmit(\\"${appName}\\",\\"${param}\\",{/g" iexec-oracle/test/rf/submitTest.js
+    Run  sed -i "s/.*return aIexecOracleAPIimplInstance.iexecSubmit(.*/return aIexecOracleAPIimplInstance.iexecSubmit(Extensions.iexecOperationId(user, aIexecOracleAPIimplInstance.address, \\"aclientid\\"),\\"${appName}\\",\\"${param}\\",{/g" iexec-oracle/test/rf/submitTest.js
     ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/submitTest.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
