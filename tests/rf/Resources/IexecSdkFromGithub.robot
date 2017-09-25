@@ -4,7 +4,8 @@ Library  OperatingSystem
 Library  String
 
 *** Variables ***
-${IEXEC_SDK_GIT_BRANCH} =  https://github.com/iExecBlockchainComputing/iexec-sdk.git
+${IEXEC_SDK_GIT_URL} =  https://github.com/iExecBlockchainComputing/iexec-sdk.git
+${IEXEC_SDK_GIT_BRANCH} =  master
 ${IEXEC_SDK_FORCE_GIT_CLONE} =  false
 ${IEXEC_SDK_DISTRIB}
 
@@ -16,7 +17,7 @@ Init Sdk
 
 Git Clone Iexec Sdk
     Remove Directory  iexec-sdk  recursive=true
-    ${git_result} =  Run Process  git clone ${IEXEC_SDK_GIT_BRANCH}  shell=yes
+    ${git_result} =  Run Process  git clone -b ${IEXEC_SDK_GIT_BRANCH} ${IEXEC_SDK_GIT_URL}  shell=yes
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0

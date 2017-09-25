@@ -9,7 +9,8 @@ Resource  ./DB/MySql.robot
 *** Variables ***
 
 ${RF_RESULT_PATH} =  ../Results
-${XW_GIT_BRANCH} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
+${XW_GIT_URL} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
+${XW_GIT_BRANCH} =  master
 ${XW_FORCE_GIT_CLONE} =  false
 ${BUILD_PATH} =  ./xtremweb-hep/build
 ${DIST_PATH} =  ${BUILD_PATH}/dist
@@ -94,7 +95,7 @@ End XWtremWeb Command Test
 
 Git Clone XWtremWeb
     Remove Directory  xtremweb-hep  recursive=true
-    ${git_result} =  Run Process  git clone ${XW_GIT_BRANCH}  shell=yes
+    ${git_result} =  Run Process  git clone -b ${XW_GIT_BRANCH} ${XW_GIT_URL}  shell=yes
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0
