@@ -35,15 +35,15 @@ Test HelloWorld Submit Iexec On Local Geth
     XWServer.Count From Works  0
 
     # 2) : start a echo work
-    IexecOracleAPIimplSmartContract.Submit  echo  HelloWorld!!!
-    ${opid} =  IexceOracleSmartContract.Check Submit Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
-    IexceOracleSmartContract.Check Submit CallbackEvent Event In IexceOracleSmartContract  ${opid}  ${HELLO_WORLD_SM_ADDRESS}
-    IexecOracleAPIimplSmartContract.Check Submit CallbackEvent Event In IexecOracleAPIimplSmartContract  ${opid}  ${HELLO_WORLD_SM_ADDRESS}
-    IexceOracleSmartContract.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${opid}  ${HELLO_WORLD_SM_ADDRESS}
+    ${submitTxHash} =  IexecOracleAPIimplSmartContract.Submit  echo  HelloWorld!!!
+    IexceOracleSmartContract.Check Submit Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}  echo  HelloWorld!!!
+    IexceOracleSmartContract.Check SubmitCallback Event In IexceOracleSmartContract  ${submitTxHash}  ${HELLO_WORLD_SM_ADDRESS}
+    IexecOracleAPIimplSmartContract.Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract  ${submitTxHash}  ${HELLO_WORLD_SM_ADDRESS}
+    IexceOracleSmartContract.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${submitTxHash}  ${HELLO_WORLD_SM_ADDRESS}  echo
     # status 4 = COMPLETED
-    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${opid}
+    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${submitTxHash}
     Should Be Equal As Strings  ${work_status}  4
-    ${workuid} =  IexceOracleSmartContract.Get Work Uid  ${opid}
+    ${workuid} =  IexceOracleSmartContract.Get Work Uid  ${submitTxHash}
     XWServer.Count From Works Where Uid  ${workuid}  1
 
 *** Keywords ***
