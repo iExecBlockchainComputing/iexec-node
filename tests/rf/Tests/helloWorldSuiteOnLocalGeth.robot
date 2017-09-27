@@ -49,7 +49,8 @@ Test HelloWorld Submit Iexec On Local Geth
 *** Keywords ***
 
 Start Oracle Bridge And Xtremweb
-    XWCommon.Prepare And Start XWtremWeb Server And XWtremWeb Worker
+    XWCommon.Prepare XWtremWeb Server And XWtremWeb Worker
+    XWCommon.Begin XWtremWeb Command Test
     ETHGeth.Start Geth42
     IexecOracle.Init Oracle
     IexecBridge.Init Bridge
@@ -59,7 +60,7 @@ Start Oracle Bridge And Xtremweb
 Stop Oracle Bridge And Xtremweb
     IexecBridge.Stop Bridge
     ETHGeth.Stop Geth42
-    XWCommon.Stop XWtremWeb Server And XWtremWeb Worker
+    XWCommon.End XWtremWeb Command Test
 
 
 

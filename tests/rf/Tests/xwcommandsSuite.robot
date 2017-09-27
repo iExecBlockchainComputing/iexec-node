@@ -3,8 +3,7 @@ Documentation    All XtremWeb commands line  tests
 Resource  ../Resources/XWCommon.robot
 Resource  ../Resources/XWServer.robot
 Resource  ../Resources/cli/XWClient.robot
-Suite Setup  Prepare And Start XWtremWeb Server And XWtremWeb Worker
-Suite Teardown  XWCommon.Stop XWtremWeb Server And XWtremWeb Worker
+Suite Setup  XWCommon.Prepare XWtremWeb Server And XWtremWeb Worker
 Test Setup  XWCommon.Begin XWtremWeb Command Test
 Test Teardown  XWCommon.End XWtremWeb Command Test
 
