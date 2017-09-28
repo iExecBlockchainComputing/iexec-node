@@ -5,10 +5,13 @@
 *** Keywords ***
 
 Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract
-    [Arguments]  ${submitTxHash}  ${provider}
+    [Arguments]  ${submitTxHash}  ${user}  ${appName}  ${stdout}
     ${watch_callback_events} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IexecSubmitCallback
     Should Be Equal As Strings  ${watch_callback_events[0]["event"]}  IexecSubmitCallback
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["submitTxHash"]}  ${submitTxHash}
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["user"]}  ${user}
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["appName"]}  ${appName}
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["stdout"]}  ${stdout}
 
 Watch IexecSubmitCallback
     ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/watchIexecSubmitCallbackTest.js  shell=yes
