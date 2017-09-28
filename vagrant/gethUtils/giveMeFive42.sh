@@ -1,4 +1,4 @@
-init42.sh
+./init42.sh
 if [ "$#" -ne 1 ]; then
     echo "usage: ./giveMeFive42.sh address "
     exit 1
