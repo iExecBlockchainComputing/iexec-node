@@ -20,6 +20,7 @@ Watch IexecSubmitCallback
     Should Be Equal As Integers	${truffletest_result.rc}	0
     ${after_begin_log} =  Fetch From Right  ${truffletest_result.stdout}  BEGIN_LOG
     ${before_end_log} =  Fetch From Left  ${after_begin_log}  END_LOG
+    ${before_end_log} =	Replace String	${before_end_log}  \n  \\n
     ${events}=  evaluate  json.loads('''${before_end_log}''')  json
     Log  ${events}
     [Return]  ${events}
