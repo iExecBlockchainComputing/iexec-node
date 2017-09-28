@@ -50,6 +50,7 @@ Start Bridge
     Set Suite Variable  ${BRIDGE_PROCESS}  ${created_process}
 
 Stop Bridge
+    Get Bridge Log
     Terminate Process  ${BRIDGE_PROCESS}
 
 Get Bridge Log
