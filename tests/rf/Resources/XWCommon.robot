@@ -156,4 +156,5 @@ Create XWCONFIGURE.VALUES FILE
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  USERCERTDIR='${XWCONFIGURE.VALUES.USERCERTDIR}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWUPGRADEURL='${XWCONFIGURE.VALUES.XWUPGRADEURL}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  HTTPSPORT='${XWCONFIGURE.VALUES.HTTPSPORT}'\n
+    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  LOGGERLEVEL=INFO\n
     LOG FILE  ${DIST_XWHEP_PATH}/conf/xwconfigure.values

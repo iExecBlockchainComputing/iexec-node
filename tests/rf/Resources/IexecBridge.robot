@@ -2,7 +2,7 @@
 
 *** Variables ***
 ${IEXEC_BRIDGE_GIT_URL} =  https://github.com/iExecBlockchainComputing/iexec-bridge.git
-${IEXEC_BRIDGE_GIT_BRANCH} =  master
+${IEXEC_BRIDGE_GIT_BRANCH} =  dev
 ${IEXEC_BRIDGE_FORCE_GIT_CLONE} =  false
 ${BRIDGE_PROCESS}
 ${IEXEC_ORACLE_SM_ADDRESS}
