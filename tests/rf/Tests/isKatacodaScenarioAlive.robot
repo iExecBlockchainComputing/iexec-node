@@ -32,7 +32,7 @@ Test Katacoda Hello World Scenario On Ropsten
     [Tags]  Katacoda
     Prepare Iexec Factorial
     IexecSdk.Iexec An App  iexec-factorial  migrate
-    IexecSdk.Iexec An App  iexec-factorial  submit factorial 10
+    ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit factorial 10
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://ropsten.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
     Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network ropsten
 
@@ -41,7 +41,7 @@ Test Katacoda Hello World Scenario On Rinkeby
     [Tags]  Katacoda
     Prepare Iexec Factorial Rinkeby
     IexecSdk.Iexec An App  iexec-factorial  migrate --network rinkeby
-    IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network rinkeby
+    ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network rinkeby
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://rinkeby.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
     Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network rinkeby
 
