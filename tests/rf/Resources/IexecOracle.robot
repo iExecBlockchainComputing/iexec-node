@@ -2,7 +2,7 @@
 
 *** Variables ***
 ${IEXEC_ORACLE_GIT_URL} =  https://github.com/iExecBlockchainComputing/iexec-oracle.git
-${IEXEC_ORACLE_GIT_BRANCH} =  dev
+${IEXEC_ORACLE_GIT_BRANCH} =  master
 ${IEXEC_ORACLE_FORCE_GIT_CLONE} =  false
 ${IEXEC_ORACLE_SM_ADDRESS}
 ${HELLO_WORLD_SM_ADDRESS}

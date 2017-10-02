@@ -5,23 +5,15 @@ Suite Setup  Init Ping Katacoda
 
 
 # to launch tests :
-# pybot --variable PKEY:aprivatekey -d Results ./Tests/isKatacodaScenarioAlive.robot
+# pybot --variable PKEY:aprivatekey -d Results ./tests/rf/Tests/isKatacodaScenarioAlive.robot
 
 *** Variables ***
 ${PKEY}
 
 
-#iexec.js
-#module.exports = {
-#    name: 'Factorial',
-#    constructorArgs: ['0x552075c9e40b050c8b61339b770e2a21e9014b3c'],
-#    // constructorArgs: ['0x0b1ea4ff347e05ca175e3d3cfb4499bc4ad5ada5'], // rinkeby
-#    // constructorArgs: ['0xe6b658facf9621eff76a0d649c61dba4c8de85fb'], // kovan
-#};
-
-${IEXEC_ORACLE_ON_ROPSTEN} =  0x552075c9e40b050c8b61339b770e2a21e9014b3c
-${IEXEC_ORACLE_ON_KOVAN} =  0xe6b658facf9621eff76a0d649c61dba4c8de85fb
-${IEXEC_ORACLE_ON_RINKEBY} =  0x0b1ea4ff347e05ca175e3d3cfb4499bc4ad5ada5
+${IEXEC_ORACLE_ON_ROPSTEN} =  0xb34406538112bd2b3036b2c417c7cff827777a11
+${IEXEC_ORACLE_ON_KOVAN} =  0xb81d38d843cb526a3d0c3130d568fe09799135aa
+${IEXEC_ORACLE_ON_RINKEBY} =  0x98275d4b6511ef05ed063d127dd82b72588326c9
 
 *** Test Cases ***
 
@@ -31,8 +23,9 @@ Test Katacoda Hello World Scenario On Kovan
     [Tags]  Katacoda
     Prepare Iexec Factorial Kovan
     IexecSdk.Iexec An App  iexec-factorial  migrate --network kovan
-    IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network kovan
-    Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  --network kovan
+    ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network kovan
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://kovan.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
+    Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network kovan
 
 Test Katacoda Hello World Scenario On Ropsten
     [Documentation]  Test Katacoda Hello World Scenario On Ropsten
@@ -40,7 +33,8 @@ Test Katacoda Hello World Scenario On Ropsten
     Prepare Iexec Factorial
     IexecSdk.Iexec An App  iexec-factorial  migrate
     IexecSdk.Iexec An App  iexec-factorial  submit factorial 10
-    Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  --network ropsten
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://ropsten.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
+    Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network ropsten
 
 Test Katacoda Hello World Scenario On Rinkeby
     [Documentation]  Test Katacoda Hello World Scenario On Rinkeby
@@ -48,7 +42,8 @@ Test Katacoda Hello World Scenario On Rinkeby
     Prepare Iexec Factorial Rinkeby
     IexecSdk.Iexec An App  iexec-factorial  migrate --network rinkeby
     IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network rinkeby
-    Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  --network rinkeby
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://rinkeby.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
+    Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network rinkeby
 
 *** Keywords ***
 
@@ -76,8 +71,8 @@ Prepare Iexec Factorial Rinkeby
 
 
 Check Factorial 10 In Result
-    [Arguments]  ${network}
-    ${stdout} =  IexecSdk.Iexec An App  iexec-factorial  results ${network}
+    [Arguments]  ${transactionHash}  ${network}
+    ${stdout} =  IexecSdk.Iexec An App  iexec-factorial  result ${transactionHash} ${network}
     ${lines} =  Get Lines Containing String  ${stdout}  3628800
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1

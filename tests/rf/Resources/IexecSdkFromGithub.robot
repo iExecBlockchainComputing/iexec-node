@@ -5,8 +5,8 @@ Library  String
 
 *** Variables ***
 ${IEXEC_SDK_GIT_URL} =  https://github.com/iExecBlockchainComputing/iexec-sdk.git
-${IEXEC_SDK_GIT_BRANCH} =  dev
-${IEXEC_ORACLE_GIT_BRANCH} =  dev
+${IEXEC_SDK_GIT_BRANCH} =  master
+${IEXEC_ORACLE_GIT_BRANCH} =  master
 ${IEXEC_SDK_FORCE_GIT_CLONE} =  false
 ${IEXEC_SDK_DISTRIB}
 
