@@ -1,7 +1,8 @@
 *** Settings ***
 
 *** Variables ***
-${IEXEC_ORACLE_GIT_BRANCH} =  https://github.com/iExecBlockchainComputing/iexec-oracle.git
+${IEXEC_ORACLE_GIT_URL} =  https://github.com/iExecBlockchainComputing/iexec-oracle.git
+${IEXEC_ORACLE_GIT_BRANCH} =  master
 ${IEXEC_ORACLE_FORCE_GIT_CLONE} =  false
 ${IEXEC_ORACLE_SM_ADDRESS}
 ${HELLO_WORLD_SM_ADDRESS}
@@ -15,7 +16,7 @@ Init Oracle
 
 Git Clone Iexec Oracle
     Remove Directory  iexec-oracle  recursive=true
-    ${git_result} =  Run Process  git clone ${IEXEC_ORACLE_GIT_BRANCH}  shell=yes
+    ${git_result} =  Run Process  git clone -b ${IEXEC_ORACLE_GIT_BRANCH} ${IEXEC_ORACLE_GIT_URL}  shell=yes
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0

@@ -9,7 +9,8 @@ Resource  ./DB/MySql.robot
 *** Variables ***
 
 ${RF_RESULT_PATH} =  ../Results
-${XW_GIT_BRANCH} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
+${XW_GIT_URL} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
+${XW_GIT_BRANCH} =  master
 ${XW_FORCE_GIT_CLONE} =  false
 ${BUILD_PATH} =  ./xtremweb-hep/build
 ${DIST_PATH} =  ${BUILD_PATH}/dist
@@ -50,11 +51,10 @@ ${XWCONFIGURE.VALUES.HTTPSPORT} =  9443
 
 *** Keywords ***
 
-Prepare And Start XWtremWeb Server And XWtremWeb Worker
+Prepare XWtremWeb Server And XWtremWeb Worker
     Run Keyword If  '${XW_FORCE_GIT_CLONE}' == 'true'  Git Clone XWtremWeb
     Compile XWtremWeb
     Install XWtremWeb
-    Start XWtremWeb Server And XWtremWeb Worker
 
 Start XWtremWeb Server And XWtremWeb Worker
     Ping XWtremWeb Database
@@ -72,13 +72,11 @@ Log XtremWeb Server
 
 Begin XWtremWeb Command Test
     Ping XWtremWeb Database
-    # TODO ping XWtremWeb server up before one test
-    LOG  TODO ping XWtremWeb server up
-    # TODO ping XWtremWeb worker up
-    LOG  TODO ping XWtremWeb worker up before one test
-    MySql.Delete Fonctionnal Xtremweb Tables
-    Stop XWtremWeb Server And XWtremWeb Worker
     Start XWtremWeb Server And XWtremWeb Worker
+
+End XWtremWeb Command Test
+    Stop XWtremWeb Server And XWtremWeb Worker
+    MySql.Delete Fonctionnal Xtremweb Tables
 
 
 Clear XWtremWeb Cache
@@ -89,12 +87,10 @@ Clear XWtremWeb Cache
     Should Be Empty	${rm_result.stderr}
     Should Be Equal As Integers	${rm_result.rc}	0
 
-End XWtremWeb Command Test
-    LOG  Nothing to do
 
 Git Clone XWtremWeb
     Remove Directory  xtremweb-hep  recursive=true
-    ${git_result} =  Run Process  git clone ${XW_GIT_BRANCH}  shell=yes
+    ${git_result} =  Run Process  git clone -b ${XW_GIT_BRANCH} ${XW_GIT_URL}  shell=yes
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0
@@ -160,4 +156,5 @@ Create XWCONFIGURE.VALUES FILE
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  USERCERTDIR='${XWCONFIGURE.VALUES.USERCERTDIR}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWUPGRADEURL='${XWCONFIGURE.VALUES.XWUPGRADEURL}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  HTTPSPORT='${XWCONFIGURE.VALUES.HTTPSPORT}'\n
+    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  LOGGERLEVEL=INFO\n
     LOG FILE  ${DIST_XWHEP_PATH}/conf/xwconfigure.values

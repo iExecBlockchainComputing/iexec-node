@@ -4,7 +4,9 @@ Library  OperatingSystem
 Library  String
 
 *** Variables ***
-${IEXEC_SDK_GIT_BRANCH} =  https://github.com/iExecBlockchainComputing/iexec-sdk.git
+${IEXEC_SDK_GIT_URL} =  https://github.com/iExecBlockchainComputing/iexec-sdk.git
+${IEXEC_SDK_GIT_BRANCH} =  master
+${IEXEC_ORACLE_GIT_BRANCH} =  master
 ${IEXEC_SDK_FORCE_GIT_CLONE} =  false
 ${IEXEC_SDK_DISTRIB}
 
@@ -12,11 +14,18 @@ ${IEXEC_SDK_DISTRIB}
 
 Init Sdk
     Run Keyword If  '${IEXEC_SDK_FORCE_GIT_CLONE}' == 'true'  Git Clone Iexec Sdk
+    Switch Oracle Branch Targeted
     Npm Install Iexec Sdk
+
+Switch Oracle Branch Targeted
+    #souxierie
+    Run  sed -i "s/--depth=1 -b/--depth=2 -b/g" iexec-sdk/src/iexec-init.js
+    Run  sed -i "s/--depth=1/--depth=1 -b ${IEXEC_ORACLE_GIT_BRANCH}/g" iexec-sdk/src/iexec-init.js
+    Run  sed -i "s/--depth=2 -b/--depth=1 -b/g" iexec-sdk/src/iexec-init.js
 
 Git Clone Iexec Sdk
     Remove Directory  iexec-sdk  recursive=true
-    ${git_result} =  Run Process  git clone ${IEXEC_SDK_GIT_BRANCH}  shell=yes
+    ${git_result} =  Run Process  git clone -b ${IEXEC_SDK_GIT_BRANCH} ${IEXEC_SDK_GIT_URL}  shell=yes
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0

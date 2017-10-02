@@ -60,6 +60,7 @@ apt-get install -y python-pip
 apt-get install -y python-dev
 apt-get install -y libssl-dev
 apt-get install -y php5-cli
+apt-get install -y python-tk
 
 apt-get install -y dstat
 apt-get install -y ntp

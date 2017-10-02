@@ -12,7 +12,7 @@ Suite Setup  Start Oracle Bridge And Xtremweb
 Suite Teardown  Stop Oracle Bridge And Xtremweb
 
 
-# to launch tests : pybot -d Results ./Tests/helloWorldSuiteOnTestRpc.robot
+# to launch tests : pybot -d Results ./tests/rf/Tests/helloWorldSuiteOnTestRpc.robot
 # Quicker for second launch :
 # pybot --variable XW_FORCE_GIT_CLONE:false --variable IEXEC_BRIDGE_FORCE_GIT_CLONE:false --variable IEXEC_ORACLE_FORCE_GIT_CLONE:false -d Results ./Tests/helloWorldSuiteOnTestRpc.robot
 
@@ -37,24 +37,17 @@ Test HelloWorld Submit Iexec On Testrpc
     XWServer.Count From Works  0
 
     # 2) : start a echo work
-    IexecOracleAPIimplSmartContract.Submit  echo  HelloWorld!!!
-    ETHTestrpc.Test Testrpc Up
-    Check Submit Launch Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
-    ${index} =  Check Submit CallbackEvent Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}
-    LOG  ${index}
-    Check Submit CallbackEvent Event In IexecOracleAPIimplSmartContract  ${index}  ${HELLO_WORLD_SM_ADDRESS}
-    Check Work Is Recorded in IexceOracleSmartContract After Submit  ${index}  ${HELLO_WORLD_SM_ADDRESS}
+    ${submitTxHash} =  IexecOracleAPIimplSmartContract.Submit  echo  HelloWorld!!!
+    IexceOracleSmartContract.Check Submit Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}  echo  HelloWorld!!!
+    IexceOracleSmartContract.Check SubmitCallback Event In IexceOracleSmartContract  ${submitTxHash}  ${USER}  echo  HelloWorld!!!
+    IexecOracleAPIimplSmartContract.Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract  ${submitTxHash}  ${USER}  echo  HelloWorld!!!
+    IexceOracleSmartContract.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${submitTxHash}  ${HELLO_WORLD_SM_ADDRESS}  echo
     # status 4 = COMPLETED
-    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${index}
+    ${work_status} =  IexceOracleSmartContract.Get Work Status  ${submitTxHash}
     Should Be Equal As Strings  ${work_status}  4
-    ${workuid} =  IexceOracleSmartContract.Get Work Uid  ${USER}  ${HELLO_WORLD_SM_ADDRESS}  ${index}
+    ${workuid} =  IexceOracleSmartContract.Get Work Uid  ${submitTxHash}
     XWServer.Count From Works Where Uid  ${workuid}  1
 
-
-    #better example ? : echo  hello | cat /etc/passwd | tr "[a-z]" "[A-Z]"
-
-
-    # TODO check  HelloWorldSmartContract.RegisterEcho call twice
     # TODO add error usecase HelloWorld tests
 
 
@@ -62,7 +55,8 @@ Test HelloWorld Submit Iexec On Testrpc
 *** Keywords ***
 
 Start Oracle Bridge And Xtremweb
-    XWCommon.Prepare And Start XWtremWeb Server And XWtremWeb Worker
+    XWCommon.Prepare XWtremWeb Server And XWtremWeb Worker
+    XWCommon.Begin XWtremWeb Command Test
     ETHTestrpc.Init And Start Testrpc
     IexecOracle.Init Oracle
     IexecBridge.Init Bridge
@@ -72,5 +66,5 @@ Start Oracle Bridge And Xtremweb
 Stop Oracle Bridge And Xtremweb
     IexecBridge.Stop Bridge
     ETHTestrpc.Stop Testrpc
-    XWCommon.Stop XWtremWeb Server And XWtremWeb Worker
+    XWCommon.End XWtremWeb Command Test
 

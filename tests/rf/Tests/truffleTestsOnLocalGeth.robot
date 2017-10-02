@@ -9,6 +9,8 @@ Suite Setup  ETHGeth.Start Geth42
 Suite Teardown  ETHGeth.Stop Geth42
 
 
+# to launch tests : pybot -d Results ./tests/rf/Tests/truffleTestsOnLocalGeth.robot
+
 
 *** Variables ***
 

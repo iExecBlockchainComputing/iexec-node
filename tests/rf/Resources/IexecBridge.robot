@@ -1,7 +1,8 @@
 *** Settings ***
 
 *** Variables ***
-${IEXEC_BRIDGE_GIT_BRANCH} =  https://github.com/iExecBlockchainComputing/iexec-bridge.git
+${IEXEC_BRIDGE_GIT_URL} =  https://github.com/iExecBlockchainComputing/iexec-bridge.git
+${IEXEC_BRIDGE_GIT_BRANCH} =  master
 ${IEXEC_BRIDGE_FORCE_GIT_CLONE} =  false
 ${BRIDGE_PROCESS}
 ${IEXEC_ORACLE_SM_ADDRESS}
@@ -17,7 +18,7 @@ Init Bridge
 
 Git Clone Iexec Bridge
     Remove Directory  iexec-bridge  recursive=true
-    ${git_result} =  Run Process  git clone ${IEXEC_BRIDGE_GIT_BRANCH}  shell=yes
+    ${git_result} =  Run Process  git clone -b ${IEXEC_BRIDGE_GIT_BRANCH} ${IEXEC_BRIDGE_GIT_URL}  shell=yes
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0
@@ -49,6 +50,7 @@ Start Bridge
     Set Suite Variable  ${BRIDGE_PROCESS}  ${created_process}
 
 Stop Bridge
+    Get Bridge Log
     Terminate Process  ${BRIDGE_PROCESS}
 
 Get Bridge Log
