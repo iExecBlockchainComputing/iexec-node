@@ -6,7 +6,7 @@
 
 Check Submit Event In IexceOracleSmartContract
     [Arguments]  ${provider}  ${appName}  ${args}
-    ${watch_callback_events} =  Wait Until Keyword Succeeds  1 min  1 min  Watch Submit
+    ${watch_callback_events} =  Wait Until Keyword Succeeds  3 min  1 min  Watch Submit
     Should Be Equal As Strings  ${watch_callback_events[0]["event"]}  Submit
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["appName"]}  ${appName}
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["args"]}  ${args}
@@ -17,7 +17,7 @@ Check Submit Event In IexceOracleSmartContract
 
 Check SubmitCallback Event In IexceOracleSmartContract
     [Arguments]  ${submitTxHash}  ${user}  ${appName}  ${stdout}
-    ${watch_callback_events} =  Wait Until Keyword Succeeds  1 min  1 min  Watch SubmitCallback
+    ${watch_callback_events} =  Wait Until Keyword Succeeds  3 min  1 min  Watch SubmitCallback
     Should Be Equal As Strings  ${watch_callback_events[0]["event"]}  SubmitCallback
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["submitTxHash"]}  ${submitTxHash}
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["user"]}  ${user}
