@@ -1,1 +1,1 @@
-geth attach ipc:/home/vagrant/.ethereum/testnet/geth.ipc
+geth attach ipc:/home/vagrant/iexecdev/.ethereum/testnet/geth.ipc
