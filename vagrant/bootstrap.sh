@@ -88,6 +88,9 @@ apt-get install -y mysql-server
 apt-get install -y solc
 apt-get install -y ethereum
 
+# install parity
+bash <(curl https://get.parity.io -kL)
+
 # truffle, testrpc pm2
 su - vagrant -c "npm install -g truffle@3.4.9"
 su - vagrant -c "npm install -g ethereumjs-testrpc@4.1.1"
