@@ -1,1 +1,1 @@
-nohup parity --base-path /home/vagrant/iexecdev/.local/share/io.parity.ethereum --warp --chain kovan --jsonrpc-interface all --jsonrpc-hosts all --ws-interface all --ws-hosts all --ws-origins all >> kovanparity.log &
+nohup parity --base-path /home/vagrant/iexecdev/.local/share/io.parity.ethereum --warp --chain kovan --jsonrpc-port 8542 --jsonrpc-interface all --jsonrpc-hosts all --ws-interface all --ws-hosts all --ws-origins all >> kovanparity.log &
