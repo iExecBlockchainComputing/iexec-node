@@ -14,7 +14,7 @@ Init Bridge
     Run Keyword If  '${IEXEC_BRIDGE_FORCE_GIT_CLONE}' == 'true'  Git Clone Iexec Bridge
     Npm Install Bridge
     Set Oracle Address In Bridge
-    Set XtremWeb Config In Bridge
+
 
 Git Clone Iexec Bridge
     Remove Directory  iexec-bridge  recursive=true
@@ -32,16 +32,6 @@ Npm Install Bridge
 
 Set Oracle Address In Bridge
     Run  sed -i 's/.*"ContractAddress":.*/"ContractAddress":\"${IEXEC_ORACLE_SM_ADDRESS}\"/g' iexec-bridge/config.json
-
-Set XtremWeb Config In Bridge
-    LOG  ${XWCONFIGURE.VALUES.XWSERVER}
-    Run  sed -i "s/.*const LOCALHOSTNAME = .*/const LOCALHOSTNAME = '${XWCONFIGURE.VALUES.XWSERVER}';/g" iexec-bridge/xwhep.js
-    LOG  ${XWCONFIGURE.VALUES.HTTPSPORT}
-    Run  sed -i "s/.*const LOCALHOSTPORT = .*/const LOCALHOSTPORT = ${XWCONFIGURE.VALUES.HTTPSPORT};/g" iexec-bridge/xwhep.js
-    LOG  ${XWCONFIGURE.VALUES.XWADMINLOGIN}
-    Run  sed -i "s/.*const LOGIN = .*/const LOGIN = '${XWCONFIGURE.VALUES.XWADMINLOGIN}';/g" iexec-bridge/xwhep.js
-    LOG  ${XWCONFIGURE.VALUES.XWADMINPASSWORD}
-    Run  sed -i "s/.*const PASSWD = .*/const PASSWD = '${XWCONFIGURE.VALUES.XWADMINPASSWORD}';/g" iexec-bridge/xwhep.js
 
 Start Bridge
     # clear log
