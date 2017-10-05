@@ -18,7 +18,7 @@ Suite Teardown  Stop Oracle Bridge And Xtremweb
 
 *** Variables ***
 ${USER}
-${CREATOR}
+${PROVIDER}
 
 
 *** Test Cases ***
@@ -28,8 +28,8 @@ Test HelloWorld Submit Iexec On Testrpc
     [Tags]  HelloWorld Tests
     ${user} =  IexceOracleSmartContract.Get User Address
     Set Suite Variable  ${USER}  ${user}
-    ${creator} =  IexceOracleSmartContract.Get Creator Address
-    Set Suite Variable  ${CREATOR}  ${creator}
+    ${provider} =  IexceOracleSmartContract.Get Provider Address
+    Set Suite Variable  ${PROVIDER}  ${provider}
 
     # 1) : deploy /bin/echo binary in XWtremweb
     ${app_uid} =  XWClient.XWSENDAPPCommand  echo  DEPLOYABLE  LINUX  AMD64  /bin/echo
@@ -41,7 +41,7 @@ Test HelloWorld Submit Iexec On Testrpc
     IexceOracleSmartContract.Check Submit Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}  echo  HelloWorld!!!
     IexceOracleSmartContract.Check SubmitCallback Event In IexceOracleSmartContract  ${submitTxHash}  ${USER}  echo  HelloWorld!!!
     IexecOracleAPIimplSmartContract.Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract  ${submitTxHash}  ${USER}  echo  HelloWorld!!!
-    IexceOracleSmartContract.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${submitTxHash}  ${HELLO_WORLD_SM_ADDRESS}  echo
+    IexceOracleSmartContract.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${submitTxHash}  echo
     # status 4 = COMPLETED
     ${work_status} =  IexceOracleSmartContract.Get Work Status  ${submitTxHash}
     Should Be Equal As Strings  ${work_status}  4

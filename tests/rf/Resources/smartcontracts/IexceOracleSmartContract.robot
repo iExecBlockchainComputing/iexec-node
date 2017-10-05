@@ -5,14 +5,14 @@
 *** Keywords ***
 
 Check Submit Event In IexceOracleSmartContract
-    [Arguments]  ${provider}  ${appName}  ${args}
+    [Arguments]  ${dapp}  ${appName}  ${args}
     ${watch_callback_events} =  Wait Until Keyword Succeeds  3 min  1 min  Watch Submit
     Should Be Equal As Strings  ${watch_callback_events[0]["event"]}  Submit
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["appName"]}  ${appName}
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["args"]}  ${args}
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["user"]}  ${USER}
-    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["creator"]}  ${CREATOR}
-    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["provider"]}  ${provider}
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["provider"]}  ${PROVIDER}
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["dapp"]}  ${dapp}
 
 
 Check SubmitCallback Event In IexceOracleSmartContract
@@ -26,7 +26,7 @@ Check SubmitCallback Event In IexceOracleSmartContract
 
 
 Check Work Is Recorded in IexceOracleSmartContract After Submit
-    [Arguments]  ${submitTxHash}  ${provider}  ${appName}
+    [Arguments]  ${submitTxHash}  ${appName}
     @{work_result} =  Get Work  ${submitTxHash}
     ${workuid} =  Get Work Uid  ${submitTxHash}
     Should Be Equal As Strings  ${workuid}  @{work_result}[0]
@@ -74,8 +74,8 @@ Get User Address
     @{address} =  Get Regexp Matches  ${truffletest_result.stdout}  BEGIN_LOG(?P<address>.*)END_LOG  address
     [Return]  @{address}[0]
 
-Get Creator Address
-    ${truffletest_result} =  Run Process  cd iexec-oracle-contract && ./node_modules/.bin/truffle test test/rf/getCreatorAddress.js  shell=yes
+Get Provider Address
+    ${truffletest_result} =  Run Process  cd iexec-oracle-contract && ./node_modules/.bin/truffle test test/rf/getProviderAddress.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
