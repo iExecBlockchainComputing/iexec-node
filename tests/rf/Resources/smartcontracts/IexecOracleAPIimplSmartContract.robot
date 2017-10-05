@@ -14,7 +14,7 @@ Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["stdout"]}  ${stdout}
 
 Watch IexecSubmitCallback
-    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/watchIexecSubmitCallbackTest.js  shell=yes
+    ${truffletest_result} =  Run Process  cd iexec-oracle-contract && ./node_modules/.bin/truffle test test/rf/watchIexecSubmitCallbackTest.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
@@ -27,8 +27,8 @@ Watch IexecSubmitCallback
 
 Submit
     [Arguments]  ${appName}  ${param}
-    Run  sed -i "s/.*return aIexecOracleAPIimplInstance.iexecSubmit(.*/return aIexecOracleAPIimplInstance.iexecSubmit(\\"${appName}\\",\\"${param}\\",{/g" iexec-oracle/test/rf/submitTest.js
-    ${truffletest_result} =  Run Process  cd iexec-oracle && ./node_modules/.bin/truffle test test/rf/submitTest.js  shell=yes
+    Run  sed -i "s/.*return aIexecOracleAPIimplInstance.iexecSubmit(.*/return aIexecOracleAPIimplInstance.iexecSubmit(\\"${appName}\\",\\"${param}\\",{/g" iexec-oracle-contract/test/rf/submitTest.js
+    ${truffletest_result} =  Run Process  cd iexec-oracle-contract && ./node_modules/.bin/truffle test test/rf/submitTest.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
     Should Be Equal As Integers	${truffletest_result.rc}	0
