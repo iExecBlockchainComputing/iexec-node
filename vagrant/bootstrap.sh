@@ -33,7 +33,7 @@ su - vagrant -c "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33
 su - vagrant -c "touch ~/.bash_profile"
 su - vagrant -c "echo 'export NVM_DIR=~/.nvm' >> .bash_profile"
 su - vagrant -c "echo 'source ~/.nvm/nvm.sh' >> .bash_profile"
-su - vagrant -c "nvm install v6.11.2"
+su - vagrant -c "nvm install v8.6.0"
 
 
 #java
