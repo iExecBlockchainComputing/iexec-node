@@ -29,9 +29,8 @@ Npm Install Bridge
     Log  ${npm_result.stdout}
     Should Be Equal As Integers	${npm_result.rc}	0
 
-
 Set Oracle Address In Bridge
-    Run  sed -i 's/.*"ContractAddress":.*/"ContractAddress":\"${IEXEC_ORACLE_SM_ADDRESS}\"/g' iexec-bridge/config.json
+    Run  sed -i 's/.*truffleContract.at(.*/const contractInstance = truffleContract.at(${IEXEC_ORACLE_SM_ADDRESS});/g' iexec-bridge/bridge.js
 
 Start Bridge
     # clear log
