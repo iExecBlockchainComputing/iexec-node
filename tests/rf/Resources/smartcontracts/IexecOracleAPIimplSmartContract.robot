@@ -27,7 +27,7 @@ Watch IexecSubmitCallback
 
 Submit
     [Arguments]  ${appName}  ${param}
-    Run  sed -i "s/.*return aIexecOracleAPIimplInstance.iexecSubmit(.*/return aIexecOracleAPIimplInstance.iexecSubmit(\\"${appName}\\",\\"${param}\\",{/g" iexec-oracle-contract/test/rf/submitTest.js
+    Run  sed -i "s/.*return aIexecOracleAPIimplInstance.iexecSubmit(.*/return aIexecOracleAPIimplInstance.iexecSubmit(\\"${appName}\\",'${param}',{/g" iexec-oracle-contract/test/rf/submitTest.js
     ${truffletest_result} =  Run Process  cd iexec-oracle-contract && ./node_modules/.bin/truffle test test/rf/submitTest.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
