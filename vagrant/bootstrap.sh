@@ -24,16 +24,16 @@ apt-get update
 
 
 
-#install for root user node v6.11.2 (npm v3.10.10) and set it as default
+#install for root user node v8.6.0 ( npm v5.3.0) and set it as default
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
-nvm install v6.11.2
+nvm install v8.6.0
 
 #install for vagrant user node v6.11.2 (npm v3.10.10) and set it as default
 su - vagrant -c "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash"
 su - vagrant -c "touch ~/.bash_profile"
 su - vagrant -c "echo 'export NVM_DIR=~/.nvm' >> .bash_profile"
 su - vagrant -c "echo 'source ~/.nvm/nvm.sh' >> .bash_profile"
-su - vagrant -c "nvm install v6.11.2"
+su - vagrant -c "nvm install v8.6.0"
 
 
 #java
@@ -87,6 +87,9 @@ apt-get install -y mysql-server
 # ethereum solidity
 apt-get install -y solc
 apt-get install -y ethereum
+
+# install parity
+bash <(curl https://get.parity.io -kL)
 
 # truffle, testrpc pm2
 su - vagrant -c "npm install -g truffle@3.4.9"
