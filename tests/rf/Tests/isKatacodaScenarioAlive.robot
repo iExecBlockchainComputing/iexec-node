@@ -11,18 +11,13 @@ Suite Setup  Init Ping Katacoda
 ${PKEY}
 
 
-${IEXEC_ORACLE_ON_ROPSTEN} =  0x065097b71b2e372eee4e31374b0262fa08238754
-${IEXEC_ORACLE_ON_KOVAN} =  0x77040475d5cf05e9dd44f96d7dab3b7da7adbc6a
-${IEXEC_ORACLE_ON_RINKEBY} =  0x9752f4bb6ab182a98e7347936e2172e7c0821338
-
-
 *** Test Cases ***
 
 
 Test Katacoda Hello World Scenario On Kovan
     [Documentation]  Test Katacoda Hello World Scenario On Kovan
     [Tags]  Katacoda
-    Prepare Iexec Factorial Kovan
+    Prepare Iexec Factorial
     IexecSdk.Iexec An App  iexec-factorial  migrate --network kovan
     ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network kovan
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://kovan.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
@@ -40,7 +35,7 @@ Test Katacoda Hello World Scenario On Ropsten
 Test Katacoda Hello World Scenario On Rinkeby
     [Documentation]  Test Katacoda Hello World Scenario On Rinkeby
     [Tags]  Katacoda
-    Prepare Iexec Factorial Rinkeby
+    Prepare Iexec Factorial
     IexecSdk.Iexec An App  iexec-factorial  migrate --network rinkeby
     ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network rinkeby
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://rinkeby.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
@@ -59,16 +54,7 @@ Prepare Iexec Factorial
     IexecSdk.Iexec An App  iexec-factorial  wallet create
     Run  sed -i 's/.*\"privateKey\":.*/\"privateKey\":\"${PKEY}\",/g' iexec-factorial/wallet.json
 
-Prepare Iexec Factorial Kovan
-    Prepare Iexec Factorial
-    # replace ropsten by Kovan oracle address
-    Run  sed -i 's/${IEXEC_ORACLE_ON_ROPSTEN}/${IEXEC_ORACLE_ON_KOVAN}/g' iexec-factorial/iexec.js
 
-
-Prepare Iexec Factorial Rinkeby
-    Prepare Iexec Factorial
-    # replace ropsten by Rinkeby oracle address
-    Run  sed -i 's/${IEXEC_ORACLE_ON_ROPSTEN}/${IEXEC_ORACLE_ON_RINKEBY}/g' iexec-factorial/iexec.js
 
 
 Check Factorial 10 In Result
