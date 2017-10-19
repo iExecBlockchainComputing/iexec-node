@@ -19,23 +19,37 @@ Suite Teardown  End Stockfish Suite
 *** Variables ***
 ${wallet}
 ${IEXEC_ORACLE_SM_ADDRESS}
-${IEXEC_ORACLE_ON_ROPSTEN} =  0x552075c9e40b050c8b61339b770e2a21e9014b3c
+${IEXEC_ORACLE_ON_KOVAN} =  0x77040475d5cf05e9dd44f96d7dab3b7da7adbc6a
 ${STOCKFISH_PROCESS}
 
 *** Test Cases ***
 
-Test Stockfish On Local Geth
-    [Documentation]  Test Stockfish Local Geth
+Test Stockfish On Test Rpc
+    [Documentation]  Test Stockfish On Test Rpc
     [Tags]  Stockfish Tests
     # 1) : deploy stockfish binary in XWtremweb
     ${bin} =  Stockfishbin.Get Stockfish Bin Path
     ${app_uid} =  XWClient.XWSENDAPPCommand  stockfish  DEPLOYABLE  LINUX  AMD64  ${bin}
     XWServer.Count From Apps Where Uid  ${app_uid}  1
     XWServer.Count From Works  0
-    #Execute Manual Step  You can play chess at http://localhost:8000
-    Sleep	20 minutes
+    IexecSdkFromGithub.Iexec An App  iexec-stockfish  migrate --network development
+    #{\\"cmdLine\\":\\"a2a4\\"}
+    ${iexec_result.stdout} =  IexecSdkFromGithub.Iexec An App  iexec-stockfish  submit stockfish '{"stdin":"position startpos moves e2e4 \\n go"}' --network development
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://development.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
+    Log  @{transactionHash}
+    Wait Until Keyword Succeeds  2 min	30 sec  Check Stockfish Status In Result  @{transactionHash}[0]  --network development
+
+
 
 *** Keywords ***
+Check Stockfish Status In Result
+    [Arguments]  ${transactionHash}  ${network}
+    ${stdout} =  IexecSdkFromGithub.Iexec An App  iexec-stockfish  result ${transactionHash} ${network}
+    ${lines} =  Get Lines Containing String  ${stdout}  stockfish
+    ${lines_count} =  Get Line Count  ${lines}
+    Should Be Equal As Integers	${lines_count}	1
+
+
 
 Prepare Stockfish Suite
     XWCommon.Prepare XWtremWeb Server And XWtremWeb Worker
@@ -79,14 +93,15 @@ Prepare Iexec Stockfish
     ETHTestrpc.Get Balance Of  ${wallet}
 
     ## target iexec oracle
-    Run  sed -i 's/${IEXEC_ORACLE_ON_ROPSTEN}/${IEXEC_ORACLE_SM_ADDRESS}/g' iexec-stockfish/iexec.js
-
-    IexecSdkFromGithub.Iexec An App  iexec-stockfish  migrate --network development
+    Run  sed -i 's/LOCAL_ORACLE_ADDRESS_VALUE/${IEXEC_ORACLE_SM_ADDRESS}/g' iexec-stockfish/truffle.js
+    Run  sed -i 's/${IEXEC_ORACLE_ON_KOVAN}/${IEXEC_ORACLE_SM_ADDRESS}/g' iexec-stockfish/node_modules/iexec-oracle-contract/build/contracts/IexecOracle.json
+    Run  sed -i 's/${IEXEC_ORACLE_ON_KOVAN}/${IEXEC_ORACLE_SM_ADDRESS}/g' iexec-sdk/node_modules/iexec-oracle-contract/build/contracts/IexecOracle.json
 
     # start front end
     ${result} =  Run Process  cd iexec-stockfish && npm install   shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers	${result.rc}	0
+
     ${created_process} =  Start Process  cd iexec-stockfish && ./buildAndDeploy.sh  shell=yes
     Set Suite Variable  ${STOCKFISH_PROCESS}  ${created_process}
