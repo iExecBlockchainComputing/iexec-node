@@ -33,21 +33,19 @@ Test HelloWorld Submit Iexec On Testrpc
     Set Suite Variable  ${PROVIDER}  ${provider}
 
     # 1) : deploy /bin/echo binary in XWtremweb
-    ${app_uid} =  XWClient.XWSENDAPPCommand  echo  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${app_uid} =  XWClient.XWSENDAPPCommand  ${HELLO_WORLD_SM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
     XWServer.Count From Apps Where Uid  ${app_uid}  1
     XWServer.Count From Works  0
 
     # 2) : start a echo work
-    ${submitTxHash} =  IexecOracleAPIimplSmartContract.Submit  echo  HelloWorld!!!
-    IexceOracleSmartContract.Check Submit Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}  echo  HelloWorld!!!
-    IexceOracleSmartContract.Check SubmitCallback Event In IexceOracleSmartContract  ${submitTxHash}  ${USER}  echo  HelloWorld!!!
-    IexecOracleAPIimplSmartContract.Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract  ${submitTxHash}  ${USER}  echo  HelloWorld!!!
-    IexceOracleSmartContract.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${submitTxHash}  echo
+    ${submitTxHash} =  IexecOracleAPIimplSmartContract.Submit  HelloWorld!!!
+    IexceOracleSmartContract.Check Submit Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}  HelloWorld!!!
+    IexceOracleSmartContract.Check SubmitCallback Event In IexceOracleSmartContract  ${submitTxHash}  ${USER}  HelloWorld!!!
+    IexecOracleAPIimplSmartContract.Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract  ${submitTxHash}  ${USER}  HelloWorld!!!
+    IexceOracleSmartContract.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${submitTxHash}
     # status 4 = COMPLETED
     ${work_status} =  IexceOracleSmartContract.Get Work Status  ${submitTxHash}
     Should Be Equal As Strings  ${work_status}  4
-    ${workuid} =  IexceOracleSmartContract.Get Work Uid  ${submitTxHash}
-    XWServer.Count From Works Where Uid  ${workuid}  1
 
 Test HelloWorld Submit Iexec On Testrpc With Json Format
     [Documentation]  Test HelloWorld Submit Iexec On Testrpc
@@ -58,21 +56,19 @@ Test HelloWorld Submit Iexec On Testrpc With Json Format
     Set Suite Variable  ${PROVIDER}  ${provider}
 
     # 1) : deploy /bin/echo binary in XWtremweb
-    ${app_uid} =  XWClient.XWSENDAPPCommand  echo  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${app_uid} =  XWClient.XWSENDAPPCommand  ${HELLO_WORLD_SM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
     XWServer.Count From Apps Where Uid  ${app_uid}  1
     XWServer.Count From Works  0
 
     # 2) : start a echo work
-    ${submitTxHash} =  IexecOracleAPIimplSmartContract.Submit  echo  {\\"cmdLine\\":\\"HelloWorld!!!\\"}
-    IexceOracleSmartContract.Check Submit Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}  echo  {"cmdLine":"HelloWorld!!!"}
-    IexceOracleSmartContract.Check SubmitCallback Event In IexceOracleSmartContract  ${submitTxHash}  ${USER}  echo  HelloWorld!!!
-    IexecOracleAPIimplSmartContract.Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract  ${submitTxHash}  ${USER}  echo  HelloWorld!!!
-    IexceOracleSmartContract.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${submitTxHash}  echo
+    ${submitTxHash} =  IexecOracleAPIimplSmartContract.Submit  {\\"cmdLine\\":\\"HelloWorld!!!\\"}
+    IexceOracleSmartContract.Check Submit Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}  {"cmdLine":"HelloWorld!!!"}
+    IexceOracleSmartContract.Check SubmitCallback Event In IexceOracleSmartContract  ${submitTxHash}  ${USER}  HelloWorld!!!
+    IexecOracleAPIimplSmartContract.Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract  ${submitTxHash}  ${USER}  HelloWorld!!!
+    IexceOracleSmartContract.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${submitTxHash}
     # status 4 = COMPLETED
     ${work_status} =  IexceOracleSmartContract.Get Work Status  ${submitTxHash}
     Should Be Equal As Strings  ${work_status}  4
-    ${workuid} =  IexceOracleSmartContract.Get Work Uid  ${submitTxHash}
-    XWServer.Count From Works Where Uid  ${workuid}  1
 
 
 *** Keywords ***

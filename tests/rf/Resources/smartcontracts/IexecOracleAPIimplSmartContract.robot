@@ -5,12 +5,11 @@
 *** Keywords ***
 
 Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract
-    [Arguments]  ${submitTxHash}  ${user}  ${appName}  ${stdout}
+    [Arguments]  ${submitTxHash}  ${user}  ${stdout}
     ${watch_callback_events} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IexecSubmitCallback
     Should Be Equal As Strings  ${watch_callback_events[0]["event"]}  IexecSubmitCallback
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["submitTxHash"]}  ${submitTxHash}
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["user"]}  ${user}
-    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["appName"]}  ${appName}
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["stdout"]}  ${stdout}
 
 Watch IexecSubmitCallback
@@ -26,8 +25,8 @@ Watch IexecSubmitCallback
     [Return]  ${events}
 
 Submit
-    [Arguments]  ${appName}  ${param}
-    Run  sed -i "s/.*return aIexecOracleAPIimplInstance.iexecSubmit(.*/return aIexecOracleAPIimplInstance.iexecSubmit(\\"${appName}\\",'${param}',{/g" iexec-oracle-contract/test/rf/submitTest.js
+    [Arguments]  ${param}
+    Run  sed -i "s/.*return aIexecOracleAPIimplInstance.iexecSubmit(.*/return aIexecOracleAPIimplInstance.iexecSubmit('${param}',{/g" iexec-oracle-contract/test/rf/submitTest.js
     ${truffletest_result} =  Run Process  cd iexec-oracle-contract && ./node_modules/.bin/truffle test test/rf/submitTest.js  shell=yes
     Log  ${truffletest_result.stderr}
     Log  ${truffletest_result.stdout}
