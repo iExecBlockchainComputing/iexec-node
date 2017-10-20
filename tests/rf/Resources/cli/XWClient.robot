@@ -78,3 +78,19 @@ XWWORKSCommand
     Should Be Equal As Integers	${cmd_result.rc}	0
    # @{results_file} =  Get Regexp Matches  ${cmd_result.stdout}  INFO : Downloaded to : (?P<file>.*)  file
     [Return]  ${cmd_result.stdout}
+
+XWSENDUSERCommand
+    [Documentation]  Usage :  XWSENDUSERCommand SENDUSER login password email rights [<a user group UID | URI> ] : sends/updates a useruid
+    [Arguments]  ${login}  ${password}  ${email}
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwsenduser ${login} ${password} ${email}  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers	${cmd_result.rc}	0
+
+XWUSERSCommand
+    [Documentation]  Usage :  XWUSERS
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwusers  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers	${cmd_result.rc}	0
+    [Return]  ${cmd_result.stdout}

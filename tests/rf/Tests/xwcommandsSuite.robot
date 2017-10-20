@@ -67,6 +67,20 @@ Test XWSubmit and XWResults Command On LS Binary With Param
     Should Be Equal As Strings	@{results_file_lines}[3]  .
 
 
+Test XWSENDUSER and XWUSERS Command
+    [Documentation]  Testing Test XWSENDUSER and XWUSERS Command
+    [Tags]  CommandLine Tests
+    XWClient.XWSENDUSERCommand  0xc2cc35ccfbded406460c74ba22249cc88a615e9c  nopass  noemail
+    ${stdout} =  XWUSERSCommand
+    Log  ${stdout}
+    Should Contain	${stdout}	LOGIN='0xc2cc35ccfbded406460c74ba22249cc88a615e9c'
+
+
+
+
+
+
+
 
 #Test 2.2 Soumettre un job avec ligne de commande
 #    [Documentation]  Ces tests doivent prouver que la ligne de commande est prise en charge correctement. Ces tests doivent se faire avec un application qui accepte des arguments sur la ligne de commande
