@@ -122,6 +122,23 @@ Install XWtremWeb
     Should Be Equal As Integers	${line_install_result_successful}	1
 
 
+Set MANDATINGLOGIN in Xtremweb Xlient Conf
+    [Arguments]  ${DIST_XWHEP_PATH}  ${MANDATED}
+    Directory Should Exist  ${DIST_XWHEP_PATH}/conf
+    Run  sed -i "s/.*MANDATINGLOGIN.*//g" ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
+    Append To File  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf  MANDATINGLOGIN=${MANDATED}
+    Log file  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
+
+
+Curl To Server
+    [Arguments]  ${URL}
+    ${curl_result} =  Run Process  /usr/bin/curl -v --insecure -X GET -G 'https://${XWCONFIGURE.VALUES.XWSERVER}:${XWCONFIGURE.VALUES.HTTPSPORT}/${URL}' -d XWLOGIN\=${XWCONFIGURE.VALUES.XWADMINLOGIN} -d XWPASSWD\=${XWCONFIGURE.VALUES.XWADMINPASSWORD}  shell=yes
+    Log  ${curl_result.stdout}
+    Log  ${curl_result.stderr}
+    Should Be Equal As Integers	${curl_result.rc}	0
+    [Return]  ${curl_result.stdout}
+
+
 
 Create XWCONFIGURE.VALUES FILE
     [Arguments]  ${DIST_XWHEP_PATH}
