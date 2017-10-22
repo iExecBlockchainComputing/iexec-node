@@ -87,8 +87,10 @@ Test STICKYBIT Without MANDATINGLOGIN
     ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
     ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
     # we find dapp_provider as owner in the dapo description
-    Should Contain	${curl_result}  0x1700
 
+    ################## OK ##################
+    Should Contain	${curl_result}  0x1700
+    ########################################
 
 Test STICKYBIT With MANDATINGLOGIN
     [Documentation]  Test STICKYBIT Without MANDATINGLOGIN
@@ -105,8 +107,10 @@ Test STICKYBIT With MANDATINGLOGIN
     ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
     # we find dapp_provider as owner in the dapo description
     Should Contain	${curl_result}  @{dapp_provider_uid}[0]
-    Should Contain	${curl_result}  0x1700
 
+    ################## KO ? ##################
+    Should Contain	${curl_result}  0x1700
+    ########################################
 
 
 
