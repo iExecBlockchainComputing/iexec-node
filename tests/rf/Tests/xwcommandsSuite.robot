@@ -80,15 +80,22 @@ Test XWSENDUSER and XWUSERS Command
     Should Contain	${stdout}	LOGIN='${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}'
 
 
-Test MANDATINGLOGIN
-    [Documentation]  Testing MANDATINGLOGIN
+Test STICKYBIT Without MANDATINGLOGIN
+    [Documentation]  Test STICKYBIT Without MANDATINGLOGIN
+    [Tags]  CommandLine Tests
+    # deployed DAPP in the name of DAPP PROVIDER
+    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
+    # we find dapp_provider as owner in the dapo description
+    Should Contain	${curl_result}  0x1700
+
+
+Test STICKYBIT With MANDATINGLOGIN
+    [Documentation]  Test STICKYBIT Without MANDATINGLOGIN
     [Tags]  CommandLine Tests
     XWClient.XWSENDUSERCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}  nopass  noemail
-
     ${xwusers} =  XWUSERSCommand
     Should Contain	${xwusers}	LOGIN='${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}'
-    #UID='6865841a-c45d-488c-b51c-bf666e5b0854', LOGIN='0xc2cc35ccfbded406460c74ba22249cc88a615e9c'
-
     @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}'  useruid
 
     # ADD MANDATINGLOGIN to the DAPP PROVIDER
@@ -98,12 +105,8 @@ Test MANDATINGLOGIN
     ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
     # we find dapp_provider as owner in the dapo description
     Should Contain	${curl_result}  @{dapp_provider_uid}[0]
+    Should Contain	${curl_result}  0x1700
 
-
-    ${workuid} =  XWSUBMITCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}
-    LOG  ${workuid}
-    Wait Until Keyword Succeeds  2 min	5 sec  Check XWSTATUS Completed  ${workuid}
-    # worker
 
 
 
