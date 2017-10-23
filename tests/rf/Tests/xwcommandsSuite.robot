@@ -79,21 +79,23 @@ Test XWSENDUSER and XWUSERS Command
     Log  ${stdout}
     Should Contain	${stdout}	LOGIN='${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}'
 
-
-Test STICKYBIT Without MANDATINGLOGIN
-    [Documentation]  Test STICKYBIT Without MANDATINGLOGIN
+Test Sendapp Call By A Admin Create A Public App
+    [Documentation]  Test Sendapp Call By A Admin Create A Public App
     [Tags]  CommandLine Tests
     # deployed DAPP in the name of DAPP PROVIDER
     ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
     ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
-    # we find dapp_provider as owner in the dapo description
 
-    ################## OK ##################
-    Should Contain	${curl_result}  0x1700
+    ################## Public ##################
+    Should Contain	${curl_result}  0x755
     ########################################
 
-Test STICKYBIT With MANDATINGLOGIN
-    [Documentation]  Test STICKYBIT Without MANDATINGLOGIN
+    ${workuid} =  XWSUBMITCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+
+Test Sendapp Call By A Provider Create A Private App
+    [Documentation]  Test Sendapp Call By A Provider Create A Private App
     [Tags]  CommandLine Tests
     XWClient.XWSENDUSERCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}  nopass  noemail
     ${xwusers} =  XWUSERSCommand
@@ -102,6 +104,7 @@ Test STICKYBIT With MANDATINGLOGIN
 
     # ADD MANDATINGLOGIN to the DAPP PROVIDER
     XWCommon.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}
+
     # deployed DAPP in the name of DAPP PROVIDER
     ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
     ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
@@ -109,7 +112,7 @@ Test STICKYBIT With MANDATINGLOGIN
     Should Contain	${curl_result}  @{dapp_provider_uid}[0]
 
     ################## KO ? ##################
-    Should Contain	${curl_result}  0x1700
+    Should Contain	${curl_result}  0x700
     ########################################
 
 
