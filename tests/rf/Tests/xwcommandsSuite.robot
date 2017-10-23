@@ -17,6 +17,7 @@ Test Teardown  XWCommon.End XWtremWeb Command Test
 *** Variables ***
 ${A_DAPP_ETHEREUM_ADDRESS_1} =  0xdapppethereumaddress00000000000000000001
 ${A_DAPP_ETHEREUM_ADDRESS_2} =  0xdapppethereumaddress00000000000000000002
+${A_DAPP_ETHEREUM_ADDRESS_3} =  0xdapppethereumaddress00000000000000000003
 ${ANOTHER_ETHEREUM_ADDRESS}  =  0xanotheruserethereumaddress00000000000000
 
 
@@ -75,7 +76,7 @@ Test XWSubmit and XWResults Command On LS Binary With Param
 Test XWSENDUSER and XWUSERS Command
     [Documentation]  Testing Test XWSENDUSER and XWUSERS Command
     [Tags]  CommandLine Tests
-    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1}  nopass  noemail
+    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1}  nopass1  noemail1
     ${stdout} =  XWUSERSCommand
     Log  ${stdout}
     Should Contain	${stdout}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'
@@ -98,7 +99,7 @@ Test Sendapp Call By A Admin Create A Public App
 Test Sendapp Call By A Provider Create A Private App
     [Documentation]  Test Sendapp Call By A Provider Create A Private App
     [Tags]  CommandLine Tests
-    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1}  nopass  noemail
+    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1}  nopass1  noemail1
     ${xwusers} =  XWUSERSCommand
     Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'
     @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'  useruid
@@ -116,11 +117,15 @@ Test Sendapp Call By A Provider Create A Private App
     Should Contain	${curl_result}  0x700
     ########################################
 
-Test Sendapp Call By A Provider Create A Private App And Force It To Public Cache Clear By Restart
-    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}  nopass  noemail
+Test Sendapp Call By A Provider Create A Private App And Force It To Public
+    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}  nopass2  noemail2
     ${xwusers} =  XWUSERSCommand
     Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_2}'
     @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS_2}'  useruid
+
+    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_3}  nopass3  noemail3
+    ${xwusers} =  XWUSERSCommand
+    Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_3}'
 
     # ADD MANDATINGLOGIN to the DAPP PROVIDER
     XWCommon.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_2}
@@ -135,25 +140,15 @@ Test Sendapp Call By A Provider Create A Private App And Force It To Public Cach
     Should Contain	${curl_result}  0x700
     ########################################
 
-    # UPDATE in DB all DAPP to 0x755 rights
-    XWCommon.Set All Apps To Public
+    # UPDATE DAPP to 0x755 rights
+    XWCommon.Remove MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}
+    XWClient.XWCMODCommand  0x755  ${app_uid}
 
     ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
     # we find dapp_provider as owner in the dapo description
     Should Contain	${curl_result}  @{dapp_provider_uid}[0]
 
-    ################## A PRIVATE APP ?. 0x700 STILL IN THE CACHE .... ##################
-    Should Contain	${curl_result}  0x700
-    ########################################
-
-    # CLEAR ME THAT XW CACHE
-    XWServer.Restart XtremWeb Server
-
-    ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
-    # we find dapp_provider as owner in the dapo description
-    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
-
-    ################## CACHE CLEAR after restart. we have now a PUBLIC APP owned by provider.  ##################
+    ################## we have now a PUBLIC APP owned by provider.  ##################
     Should Contain	${curl_result}  0x755
     ########################################
 
@@ -161,6 +156,21 @@ Test Sendapp Call By A Provider Create A Private App And Force It To Public Cach
     ${workuid} =  XWSUBMITCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}
     LOG  ${workuid}
     Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+
+    # ADD MANDATINGLOGIN to the provider
+    XWCommon.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    ${workuid} =  XWSUBMITCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+
+    # ADD MANDATINGLOGIN to the a random guy => do not work
+    XWCommon.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_3}
+    ${workuid} =  XWSUBMITCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+
+
+
 
 
 

@@ -137,9 +137,6 @@ Remove MANDATINGLOGIN in Xtremweb Xlient Conf
     Run  sed -i "s/.*MANDATINGLOGIN.*//g" ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
     Log file  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
 
-Set All Apps To Public
-    MySql.Set All Apps To Public
-
 Curl To Server
     [Arguments]  ${URL}
     ${curl_result} =  Run Process  /usr/bin/curl -v --insecure -X GET -G 'https://${XWCONFIGURE.VALUES.XWSERVER}:${XWCONFIGURE.VALUES.HTTPSPORT}/${URL}' -d XWLOGIN\=${XWCONFIGURE.VALUES.XWADMINLOGIN} -d XWPASSWD\=${XWCONFIGURE.VALUES.XWADMINPASSWORD}  shell=yes

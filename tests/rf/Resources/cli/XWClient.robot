@@ -104,3 +104,14 @@ XWUSERSCommand
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers	${cmd_result.rc}	0
     [Return]  ${cmd_result.stdout}
+
+XWCMODCommand
+    [Documentation]  Usage :  XWCMOD
+    [Arguments]  ${rights}  ${uid}
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwchmod ${rights} ${uid}   shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers	${cmd_result.rc}	0
+    [Return]  ${cmd_result.stdout}
+
+
