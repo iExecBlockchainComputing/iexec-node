@@ -72,6 +72,7 @@ Log XtremWeb Server
 
 Begin XWtremWeb Command Test
     Ping XWtremWeb Database
+    Remove MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}
     Start XWtremWeb Server And XWtremWeb Worker
 
 End XWtremWeb Command Test
@@ -127,6 +128,13 @@ Set MANDATINGLOGIN in Xtremweb Xlient Conf
     Directory Should Exist  ${DIST_XWHEP_PATH}/conf
     Run  sed -i "s/.*MANDATINGLOGIN.*//g" ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
     Append To File  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf  MANDATINGLOGIN=${MANDATED}
+    Log file  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
+
+
+Remove MANDATINGLOGIN in Xtremweb Xlient Conf
+    [Arguments]  ${DIST_XWHEP_PATH}
+    Directory Should Exist  ${DIST_XWHEP_PATH}/conf
+    Run  sed -i "s/.*MANDATINGLOGIN.*//g" ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
     Log file  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
 
 Set All Apps To Public
