@@ -15,7 +15,7 @@ Test Teardown  XWCommon.End XWtremWeb Command Test
 #
 
 *** Variables ***
-${A_DAPP_PROVIDER_ETHEREUM_ADDRESS} =  0xdappproviderethereumaddress0000000000000
+${A_DAPP_ETHEREUM_ADDRESS} =   0xdapppethereumaddress00000000000000000000
 ${ANOTHER_ETHEREUM_ADDRESS} =  0xanotheruserethereumaddress00000000000000
 
 
@@ -74,47 +74,92 @@ Test XWSubmit and XWResults Command On LS Binary With Param
 Test XWSENDUSER and XWUSERS Command
     [Documentation]  Testing Test XWSENDUSER and XWUSERS Command
     [Tags]  CommandLine Tests
-    XWClient.XWSENDUSERCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}  nopass  noemail
+    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS}  nopass  noemail
     ${stdout} =  XWUSERSCommand
     Log  ${stdout}
-    Should Contain	${stdout}	LOGIN='${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}'
+    Should Contain	${stdout}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS}'
 
 Test Sendapp Call By A Admin Create A Public App
     [Documentation]  Test Sendapp Call By A Admin Create A Public App
     [Tags]  CommandLine Tests
     # deployed DAPP in the name of DAPP PROVIDER
-    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
     ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
 
     ################## Public ##################
     Should Contain	${curl_result}  0x755
     ########################################
 
-    ${workuid} =  XWSUBMITCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}
+    ${workuid} =  XWSUBMITCommand  ${A_DAPP_ETHEREUM_ADDRESS}
     LOG  ${workuid}
     Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
 
 Test Sendapp Call By A Provider Create A Private App
     [Documentation]  Test Sendapp Call By A Provider Create A Private App
     [Tags]  CommandLine Tests
-    XWClient.XWSENDUSERCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}  nopass  noemail
+    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS}  nopass  noemail
     ${xwusers} =  XWUSERSCommand
-    Should Contain	${xwusers}	LOGIN='${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}'
-    @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}'  useruid
+    Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS}'
+    @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS}'  useruid
 
     # ADD MANDATINGLOGIN to the DAPP PROVIDER
-    XWCommon.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}
+    XWCommon.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS}
 
     # deployed DAPP in the name of DAPP PROVIDER
-    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_PROVIDER_ETHEREUM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
     ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
     # we find dapp_provider as owner in the dapo description
     Should Contain	${curl_result}  @{dapp_provider_uid}[0]
 
-    ################## KO ? ##################
+    ################## A PRIVATE APP ##################
     Should Contain	${curl_result}  0x700
     ########################################
 
+Test Sendapp Call By A Provider Create A Private App And Force It To Public Cache Clear By Restart
+    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS}  nopass  noemail
+    ${xwusers} =  XWUSERSCommand
+    Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS}'
+    @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS}'  useruid
+
+    # ADD MANDATINGLOGIN to the DAPP PROVIDER
+    XWCommon.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS}
+
+    # deployed DAPP in the name of DAPP PROVIDER
+    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
+    # we find dapp_provider as owner in the dapo description
+    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
+
+    ################## A PRIVATE APP ##################
+    Should Contain	${curl_result}  0x700
+    ########################################
+
+    # UPDATE in DB all DAPP to 0x755 rights
+    XWCommon.Set All Apps To Public
+
+    ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
+    # we find dapp_provider as owner in the dapo description
+    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
+
+    ################## A PRIVATE APP ?. 0x700 STILL IN THE CACHE .... ##################
+    Should Contain	${curl_result}  0x700
+    ########################################
+
+    # CLEAR ME THAT XW CACHE
+    XWServer.Restart XtremWeb Server
+
+    ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
+    # we find dapp_provider as owner in the dapo description
+    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
+
+    ################## CACHE CLEAR after restart. we have now a PUBLIC APP owned by provider.  ##################
+    Should Contain	${curl_result}  0x755
+    ########################################
+
+    # User  and worker are now happyly using this public app from Mr Provider
+    ${workuid} =  XWSUBMITCommand  ${A_DAPP_ETHEREUM_ADDRESS}
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
 
 
 

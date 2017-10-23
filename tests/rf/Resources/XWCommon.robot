@@ -129,6 +129,8 @@ Set MANDATINGLOGIN in Xtremweb Xlient Conf
     Append To File  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf  MANDATINGLOGIN=${MANDATED}
     Log file  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
 
+Set All Apps To Public
+    MySql.Set All Apps To Public
 
 Curl To Server
     [Arguments]  ${URL}

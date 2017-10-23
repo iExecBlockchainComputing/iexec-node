@@ -32,6 +32,11 @@ Count From Table
     Row Count Is Equal To X  SELECT * FROM ${table}  ${countExpected}
     Disconnect
 
+Set All Apps To Public
+    Connect
+    Execute Sql Script  tests${/}rf${/}/Resources${/}DB${/}SetAllAppsToPublic.sql
+    Disconnect
+
 Delete Fonctionnal Xtremweb Tables
     Connect
     Delete All Rows From Table  apps

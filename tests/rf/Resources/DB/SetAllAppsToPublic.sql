@@ -1,0 +1,1 @@
+update xtremweb.apps set accessRights ='1877';

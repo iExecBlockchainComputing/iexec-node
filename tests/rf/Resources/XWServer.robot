@@ -28,6 +28,10 @@ Start XtremWeb Server
     Wait Until Keyword Succeeds  2 min	5 sec  Check XtremWeb Server Start From Log  ${DIST_XWHEP_PATH}/xwhep.server.process.log
     Log XtremWeb Process Log File
 
+Restart XtremWeb Server
+    Stop XtremWeb Server
+    Start XtremWeb Server  ${DIST_XWHEP_PATH}
+
 Check XtremWeb Server Start From Log
     [Arguments]  ${log}
     Log XtremWeb Process Log File
