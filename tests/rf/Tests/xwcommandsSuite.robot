@@ -9,7 +9,7 @@ Test Teardown  XWCommon.End XWtremWeb Command Test
 
 
 # to launch tests :
-# pybot -d Results -t "Test MANDATINGLOGIN" ./tests/rf/Tests/xwcommandsSuite.robot
+# pybot -d Results -t "Test XWSendapp Command With LS Binary" ./tests/rf/Tests/xwcommandsSuite.robot
 # Quicker for second launch :
 # pybot --variable XW_FORCE_GIT_CLONE:false -d Results ./tests/rf/Tests/xwcommandsSuite.robot
 #
@@ -36,7 +36,17 @@ Test XWSendapp Command With LS Binary
     [Tags]  CommandLine Tests
     ${uid} =  XWClient.XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
     XWServer.Count From Apps Where Uid  ${uid}  1
-    # TODO check also values : ls  deployable  macosx  x86_64  /bin/ls in apps table
+    ${stdout_datas} =  XWClient.XWDATASCommand
+    #Log  ${stdout_datas}
+    #UID='5d546735-d382-41d9-921f-27fa2b08ee63', NAME='ls'
+    @{uid} =  Get Regexp Matches  ${stdout_datas}  UID='(?P<uid>.*)', NAME=  uid
+    ${data_curl_result} =  XWCommon.Curl To Server  get/@{uid}[0]
+    Log  ${data_curl_result}
+    ${stdout_apps} =  XWClient.XWAPPSCommand
+    #Log  ${stdout_apps}
+    @{uid} =  Get Regexp Matches  ${stdout_apps}  UID='(?P<uid>.*)', NAME=  uid
+    ${app_curl_result} =  XWCommon.Curl To Server  get/@{uid}[0]
+    Log  ${app_curl_result}
 
 Test XWSubmit and XWResults Command On LS Binary
     [Documentation]  Testing XWSubmit and XWResults cmd

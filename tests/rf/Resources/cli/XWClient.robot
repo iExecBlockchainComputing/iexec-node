@@ -81,8 +81,17 @@ XWWORKSCommand
 
 XWAPPSCommand
     [Documentation]  Usage :  XWAPPSCommand uid
-    [Arguments]  ${uid}
-    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwapps ${uid}  shell=yes
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwapps  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers	${cmd_result.rc}	0
+   # @{results_file} =  Get Regexp Matches  ${cmd_result.stdout}  INFO : Downloaded to : (?P<file>.*)  file
+    [Return]  ${cmd_result.stdout}
+
+
+XWDATASCommand
+    [Documentation]  Usage :  XWAPPSCommand uid
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwdatas  shell=yes
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers	${cmd_result.rc}	0
