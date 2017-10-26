@@ -21,7 +21,9 @@ Test Katacoda Hello World Scenario On Kovan
     IexecSdk.Iexec An App  iexec-factorial  account allow 1 --network kovan
     IexecSdk.Iexec An App  iexec-factorial  wallet getRLC --network kovan
     IexecSdk.Iexec An App  iexec-factorial  migrate --network kovan
-    ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network kovan
+    IexecSdk.Iexec An App  iexec-factorial  account login --network kovan
+    IexecSdk.Iexec An App  iexec-factorial  apps send factorial --network kovan
+    ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network kovan
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://kovan.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
     Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network kovan
 
@@ -32,7 +34,9 @@ Test Katacoda Hello World Scenario On Ropsten
     IexecSdk.Iexec An App  iexec-factorial  account allow 1
     IexecSdk.Iexec An App  iexec-factorial  wallet getRLC
     IexecSdk.Iexec An App  iexec-factorial  migrate
-    ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit factorial 10
+    IexecSdk.Iexec An App  iexec-factorial  account login
+    IexecSdk.Iexec An App  iexec-factorial  apps send factorial
+    ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit 10
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://ropsten.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
     Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network ropsten
 
@@ -43,7 +47,9 @@ Test Katacoda Hello World Scenario On Rinkeby
     IexecSdk.Iexec An App  iexec-factorial  account allow 1 --network rinkeby
     IexecSdk.Iexec An App  iexec-factorial  wallet getRLC --network rinkeby
     IexecSdk.Iexec An App  iexec-factorial  migrate --network rinkeby
-    ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit factorial 10 --network rinkeby
+    IexecSdk.Iexec An App  iexec-factorial  account login --network rinkeby
+    IexecSdk.Iexec An App  iexec-factorial  apps send factorial --network rinkeby
+    ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network rinkeby
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://rinkeby.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
     Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network rinkeby
 
