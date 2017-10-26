@@ -1,0 +1,1 @@
+select uid as '' from apps where accessRights <> '1877';
