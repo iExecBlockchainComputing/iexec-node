@@ -72,6 +72,7 @@ Log XtremWeb Server
 
 Begin XWtremWeb Command Test
     Ping XWtremWeb Database
+    Remove MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}
     Start XWtremWeb Server And XWtremWeb Worker
 
 End XWtremWeb Command Test
@@ -120,6 +121,29 @@ Install XWtremWeb
     ${install_result_successful} =  Get Lines Containing String  ${install_result.stdout}  That's all folks
     ${line_install_result_successful} =  Get Line Count  ${install_result_successful}
     Should Be Equal As Integers	${line_install_result_successful}	1
+
+
+Set MANDATINGLOGIN in Xtremweb Xlient Conf
+    [Arguments]  ${DIST_XWHEP_PATH}  ${MANDATED}
+    Directory Should Exist  ${DIST_XWHEP_PATH}/conf
+    Run  sed -i "s/.*MANDATINGLOGIN.*//g" ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
+    Append To File  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf  MANDATINGLOGIN=${MANDATED}
+    Log file  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
+
+
+Remove MANDATINGLOGIN in Xtremweb Xlient Conf
+    [Arguments]  ${DIST_XWHEP_PATH}
+    Directory Should Exist  ${DIST_XWHEP_PATH}/conf
+    Run  sed -i "s/.*MANDATINGLOGIN.*//g" ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
+    Log file  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
+
+Curl To Server
+    [Arguments]  ${URL}
+    ${curl_result} =  Run Process  /usr/bin/curl -v --insecure -X GET -G 'https://${XWCONFIGURE.VALUES.XWSERVER}:${XWCONFIGURE.VALUES.HTTPSPORT}/${URL}' -d XWLOGIN\=${XWCONFIGURE.VALUES.XWADMINLOGIN} -d XWPASSWD\=${XWCONFIGURE.VALUES.XWADMINPASSWORD}  shell=yes
+    Log  ${curl_result.stdout}
+    Log  ${curl_result.stderr}
+    Should Be Equal As Integers	${curl_result.rc}	0
+    [Return]  ${curl_result.stdout}
 
 
 
