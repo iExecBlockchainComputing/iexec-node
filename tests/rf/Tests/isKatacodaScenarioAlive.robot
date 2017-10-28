@@ -18,40 +18,37 @@ Test Katacoda Hello World Scenario On Kovan
     [Documentation]  Test Katacoda Hello World Scenario On Kovan
     [Tags]  Katacoda
     Prepare Iexec Factorial
-    IexecSdk.Iexec An App  iexec-factorial  account allow 1 --network kovan
-    IexecSdk.Iexec An App  iexec-factorial  wallet getRLC --network kovan
-    IexecSdk.Iexec An App  iexec-factorial  account login --network kovan
-    IexecSdk.Iexec An App  iexec-factorial  deploy --network kovan
-    Sleep  65s
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* account allow 1 --network kovan
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* wallet getRLC --network kovan
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* account login --network kovan
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* deploy --network kovan
     ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network kovan
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://kovan.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
-    Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network kovan
+    Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network kovan
 
 Test Katacoda Hello World Scenario On Ropsten
     [Documentation]  Test Katacoda Hello World Scenario On Ropsten
     [Tags]  Katacoda
     Prepare Iexec Factorial
-    IexecSdk.Iexec An App  iexec-factorial  account allow 1
-    IexecSdk.Iexec An App  iexec-factorial  wallet getRLC
-    IexecSdk.Iexec An App  iexec-factorial  account login
-    IexecSdk.Iexec An App  iexec-factorial  deploy
-    Sleep  65s
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* account allow 1
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* wallet getRLC
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* account login
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* deploy
     ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit 10
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://ropsten.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
-    Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network ropsten
+    Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network ropsten
 
 Test Katacoda Hello World Scenario On Rinkeby
     [Documentation]  Test Katacoda Hello World Scenario On Rinkeby
     [Tags]  Katacoda
     Prepare Iexec Factorial
-    IexecSdk.Iexec An App  iexec-factorial  account allow 1 --network rinkeby
-    IexecSdk.Iexec An App  iexec-factorial  wallet getRLC --network rinkeby
-    IexecSdk.Iexec An App  iexec-factorial  account login --network rinkeby
-    IexecSdk.Iexec An App  iexec-factorial  deploy --network rinkeby
-    Sleep  65s
-    ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network rinkeby
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* account allow 1 --network rinkeby
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* wallet getRLC --network rinkeby
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* account login --network rinkeby
+    IexecSdk.Iexec An App  iexec-factorial  DEBUG=* deploy --network rinkeby
+    ${iexec_result.stdout} =  IexecSdk.Iexec An App  iexec-factorial  DEBUG=* submit 10 --network rinkeby
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stdout}  View on etherscan: https://rinkeby.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
-    Wait Until Keyword Succeeds  30 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network rinkeby
+    Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network rinkeby
 
 *** Keywords ***
 
