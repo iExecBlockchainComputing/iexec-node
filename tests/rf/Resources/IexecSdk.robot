@@ -41,7 +41,7 @@ Iexec An app
     Log  ${iexec_result.stderr}
     Log  ${iexec_result.stdout}
     Should Be Equal As Integers	${iexec_result.rc}	0
-    [Return]  ${iexec_result.stdout}
+    [Return]  ${iexec_result.stderr}
 
 
 Iexec Init An App
