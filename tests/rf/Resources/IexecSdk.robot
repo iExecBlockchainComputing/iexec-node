@@ -37,7 +37,7 @@ Iexec
 
 Iexec An app
     [Arguments]  ${directory}  ${args}
-    ${iexec_result} =  Run Process  cd ${directory} && DEBUG=* iexec ${args}  shell=yes
+    ${iexec_result} =  Run Process  cd ${directory} && DEBUG\=* iexec ${args}  shell=yes
     Log  ${iexec_result.stderr}
     Log  ${iexec_result.stdout}
     Should Be Equal As Integers	${iexec_result.rc}	0
