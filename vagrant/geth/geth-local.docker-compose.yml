@@ -1,0 +1,22 @@
+version: '3'
+services:
+  explorer-geth-local:
+    image: iexec-geth-local:latest
+    build:
+      context: .
+      dockerfile: geth-local-Dockerfile
+    command: --dev --networkid 1337 --ws --wsaddr "0.0.0.0" --wsorigins "*" --mine --minerthreads 1 --unlock 0 --password password.txt
+    volumes:
+      - "explorer-geth-local-volume:/root"
+    expose:
+      - "8546"
+    environment:
+      - VIRTUAL_PORT=8546
+
+volumes:
+  explorer-geth-local-volume:
+
+networks:
+  default:
+    external:
+      name: webproxy
