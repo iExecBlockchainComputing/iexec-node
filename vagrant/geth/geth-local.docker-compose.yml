@@ -1,10 +1,11 @@
 version: '3'
 services:
-  explorer-geth-local:
+  iexec-geth-local:
     image: iexec-geth-local:latest
     build:
       context: .
       dockerfile: geth-local-Dockerfile
+    restart: unless-stopped
     command: --dev --networkid 1337 --ws --wsaddr "0.0.0.0" --wsorigins "*" --rpc --rpcport 8545 --rpcaddr 127.0.0.1 --rpccorsdomain "*" --rpcapi "eth,web3,net" --mine --minerthreads 1 --unlock 0 --password password.txt
     volumes:
       - "explorer-geth-local-volume:/root"
@@ -14,7 +15,7 @@ services:
       - VIRTUAL_PORT=8546
 
 volumes:
-  explorer-geth-local-volume:
+  iexec-geth-local-volume:
 
 networks:
   default:
