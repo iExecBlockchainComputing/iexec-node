@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: geth-local-Dockerfile
-    command: --dev --networkid 1337 --ws --wsaddr "0.0.0.0" --wsorigins "*" --mine --minerthreads 1 --unlock 0 --password password.txt
+    command: --dev --networkid 1337 --ws --wsaddr "0.0.0.0" --wsorigins "*" --rpc --rpcport 8545 --rpcaddr 127.0.0.1 --rpccorsdomain "*" --rpcapi "eth,web3,net" --mine --minerthreads 1 --unlock 0 --password password.txt
     volumes:
       - "explorer-geth-local-volume:/root"
     expose:
