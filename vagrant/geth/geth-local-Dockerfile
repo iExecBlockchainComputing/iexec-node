@@ -2,3 +2,4 @@ FROM ethereum/client-go:v1.7.2
 RUN echo "whatever" > password.txt
 RUN geth --dev --password password.txt  account new
 RUN geth --dev  account list
+EXPOSE 8546 8545
