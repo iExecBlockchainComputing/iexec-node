@@ -9,11 +9,6 @@ services:
     command: --dev --networkid 1337 --ws --wsaddr "0.0.0.0" --wsorigins "*" --rpc --rpcport 8545 --rpcaddr 127.0.0.1 --rpccorsdomain "*" --rpcapi "eth,web3,net" --mine --minerthreads 1 --unlock 0 --password password.txt
     volumes:
       - "ethereum-geth-local-volume:/root"
-    expose:
-      - "8546"
-    ports:
-      - "8546:8546"
-      - "8545:8545"
     environment:
       - VIRTUAL_PORT=8546
 
