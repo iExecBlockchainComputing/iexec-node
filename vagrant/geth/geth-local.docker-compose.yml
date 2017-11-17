@@ -5,7 +5,6 @@ services:
     build:
       context: .
       dockerfile: geth-local-Dockerfile
-    restart: unless-stopped
     command:  sh -c "./startupGeth.sh"
     volumes:
       - "ethereum-geth-local-volume:/root"

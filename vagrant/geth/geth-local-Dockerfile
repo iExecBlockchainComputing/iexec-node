@@ -16,9 +16,12 @@ RUN geth --dev --password password.txt  account new
 RUN geth --dev --password password.txt  account new
 RUN geth --dev --password password.txt  account new
 RUN geth --dev  account list
+
 RUN echo "nohup geth --dev --networkid 1337 --ws --wsaddr \"0.0.0.0\" --wsorigins \"*\" --rpc --rpcport 8545 --rpcaddr \"0.0.0.0\" --rpccorsdomain \"*\" --rpcapi \"eth,web3,net,personal\" --mine --minerthreads 1 --unlock \"0\" --password password.txt &" >> startupGeth.sh
+
 RUN echo "echo sleep 10 sec " >> startupGeth.sh
 RUN echo "sleep 10" >> startupGeth.sh
+
 RUN echo "echo unlockAccount1" >> startupGeth.sh
 RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[1], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
 RUN echo "echo unlockAccount2" >> startupGeth.sh
@@ -38,6 +41,8 @@ RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[8], 'whatever', 1000
 RUN echo "echo unlockAccount9" >> startupGeth.sh
 RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[9], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
 
+RUN echo "geth attach http://localhost:8545" >> startupGeth.sh
 
+RUN echo "tail -f /dev/null" >> startupGeth.sh
 
 RUN chmod 755 startupGeth.sh
