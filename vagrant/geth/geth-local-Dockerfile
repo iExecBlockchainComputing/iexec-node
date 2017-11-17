@@ -1,4 +1,9 @@
-FROM ethereum/client-go:v1.7.2
+FROM ubuntu:trusty
+RUn apt-get update
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository -y ppa:ethereum/ethereum
+RUN apt-get update -q
+RUN apt-get install -y ethereum
 RUN echo "whatever" > password.txt
 RUN geth --dev --password password.txt  account new
 RUN geth --dev --password password.txt  account new
@@ -11,3 +16,28 @@ RUN geth --dev --password password.txt  account new
 RUN geth --dev --password password.txt  account new
 RUN geth --dev --password password.txt  account new
 RUN geth --dev  account list
+RUN echo "nohup geth --dev --networkid 1337 --ws --wsaddr \"0.0.0.0\" --wsorigins \"*\" --rpc --rpcport 8545 --rpcaddr \"0.0.0.0\" --rpccorsdomain \"*\" --rpcapi \"eth,web3,net,personal\" --mine --minerthreads 1 --unlock \"0\" --password password.txt &" >> startupGeth.sh
+RUN echo "echo sleep 10 sec " >> startupGeth.sh
+RUN echo "sleep 10" >> startupGeth.sh
+RUN echo "echo unlockAccount1" >> startupGeth.sh
+RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[1], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
+RUN echo "echo unlockAccount2" >> startupGeth.sh
+RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[2], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
+RUN echo "echo unlockAccount3" >> startupGeth.sh
+RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[3], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
+RUN echo "echo unlockAccount4" >> startupGeth.sh
+RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[4], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
+RUN echo "echo unlockAccount5" >> startupGeth.sh
+RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[5], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
+RUN echo "echo unlockAccount6" >> startupGeth.sh
+RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[6], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
+RUN echo "echo unlockAccount7" >> startupGeth.sh
+RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[7], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
+RUN echo "echo unlockAccount8" >> startupGeth.sh
+RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[8], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
+RUN echo "echo unlockAccount9" >> startupGeth.sh
+RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[9], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
+
+
+
+RUN chmod 755 startupGeth.sh
