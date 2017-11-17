@@ -5,19 +5,22 @@ RUN add-apt-repository -y ppa:ethereum/ethereum
 RUN apt-get update -q
 RUN apt-get install -y ethereum
 RUN echo "whatever" > password.txt
-RUN geth --dev --password password.txt  account new
-RUN geth --dev --password password.txt  account new
-RUN geth --dev --password password.txt  account new
-RUN geth --dev --password password.txt  account new
-RUN geth --dev --password password.txt  account new
-RUN geth --dev --password password.txt  account new
-RUN geth --dev --password password.txt  account new
-RUN geth --dev --password password.txt  account new
-RUN geth --dev --password password.txt  account new
-RUN geth --dev --password password.txt  account new
-RUN geth --dev  account list
+COPY geth-local-genesis.json geth-local-genesis.json
 
-RUN echo "nohup geth --dev --networkid 1337 --ws --wsaddr \"0.0.0.0\" --wsorigins \"*\" --rpc --rpcport 8545 --rpcaddr \"0.0.0.0\" --rpccorsdomain \"*\" --rpcapi \"eth,web3,net,personal\" --mine --minerthreads 1 --unlock \"0\" --password password.txt &" >> startupGeth.sh
+RUN echo "rm -rf ~/.ethereum" >> startupGeth.sh
+RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337 init geth-local-genesis.json" >> startupGeth.sh
+RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
+RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
+RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
+RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
+RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
+RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
+RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
+RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
+RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
+RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
+
+RUN echo "nohup geth --datadir ~/.ethereum/net1337  --networkid 1337 --ws --wsaddr \"0.0.0.0\" --wsorigins \"*\" --rpc --rpcport 8545 --rpcaddr \"0.0.0.0\" --rpccorsdomain \"*\" --rpcapi \"eth,web3,net,personal\" --mine --minerthreads 1 --unlock \"0\" --password password.txt &" >> startupGeth.sh
 
 RUN echo "echo sleep 10 sec " >> startupGeth.sh
 RUN echo "sleep 10" >> startupGeth.sh
