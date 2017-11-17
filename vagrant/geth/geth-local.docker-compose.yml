@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: geth-local-Dockerfile
     restart: unless-stopped
-    command: --dev --networkid 1337 --ws --wsaddr "0.0.0.0" --wsorigins "*" --rpc --rpcport 8545 --rpcaddr 127.0.0.1 --rpccorsdomain "*" --rpcapi "eth,web3,net" --mine --minerthreads 1 --unlock 0 --password password.txt
+    command: --dev --networkid 1337 --ws --wsaddr "0.0.0.0" --wsorigins "*" --rpc --rpcport 8545 --rpcaddr "0.0.0.0" --rpccorsdomain "*" --rpcapi "eth,web3,net" --mine --minerthreads 1 --unlock 0 --password password.txt
     volumes:
       - "ethereum-geth-local-volume:/root"
     environment:
