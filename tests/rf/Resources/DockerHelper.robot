@@ -10,19 +10,29 @@ Get Docker Container Id From Image
     [Arguments]  ${docker_image}
     ${container_id} =  Run Process  docker ps --filter \"ancestor\=${docker_image}\" --format \"{{.ID}}\"  shell=yes
     Log  ${container_id.stdout}
-    Set Suite Variable  ${ORACLE_DOCKER_CONTAINER_ID}  ${container_id.stdout}
-    ${container_id} =  Run Process  docker ps  shell=yes
-    Log  ${container_id.stdout}
+    Log  ${container_id.stderr}
+    Should not be empty  ${container_id.stdout}
+    [Return]  ${container_id.stdout}
 
+Logs By Container Id
+    [Arguments]  ${container_id}
+    Log  ${container_id}
+    Remove File  ${CURDIR}/${container_id}.log
+    Create File  ${CURDIR}/${container_id}.log
+    Run Process  docker logs ${container_id} > ${CURDIR}/${container_id}.log 2>&1  shell=yes
+    Log File  ${CURDIR}/${container_id}.log
+    ${content} =  Get File  ${CURDIR}/${container_id}.log
+    [Return]  ${content}
 
-    ${lines} =  Get Lines Containing String  ${result.stdout}  ${docker_image}
-    ${lines_count} =  Get Line Count  ${lines}
-    Should Be Equal As Integers	${lines_count}	1
+Logs By Image
+    [Arguments]  ${docker_image}
+    ${container_id} =  Get Docker Container Id From Image  ${docker_image}
+    ${logs} =  Logs By Container Id  ${container_id}
+    [Return]  ${logs}
 
 Stop And Remove All Containers
     Run Process  docker stop $(docker ps -a -q)  shell=yes
     Run Process  docker rm $(docker ps -a -q)  shell=yes
-
 
 Remove All Images
     Stop And Remove All Containers

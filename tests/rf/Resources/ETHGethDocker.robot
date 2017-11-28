@@ -1,35 +1,47 @@
 *** Settings ***
 Documentation   local geth 42 node
+Resource  ./DockerHelper.robot
 
 *** Variables ***
 ${GETH_UTILS_PATH} =  ./vagrant/geth
 ${GETH_PROCESS}
-${GETH_LOG} =  ./vagrant/geth/localgeth.log
+${ACCOUNT_0_PRIVATE_KEY}
+${LOCAL_GETH_CONTAINER_ID}
+
 
 *** Keywords ***
 Start Geth42
     Run Process  cd ${GETH_UTILS_PATH} && docker network create webproxy  shell=yes
-    Remove File  ${GETH_LOG}
-    ${created_process} =  Start Process  cd ${GETH_UTILS_PATH} && docker-compose -f geth-local.docker-compose.yml up --build  shell=yes  stderr=STDOUT  stdout=${GETH_LOG}
+    ${created_process} =  Start Process  cd ${GETH_UTILS_PATH} && docker-compose -f geth-local.docker-compose.yml up --build  shell=yes  stderr=STDOUT
     Set Suite Variable  ${GETH_PROCESS}  ${created_process}
-    Sleep  120s
+
+    ${container_id} =  Wait Until Keyword Succeeds  15 min	10 sec  DockerHelper.Get Docker Container Id From Image  iexec-geth-local
+
+    Set Suite Variable  ${LOCAL_GETH_CONTAINER_ID}  ${container_id}
+
+    Wait Until Keyword Succeeds  10 min	10 sec  Check Local Geth Initialized
+
+    ${account0_file} =  Run Process  cd ${GETH_UTILS_PATH} && docker exec -t ${LOCAL_GETH_CONTAINER_ID} bash -c "ls /root/.ethereum/net1337/keystore/0_*"  shell=yes  stderr=STDOUT
+    Log  ${account0_file.stderr}
+    Log  ${account0_file.stdout}
+    ${path}  ${file} =  Split Path  ${account0_file.stdout}
+    Log  ${path}
+    Log  ${file}
+
+    ${account_no}  ${public_key}  ${private_key} =  Split String  ${file}  separator=_
+    Log  ${account_no}
+    Log  ${public_key}
+    Log  ${private_key}
+    Set Suite Variable  ${ACCOUNT_0_PRIVATE_KEY}  ${private_key}
+
+
+
+Check Local Geth Initialized
+    ${logs} =  DockerHelper.Logs By Container Id  ${LOCAL_GETH_CONTAINER_ID}
+    ${lines} =  Get Lines Containing String  ${logs}  LOCAL_GETH_WELL_INITIALIZED
+    ${lines_count} =  Get Line Count  ${lines}
+    Should Be Equal As Integers	${lines_count}	1
 
 Stop Geth42
     Terminate Process  ${GETH_PROCESS}
-    Log File  ${GETH_LOG}
-
-
-Give Me Five
-    [Arguments]  ${to}
-    ${testrpc_result} =  Run Process  cd ${GETH_UTILS_PATH} && ./giveMeFive42.sh ${to}  shell=yes
-    Log  ${testrpc_result.stderr}
-    Log  ${testrpc_result.stdout}
-    Should Be Equal As Integers	${testrpc_result.rc}	0
-
-Get Balance Of
-    [Arguments]  ${address}
-    ${testrpc_result} =  Run Process  cd ${TESTRPC_UTILS_PATH} && npm install && node balance.js ${address}  shell=yes
-    Log  ${testrpc_result.stderr}
-    Log  ${testrpc_result.stdout}
-    Should Be Equal As Integers	${testrpc_result.rc}	0
-    [Return]  ${testrpc_result.stdout}
+    DockerHelper.Logs By Container Id  ${LOCAL_GETH_CONTAINER_ID}

@@ -14,14 +14,9 @@ ${IEXEC_SDK_DISTRIB}
 
 Init Sdk
     Run Keyword If  '${IEXEC_SDK_FORCE_GIT_CLONE}' == 'true'  Git Clone Iexec Sdk
-    Switch Oracle Branch Targeted
+    Run  sed -i "s/xw.iex.ec/xwdev.iex.ec/g" iexec-sdk/src/iexec-init.js
     Npm Install Iexec Sdk
 
-Switch Oracle Branch Targeted
-    #souxierie
-    Run  sed -i "s/--depth=1 -b/--depth=2 -b/g" iexec-sdk/src/iexec-init.js
-    Run  sed -i "s/--depth=1/--depth=1 -b ${IEXEC_ORACLE_GIT_BRANCH}/g" iexec-sdk/src/iexec-init.js
-    Run  sed -i "s/--depth=2 -b/--depth=1 -b/g" iexec-sdk/src/iexec-init.js
 
 Git Clone Iexec Sdk
     Remove Directory  iexec-sdk  recursive=true

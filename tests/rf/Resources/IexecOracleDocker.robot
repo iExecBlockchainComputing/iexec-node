@@ -10,9 +10,6 @@ ${HELLO_WORLD_SM_ADDRESS}
 
 Init Oracle
     Run Keyword If  '${IEXEC_ORACLE_FORCE_GIT_CLONE}' == 'true'  Git Clone Iexec Oracle
-    ${truffletest_result} =  Run Process  cd iexec-oracle-contract && docker-compose -f docker-compose.dev.yml --build  shell=yes
-    Log  ${truffletest_result.stderr}
-    Log  ${truffletest_result.stdout}
     Iexec Oracle Truffle Migrate
 
 

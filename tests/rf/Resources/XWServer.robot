@@ -21,6 +21,8 @@ Start XtremWeb Server
     ${config_content_filtered} =  Replace String  ${config_content_filtered}  LOGGERLEVEL=INFO  LOGGERLEVEL=FINEST
     Create File  ${DIST_XWHEP_PATH}/conf/xtremweb.server.conf  content=${config_content_filtered}
 
+    Append To File  ${DIST_XWHEP_PATH}/conf/xtremweb.server.conf  DELEGATEDREGISTRATION=true\n
+
     Remove File  ${DIST_XWHEP_PATH}/xwhep.server.process.log
     ${created_process} =  Start Process  ${DIST_XWHEP_PATH}/bin/xtremweb.server console  shell=yes  stderr=STDOUT  stdout=${DIST_XWHEP_PATH}/xwhep.server.process.log
     Set Suite Variable  ${SERVER_PROCESS}  ${created_process}
