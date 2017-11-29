@@ -19,7 +19,7 @@ Start Geth42
     ${created_process} =  Start Process  cd ${GETH_UTILS_PATH} && docker-compose -f geth-local.docker-compose.yml up --build  shell=yes  stderr=STDOUT
     Set Suite Variable  ${GETH_PROCESS}  ${created_process}
 
-    ${container_id} =  Wait Until Keyword Succeeds  15 min	10 sec  DockerHelper.Get Docker Container Id From Image  iexec-geth-local
+    ${container_id} =  Wait Until Keyword Succeeds  25 min	10 sec  DockerHelper.Get Docker Container Id From Image  iexec-geth-local
 
     Set Suite Variable  ${LOCAL_GETH_CONTAINER_ID}  ${container_id}
 
