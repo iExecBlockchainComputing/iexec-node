@@ -126,3 +126,7 @@ su - vagrant -c "cd ~/terraform && curl -o terraform.zip https://releases.hashic
 su - vagrant -c "sudo cp -f ~/terraform/terraform /usr/local/bin/ && rm -rf ~/terraform"
 
 
+# TO DO
+#cp /etc/hosts /etc/hosts.`date +"%Y%m%d%H%M%S"`
+#sudo su
+#cat /etc/hosts | /bin/sed -e 's/127.0.0.1 localhost/127.0.0.1 localhost vagrant-ubuntu-trusty-64 /' > /etc/hosts
