@@ -4,48 +4,31 @@ RUN apt-get install -y software-properties-common
 RUN add-apt-repository -y ppa:ethereum/ethereum
 RUN apt-get update -q
 RUN apt-get install -y ethereum
+RUN apt-get install -y build-essential
+
+#RUN apt-get install -y python-software-properties
+RUN apt-get install -y curl
+#RUN apt-get install -y git
+#RUN apt-get install -y python-pip
+RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+RUN apt-get install -y nodejs
+
 RUN echo "whatever" > password.txt
+
 COPY geth-local-genesis.json geth-local-genesis.json
-
-RUN echo "rm -rf ~/.ethereum" >> startupGeth.sh
-RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337 init geth-local-genesis.json" >> startupGeth.sh
-RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
-RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
-RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
-RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
-RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
-RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
-RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
-RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
-RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
-RUN echo "geth --networkid 1337  --datadir ~/.ethereum/net1337  --password password.txt  account new" >> startupGeth.sh
-
-RUN echo "nohup geth --datadir ~/.ethereum/net1337  --networkid 1337 --ws --wsaddr \"0.0.0.0\" --wsorigins \"*\" --rpc --rpcport 8545 --rpcaddr \"0.0.0.0\" --rpccorsdomain \"*\" --rpcapi \"eth,web3,net,personal\" --mine --minerthreads 1 --unlock \"0\" --password password.txt &" >> startupGeth.sh
-
-RUN echo "echo sleep 10 sec " >> startupGeth.sh
-RUN echo "sleep 10" >> startupGeth.sh
-
-RUN echo "echo unlockAccount1" >> startupGeth.sh
-RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[1], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
-RUN echo "echo unlockAccount2" >> startupGeth.sh
-RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[2], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
-RUN echo "echo unlockAccount3" >> startupGeth.sh
-RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[3], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
-RUN echo "echo unlockAccount4" >> startupGeth.sh
-RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[4], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
-RUN echo "echo unlockAccount5" >> startupGeth.sh
-RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[5], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
-RUN echo "echo unlockAccount6" >> startupGeth.sh
-RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[6], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
-RUN echo "echo unlockAccount7" >> startupGeth.sh
-RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[7], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
-RUN echo "echo unlockAccount8" >> startupGeth.sh
-RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[8], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
-RUN echo "echo unlockAccount9" >> startupGeth.sh
-RUN echo "geth --exec \"personal.unlockAccount(eth.accounts[9], 'whatever', 100000)\" attach http://localhost:8545" >> startupGeth.sh
-
-RUN echo "geth attach http://localhost:8545" >> startupGeth.sh
-
-RUN echo "tail -f /dev/null" >> startupGeth.sh
+COPY startupGeth.sh startupGeth.sh
+COPY extractPrivateKey.js extractPrivateKey.js
 
 RUN chmod 755 startupGeth.sh
+
+
+RUN rm -rf ~/.ethereum
+RUN geth --networkid 1337  --datadir ~/.ethereum/net1337 init geth-local-genesis.json
+
+
+RUN geth --datadir ~/.ethereum/net1337  --networkid 1337 makedag 0 ~/.ethash
+RUN geth --datadir ~/.ethereum/net1337  --networkid 1337 makedag 30000 ~/.ethash
+#RUN geth --datadir ~/.ethereum/net1337  --networkid 1337 makedag 60000 ~/.ethash
+
+
+EXPOSE 8545

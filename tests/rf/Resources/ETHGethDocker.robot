@@ -6,7 +6,11 @@ Resource  ./DockerHelper.robot
 ${GETH_UTILS_PATH} =  ./vagrant/geth
 ${GETH_PROCESS}
 ${ACCOUNT_0_PRIVATE_KEY}
+${ACCOUNT_1_PRIVATE_KEY}
 ${LOCAL_GETH_CONTAINER_ID}
+${LOCAL_GETH_DOCKER_SERVICE} =  iexec-geth-local
+${LOCAL_GETH_WS_PORT} =  8546
+
 
 
 *** Keywords ***
@@ -33,6 +37,21 @@ Start Geth42
     Log  ${public_key}
     Log  ${private_key}
     Set Suite Variable  ${ACCOUNT_0_PRIVATE_KEY}  ${private_key}
+
+
+
+    ${account1_file} =  Run Process  cd ${GETH_UTILS_PATH} && docker exec -t ${LOCAL_GETH_CONTAINER_ID} bash -c "ls /root/.ethereum/net1337/keystore/1_*"  shell=yes  stderr=STDOUT
+    Log  ${account1_file.stderr}
+    Log  ${account1_file.stdout}
+    ${path}  ${file} =  Split Path  ${account1_file.stdout}
+    Log  ${path}
+    Log  ${file}
+
+    ${account_no}  ${public_key}  ${private_key} =  Split String  ${file}  separator=_
+    Log  ${account_no}
+    Log  ${public_key}
+    Log  ${private_key}
+    Set Suite Variable  ${ACCOUNT_1_PRIVATE_KEY}  ${private_key}
 
 
 

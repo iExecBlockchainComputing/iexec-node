@@ -17,12 +17,12 @@ Init Bridge
     Remove File  iexec-bridge/.env
     Create File  iexec-bridge/.env
     Append To File  iexec-bridge/.env  CHAIN\=local\n
-    Append To File  iexec-bridge/.env  HOST\=ws://iexec-geth-local:8546\n
+    Append To File  iexec-bridge/.env  HOST\=ws://${LOCAL_GETH_DOCKER_SERVICE}:${LOCAL_GETH_WS_PORT}\n
     Append To File  iexec-bridge/.env  PRIVATE_KEY\=${ACCOUNT_0_PRIVATE_KEY}\n
-    Append To File  iexec-bridge/.env  XW_LOGIN\=admin\n
-    Append To File  iexec-bridge/.env  XW_PWD\=admin\n
-    Append To File  iexec-bridge/.env  XW_HOST\=dockerhost\n
-    Append To File  iexec-bridge/.env  XW_PORT\=9943\n
+    Append To File  iexec-bridge/.env  XW_LOGIN\=${XWCONFIGURE.VALUES.XWADMINLOGIN}\n
+    Append To File  iexec-bridge/.env  XW_PWD\=${XWCONFIGURE.VALUES.XWADMINPASSWORD}\n
+    Append To File  iexec-bridge/.env  XW_HOST\=${XWCONFIGURE.VALUES.XWSERVER}\n
+    Append To File  iexec-bridge/.env  XW_PORT\=${XWCONFIGURE.VALUES.HTTPSPORT}\n
     Append To File  iexec-bridge/.env  IEXEC_ORACLE\=${IEXEC_ORACLE_SM_ADDRESS}\n
 
 Git Clone Iexec Bridge

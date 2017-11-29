@@ -16,13 +16,13 @@ ${BUILD_PATH} =  ./xtremweb-hep/build
 ${DIST_PATH} =  ${BUILD_PATH}/dist
 ${DIST_XWHEP_PATH}
 ${XW_CACHE_DIR} =  /tmp
-
+${XW_SERVER_NAME} =  vagrant-ubuntu-trusty-64
 
 ## xwconfigure.values
 ${XWCONFIGURE.VALUES.XWUSER} =  root
 ${XWCONFIGURE.VALUES.DBVENDOR} =  mysql
 ${XWCONFIGURE.VALUES.DBENGINE} =  InnoDB
-${XWCONFIGURE.VALUES.DBHOST} =  localhost
+${XWCONFIGURE.VALUES.DBHOST} =  ${XW_SERVER_NAME}
 ${XWCONFIGURE.VALUES.DBADMINLOGIN} =  root
 ${XWCONFIGURE.VALUES.DBADMINPASSWORD} =  root
 ${XWCONFIGURE.VALUES.DBNAME} =  xtremweb
@@ -32,8 +32,8 @@ ${XWCONFIGURE.VALUES.XWADMINLOGIN} =  admin
 ${XWCONFIGURE.VALUES.XWADMINPASSWORD} =  admin
 ${XWCONFIGURE.VALUES.XWWORKERLOGIN} =  worker
 ${XWCONFIGURE.VALUES.XWWORKERPASSWORD} =  worker
-${XWCONFIGURE.VALUES.XWSERVER} =  localhost
-${XWCONFIGURE.VALUES.CERTCN} =  localhost
+${XWCONFIGURE.VALUES.XWSERVER} =  ${XW_SERVER_NAME}
+${XWCONFIGURE.VALUES.CERTCN} =  ${XW_SERVER_NAME}
 ${XWCONFIGURE.VALUES.CERTOU} =  MrRobotFramework
 ${XWCONFIGURE.VALUES.CERTO} =  MrRobotFramework
 ${XWCONFIGURE.VALUES.CERTL} =  MrRobotFramework
@@ -44,7 +44,7 @@ ${XWCONFIGURE.VALUES.SSLKEYWORKERPASSWORD} =  MrRobotFramework
 ${XWCONFIGURE.VALUES.SSLKEYCLIENTPASSWORD} =  MrRobotFramework
 ${XWCONFIGURE.VALUES.X509CERTDIR} =  /tmp/castore
 ${XWCONFIGURE.VALUES.USERCERTDIR} =
-${XWCONFIGURE.VALUES.XWUPGRADEURL} =  http://localhost:8080/somewhere/xtremweb.jar
+${XWCONFIGURE.VALUES.XWUPGRADEURL} =  http://${XW_SERVER_NAME}:8080/somewhere/xtremweb.jar
 ${XWCONFIGURE.VALUES.HTTPSPORT} =  9443
 
 
@@ -146,7 +146,13 @@ Curl To Server
     Should Be Equal As Integers	${curl_result.rc}	0
     [Return]  ${curl_result.stdout}
 
-
+Check Work Completed By SubmitTxHash
+    [Arguments]  ${submitTxHash}
+    ${app_curl_result} =  Curl To Server  getworkbyexternalid/${submitTxHash}
+    Log  ${app_curl_result}
+    ${lines} =  Get Lines Containing String  ${app_curl_result}  COMPLETED
+    ${lines_count} =  Get Line Count  ${lines}
+    Should Be Equal As Integers	${lines_count}	1
 
 Create XWCONFIGURE.VALUES FILE
     [Arguments]  ${DIST_XWHEP_PATH}
