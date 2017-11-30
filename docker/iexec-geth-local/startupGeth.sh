@@ -56,6 +56,8 @@ geth --exec "eth.sendTransaction({from:eth.accounts[0], to:eth.accounts[1], valu
 geth attach http://localhost:8545
 
 
-
 echo "LOCAL_GETH_WELL_INITIALIZED"
-tail -f /dev/null
+
+while true; do
+ sleep 5
+done
