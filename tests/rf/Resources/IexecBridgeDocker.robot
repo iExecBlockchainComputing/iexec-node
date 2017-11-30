@@ -18,12 +18,17 @@ Init Bridge
     Create File  iexec-bridge/.env
     Append To File  iexec-bridge/.env  CHAIN\=local\n
     Append To File  iexec-bridge/.env  HOST\=ws://${LOCAL_GETH_DOCKER_SERVICE}:${LOCAL_GETH_WS_PORT}\n
-    Append To File  iexec-bridge/.env  PRIVATE_KEY\=${ACCOUNT_0_PRIVATE_KEY}\n
+    #Append To File  iexec-bridge/.env  PRIVATE_KEY\=${ACCOUNT_0_PRIVATE_KEY}\n
     Append To File  iexec-bridge/.env  XW_LOGIN\=${XWCONFIGURE.VALUES.XWADMINLOGIN}\n
     Append To File  iexec-bridge/.env  XW_PWD\=${XWCONFIGURE.VALUES.XWADMINPASSWORD}\n
     Append To File  iexec-bridge/.env  XW_HOST\=${XWCONFIGURE.VALUES.XWSERVER}\n
     Append To File  iexec-bridge/.env  XW_PORT\=${XWCONFIGURE.VALUES.HTTPSPORT}\n
-    Append To File  iexec-bridge/.env  IEXEC_ORACLE\=${IEXEC_ORACLE_SM_ADDRESS}\n
+    #Append To File  iexec-bridge/.env  IEXEC_ORACLE\=${IEXEC_ORACLE_SM_ADDRESS}\n
+    ${docker_build} =  Run Process  cd iexec-bridge && docker build -t iexec-bridge:latest . -f ./Dockerfile.dev && cd -  shell=yes
+    Log  ${docker_build.stderr}
+    Should Be Empty	${docker_build.stderr}
+    Log  ${docker_build.stdout}
+    Should Be Equal As Integers	${docker_build.rc}	0
 
 Git Clone Iexec Bridge
     Remove Directory  iexec-bridge  recursive=true
@@ -33,12 +38,7 @@ Git Clone Iexec Bridge
     Should Be Equal As Integers	${git_result.rc}	0
 
 Start Bridge
-    ${docker_build} =  Run Process  cd iexec-bridge && docker build -t iexec-bridge:latest . -f ./Dockerfile.dev && cd -  shell=yes
-    Log  ${docker_build.stderr}
-    Should Be Empty	${docker_build.stderr}
-    Log  ${docker_build.stdout}
-    Should Be Equal As Integers	${docker_build.rc}	0
-    ${created_process} =  Start Process  cd iexec-bridge && docker-compose -f docker-compose.dev.yml up  shell=yes  stderr=STDOUT
+    ${created_process} =  Start Process  cd iexec-bridge && export PRIVATE_KEY\=${ACCOUNT_0_PRIVATE_KEY} && export IEXEC_ORACLE\=${IEXEC_ORACLE_SM_ADDRESS} && docker-compose -f docker-compose.dev.yml up  shell=yes  stderr=STDOUT
     Set Suite Variable  ${BRIDGE_PROCESS}  ${created_process}
     ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id From Image  iexec-bridge
     Log  ${container_id}

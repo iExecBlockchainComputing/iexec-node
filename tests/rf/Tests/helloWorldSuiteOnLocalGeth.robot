@@ -70,9 +70,10 @@ Hello World Test Setup
     DockerHelper.Stop And Remove All Containers
     DockerHelper.Init Webproxy Network
     XWCommon.Begin XWtremWeb Command Test
-    ETHGethDocker.Start Geth42
-    IexecOracleDocker.Init Oracle
+    IexecOracleDocker.Init Oracle Docker
     IexecBridgeDocker.Init Bridge
+    ETHGethDocker.Start Geth42
+    IexecOracleDocker.Iexec Oracle Truffle Migrate Docker
     IexecBridgeDocker.Start Bridge
 
 Hello World Test Teardown

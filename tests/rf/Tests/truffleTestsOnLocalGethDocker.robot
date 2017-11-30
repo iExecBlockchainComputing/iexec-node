@@ -20,7 +20,7 @@ Suite Teardown  Truffle Test Teardown
 Test Iexec Oracle Truffle Tests On Local Geth
     [Documentation]  call truffle test on a started local geth and show the result here.
     [Tags]  Smart contract Tests
-    IexecOracleDocker.Iexec Oracle Truffle Tests
+    IexecOracleDocker.Iexec Oracle Truffle Tests Docker
 
 *** Keywords ***
 
@@ -28,7 +28,7 @@ Truffle Test Setup
     DockerHelper.Remove All Images
     DockerHelper.Init Webproxy Network
     ETHGethDocker.Start Geth42
-    IexecOracleDocker.Init Oracle
+    IexecOracleDocker.Init Oracle Docker
 
 Truffle Test Teardown
     ETHGethDocker.Stop Geth42
