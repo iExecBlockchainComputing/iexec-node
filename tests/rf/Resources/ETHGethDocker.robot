@@ -16,7 +16,7 @@ ${LOCAL_GETH_WS_PORT} =  8546
 *** Keywords ***
 Start Geth42
     Run Process  cd ${GETH_UTILS_PATH} && docker network create webproxy  shell=yes
-    ${created_process} =  Start Process  cd ${GETH_UTILS_PATH} && docker-compose -f geth-local.docker-compose.yml up --build  shell=yes  stderr=STDOUT
+    ${created_process} =  Start Process  cd ${GETH_UTILS_PATH} && docker-compose -f geth-local.docker-compose-dockerhub.yml up --build  shell=yes  stderr=STDOUT
     Set Suite Variable  ${GETH_PROCESS}  ${created_process}
 
     ${container_id} =  Wait Until Keyword Succeeds  25 min	10 sec  DockerHelper.Get Docker Container Id From Image  iexec-geth-local
