@@ -39,7 +39,7 @@ echo unlockAccount9
 geth --exec "personal.unlockAccount(eth.accounts[9], 'whatever', 100000)" attach http://localhost:8545
 
 
-npm install keythereum
+
 FILES=/root/.ethereum/net1337/keystore/*
 COUNTER=0
 for f in $FILES

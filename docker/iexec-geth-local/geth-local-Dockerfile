@@ -29,5 +29,6 @@ RUN geth --networkid 1337  --datadir ~/.ethereum/net1337 init geth-local-genesis
 RUN geth --datadir ~/.ethereum/net1337  --networkid 1337 makedag 0 ~/.ethash
 RUN geth --datadir ~/.ethereum/net1337  --networkid 1337 makedag 30000 ~/.ethash
 
+RUN npm install keythereum
 
 EXPOSE 8545
