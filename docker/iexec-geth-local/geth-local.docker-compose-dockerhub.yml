@@ -1,0 +1,17 @@
+version: '3'
+services:
+  iexec-geth-local:
+    image: iexechub/iexec-geth-local:latest
+    command:  sh -c "./startupGeth.sh"
+    volumes:
+      - "ethereum-geth-local-volume:/root"
+    environment:
+      - VIRTUAL_PORT=8546
+
+volumes:
+  ethereum-geth-local-volume:
+
+networks:
+  default:
+    external:
+      name: webproxy

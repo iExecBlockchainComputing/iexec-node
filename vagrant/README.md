@@ -27,6 +27,11 @@ vagrant up
 vagrant ssh
 ```
 
+### Edit the /etc/hosts 
+```
+add vagrant-ubuntu-trusty-64 here :
+127.0.0.1 localhost vagrant-ubuntu-trusty-64
+```
 ### Configure your git identity
 * git config --global user.email "you@example.com"
 * git config --global user.name "Your Name"

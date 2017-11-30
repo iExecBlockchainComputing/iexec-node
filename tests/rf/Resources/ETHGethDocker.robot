@@ -3,7 +3,7 @@ Documentation   local geth 42 node
 Resource  ./DockerHelper.robot
 
 *** Variables ***
-${GETH_UTILS_PATH} =  ./vagrant/geth
+${GETH_UTILS_PATH} =  ./docker/iexec-geth-local
 ${GETH_PROCESS}
 ${ACCOUNT_0_PRIVATE_KEY}
 ${ACCOUNT_1_PRIVATE_KEY}
