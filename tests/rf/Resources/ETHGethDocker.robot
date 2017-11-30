@@ -9,7 +9,9 @@ ${ACCOUNT_0_PRIVATE_KEY}
 ${ACCOUNT_1_PRIVATE_KEY}
 ${LOCAL_GETH_CONTAINER_ID}
 ${LOCAL_GETH_DOCKER_SERVICE} =  iexec-geth-local
+${LOCAL_GETH_DOCKER_IMAGE} =  iexechub/iexec-geth-local:latest
 ${LOCAL_GETH_WS_PORT} =  8546
+
 
 
 
@@ -19,7 +21,7 @@ Start Geth42
     ${created_process} =  Start Process  cd ${GETH_UTILS_PATH} && docker-compose -f geth-local.docker-compose-dockerhub.yml up --build  shell=yes  stderr=STDOUT
     Set Suite Variable  ${GETH_PROCESS}  ${created_process}
 
-    ${container_id} =  Wait Until Keyword Succeeds  25 min	10 sec  DockerHelper.Get Docker Container Id From Image  iexec-geth-local
+    ${container_id} =  Wait Until Keyword Succeeds  2 min	10 sec  DockerHelper.Get Docker Container Id From Image  ${LOCAL_GETH_DOCKER_IMAGE}
 
     Set Suite Variable  ${LOCAL_GETH_CONTAINER_ID}  ${container_id}
 

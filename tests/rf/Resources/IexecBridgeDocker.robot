@@ -32,9 +32,13 @@ Git Clone Iexec Bridge
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0
 
-
 Start Bridge
-    ${created_process} =  Start Process  cd iexec-bridge && docker-compose -f docker-compose.dev.yml up --build  shell=yes  stderr=STDOUT
+    ${docker_build} =  Run Process  cd iexec-bridge && docker build -t iexec-bridge:latest . -f ./Dockerfile.dev && cd -  shell=yes
+    Log  ${docker_build.stderr}
+    Should Be Empty	${docker_build.stderr}
+    Log  ${docker_build.stdout}
+    Should Be Equal As Integers	${docker_build.rc}	0
+    ${created_process} =  Start Process  cd iexec-bridge && docker-compose -f docker-compose.dev.yml up  shell=yes  stderr=STDOUT
     Set Suite Variable  ${BRIDGE_PROCESS}  ${created_process}
     ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id From Image  iexec-bridge
     Log  ${container_id}
