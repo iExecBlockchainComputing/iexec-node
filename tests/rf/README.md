@@ -3,34 +3,83 @@
 
 ### Prerequisite 
 
-ubuntu with :
+iexec vagrant, needed dependency are already in your local vagrant
 
+or
+
+ubuntu and see bootstrap.sh for lib needed: 
+
+[bootstrap.sh](../vagrant/bootstrap.sh)
+
+
+### General 
+Before tests launch select your targeted iexec repo to test in 
 ```
-apt-get -y install openjdk-8-jdk
-apt-get install -y -qy python-pip groff-base
-apt-get -y install uuid-runtime
-apt-get install -y mysql-client
-echo "mysql-server mysql-server/root_password password root" | debconf-set-selections
-echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections
-apt-get install -y mysql-server
-pip install robotframework
-pip install robotframework-selenium2library
-pip install robotframework-databaselibrary
-pip install pymysql
-
-```
-The above dependency are already in your local vagrant
-
-### Launch xtremweb robotframework tests
+iexec-node/gitcloneall.sh
 ```
 
-cd ~/iexecdev/iexec-node/tests/rf
-pybot -d Results ./Tests/
+by default master are cloned.
+If you want to test non reg into your evol branch
+
+Modifiy the git clone like this :
+```
+git clone -b "your branch to test" https://github.com/iExecBlockchainComputing/The iexec repo impacted.git
+```
+gitcloneall.sh
+
+
+### Full Non Reg
+```
+bash
+docker pull iexechub/iexec-geth-local:latest
+cd ~/iexecdev/iexec-node
+./gitcloneall.sh
+pybot -d Results ./tests/rf/Tests/
 ```
 
-Open report.html to see results :
+
+### Xtremweb Non Reg
 ```
-Output:  /home/vagrant/iexecdev/iexec-node/tests/rf/Results/output.xml
-Log:     /home/vagrant/iexecdev/iexec-node/tests/rf/Results/log.html
-Report:  /home/vagrant/iexecdev/iexec-node/tests/rf/Results/report.html
+bash
+cd ~/iexecdev/iexec-node
+./gitcloneall.sh
+pybot -d Results ./tests/rf/Tests/xwcommandsSuite.robot
 ```
+
+
+### Oracle Non Reg On test Rpc
+```
+bash
+cd ~/iexecdev/iexec-node
+./gitcloneall.sh
+pybot -d Results ./tests/rf/Tests/truffleTestsOnTestrpc.robot
+```
+
+### Oracle Non Reg On Geth Local
+```
+bash
+cd ~/iexecdev/iexec-node
+./gitcloneall.sh
+pybot -d Results ./tests/rf/Tests/truffleTestsOnLocalGeth.robot
+```
+
+### Oracle Non Reg On Geth Local Dockerized
+```
+bash
+docker pull iexechub/iexec-geth-local:latest
+cd ~/iexecdev/iexec-node
+./gitcloneall.sh
+pybot -d Results ./tests/rf/Tests/truffleTestsOnLocalGethDocker.robot
+```
+
+
+### OBXW Non Reg : Geth Local Dockerized+ Oracle Dockerized+ Bridge Dockerized + Xtremweb 
+```
+bash
+docker pull iexechub/iexec-geth-local:latest
+cd ~/iexecdev/iexec-node
+./gitcloneall.sh
+pybot -d Results ./tests/rf/Tests/NonRegOBXW.robot
+```
+
+
