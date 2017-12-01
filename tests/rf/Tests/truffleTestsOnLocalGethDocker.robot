@@ -27,8 +27,9 @@ Test Iexec Oracle Truffle Tests On Local Geth
 Truffle Test Setup
     DockerHelper.Stop And Remove All Containers
     DockerHelper.Init Webproxy Network
-    ETHGethDocker.Start Geth42
     IexecOracleDocker.Init Oracle Docker
+    ETHGethDocker.Start Geth42
+
 
 Truffle Test Teardown
     ETHGethDocker.Stop Geth42
