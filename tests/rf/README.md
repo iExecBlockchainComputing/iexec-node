@@ -9,7 +9,7 @@ or
 
 ubuntu and see bootstrap.sh for lib needed: 
 
-[bootstrap.sh](../vagrant/bootstrap.sh)
+[bootstrap.sh](../../vagrant/bootstrap.sh)
 
 
 ### General 
