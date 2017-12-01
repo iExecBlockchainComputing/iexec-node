@@ -31,7 +31,6 @@ gitcloneall.sh
 ### Full Non Reg
 ```
 bash
-docker pull iexechub/iexec-geth-local:latest
 cd ~/iexecdev/iexec-node
 ./gitcloneall.sh
 pybot -d Results ./tests/rf/Tests/
@@ -66,7 +65,6 @@ pybot -d Results ./tests/rf/Tests/truffleTestsOnLocalGeth.robot
 ### Oracle Non Reg On Geth Local Dockerized
 ```
 bash
-docker pull iexechub/iexec-geth-local:latest
 cd ~/iexecdev/iexec-node
 ./gitcloneall.sh
 pybot -d Results ./tests/rf/Tests/truffleTestsOnLocalGethDocker.robot
@@ -76,7 +74,6 @@ pybot -d Results ./tests/rf/Tests/truffleTestsOnLocalGethDocker.robot
 ### OBXW Non Reg : Geth Local Dockerized+ Oracle Dockerized+ Bridge Dockerized + Xtremweb 
 ```
 bash
-docker pull iexechub/iexec-geth-local:latest
 cd ~/iexecdev/iexec-node
 ./gitcloneall.sh
 pybot -d Results ./tests/rf/Tests/NonRegOBXW.robot
