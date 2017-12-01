@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation    End-to-End test HelloWorld usecase Oracle+bridge+xtremweb
+Documentation    End-to-End test OBX = Oracle+bridge+xtremweb
 Resource  ../Resources/XWCommon.robot
 Resource  ../Resources/XWServer.robot
 Resource  ../Resources/IexecOracleDocker.robot
@@ -10,11 +10,11 @@ Resource  ../Resources/DockerHelper.robot
 Resource  ../Resources/smartcontracts/IexecOracleAPIimplSmartContractDocker.robot
 Resource  ../Resources/smartcontracts/IexceOracleSmartContractDocker.robot
 Suite Setup  XWCommon.Prepare XWtremWeb Server And XWtremWeb Worker
-Test Setup  Hello World Test Setup
-Test Teardown  Hello World Test Teardown
+Test Setup  OBX Test Setup
+Test Teardown  OBX World Test Teardown
 
 
-# to launch tests : pybot -d Results ./tests/rf/NonRegOBXW.robot
+# to launch tests : pybot -d Results ./tests/rf/Tests/NonRegOBXW.robot
 
 *** Variables ***
 ${USER}
@@ -93,7 +93,7 @@ Test HelloWorld Submit Iexec On Local Docker Geth With Json Format
 
     Wait Until Keyword Succeeds  3 min	5 sec  XWCommon.Check Work Completed By SubmitTxHash  ${submitTxHash}
 
-    IexceOracleSmartContractDocker.Check Submit Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}  HelloWorld!!!
+    IexceOracleSmartContractDocker.Check Submit Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}  {"cmdLine":"HelloWorld!!!"}
     ${app_curl_result} =  XWCommon.Curl To Server  getapps
     Log  ${app_curl_result}
     IexceOracleSmartContractDocker.Check SubmitCallback Event In IexceOracleSmartContract  ${submitTxHash}  ${USER}  HelloWorld!!!
@@ -105,7 +105,7 @@ Test HelloWorld Submit Iexec On Local Docker Geth With Json Format
 
 *** Keywords ***
 
-Hello World Test Setup
+OBX Test Setup
     DockerHelper.Stop And Remove All Containers
     DockerHelper.Init Webproxy Network
     XWCommon.Begin XWtremWeb Command Test
@@ -115,7 +115,7 @@ Hello World Test Setup
     IexecOracleDocker.Iexec Oracle Truffle Migrate Docker
     IexecBridgeDocker.Start Bridge
 
-Hello World Test Teardown
+OBX World Test Teardown
      XWCommon.End XWtremWeb Command Test
      ETHGethDocker.Stop Geth42
      IexecBridgeDocker.Stop Bridge
