@@ -20,7 +20,7 @@ ${A_DAPP_ETHEREUM_ADDRESS_2} =  0xdapppethereumaddress00000000000000000002
 ${A_DAPP_ETHEREUM_ADDRESS_3} =  0xdapppethereumaddress00000000000000000003
 ${ANOTHER_ETHEREUM_ADDRESS}  =  0xanotheruserethereumaddress00000000000000
 
-${FFMPEG_URI} =  https://github.com/iExecBlockchainComputing/iexec-dapp-samples/raw/ffmpeg/apps/ffmpeg
+${FFMPEG_URI} =  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapp-samples/ffmpeg/apps/ffmpeg
 ${BIN_DIR} =  ${CURDIR}${/}../Resources/bin
 
 *** Test Cases ***
@@ -181,11 +181,13 @@ Test Sendapp Call By A Provider Create A Private App And Force It To Public
     LOG  ${workuid}
     Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
 
+
 Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     [Documentation]  Testing XWSubmit and XWResults cmd
     [Tags]  CommandLine Tests
-    ${wget_cmd_result} =  Run Process  wget ${FFMPEG_URI} -P ${BIN_DIR}  shell=yes
-    Log  ${wget_cmd_result.stdout} 
+    ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yes #rm old ffmpeg binary
+    ${wget_cmd_result} =  Run Process  curl ${FFMPEG_URI} -o ${BIN_DIR}/ffmpeg  shell=yes
+    Log  ${wget_cmd_result.stdout}
     Should Be Equal As Integers  ${wget_cmd_result.rc}  0
     ${uid} =  XWClient.XWSENDAPPCommand  ffmpeg  DEPLOYABLE  LINUX  AMD64  ${BIN_DIR}${/}ffmpeg
     XWServer.Count From Apps Where Uid  ${uid}  1
@@ -193,7 +195,7 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     Should Be Equal As Integers  ${rm_cmd_result.rc}  0
     ${data_curl_result} =  XWCommon.Curl To Server  get/${uid}
     Log  ${data_curl_result}
-    ${workuid} =  XWSUBMITCommand  ffmpeg -i http://techslides.com/demos/sample-videos/small.mp4 small.mp4 small.avi
+    ${workuid} =  XWSUBMITCommand  ffmpeg -i demos/sample-videos/small.mp4 small.avi --xwenv http://techslides.com/demos/sample-videos/small.mp4
     LOG  ${workuid}
     Wait Until Keyword Succeeds  2 min  00 sec  Check XWSTATUS Completed  ${workuid}
     ${zip_file} =  XWRESULTSCommand  ${workuid}
