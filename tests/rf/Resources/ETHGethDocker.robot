@@ -18,6 +18,12 @@ ${LOCAL_GETH_WS_PORT} =  8546
 *** Keywords ***
 Start Geth42
     Run Process  cd ${GETH_UTILS_PATH} && docker network create webproxy  shell=yes
+
+    ${pull_result} =  Run Process  docker pull iexechub/iexec-geth-local:latest  shell=yes
+    Log  ${pull_result.stderr}
+    Log  ${pull_result.stdout}
+    Should Be Equal As Integers	${pull_result.rc}	0
+
     ${created_process} =  Start Process  cd ${GETH_UTILS_PATH} && docker-compose -f geth-local.docker-compose-dockerhub.yml up --build  shell=yes  stderr=STDOUT
     Set Suite Variable  ${GETH_PROCESS}  ${created_process}
 

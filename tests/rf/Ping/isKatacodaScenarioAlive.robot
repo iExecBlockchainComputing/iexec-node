@@ -5,7 +5,7 @@ Suite Setup  Init Ping Katacoda
 
 
 # to launch tests :
-# pybot --variable PKEY:aprivatekey -d Results ./tests/rf/Tests/isKatacodaScenarioAlive.robot
+# pybot --variable PKEY:aprivatekey -d Results ./tests/rf/Ping/isKatacodaScenarioAlive.robot
 
 *** Variables ***
 ${PKEY}
