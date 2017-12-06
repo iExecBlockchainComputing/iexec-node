@@ -54,14 +54,14 @@ Test HelloWorld Submit Iexec On Local Docker Geth
     Wait Until Keyword Succeeds  3 min	5 sec  XWCommon.Check Work Completed By SubmitTxHash  ${submitTxHash}
 
     IexceOracleSmartContractDocker.Check Submit Event In IexceOracleSmartContract  ${HELLO_WORLD_SM_ADDRESS}  HelloWorld!!!
-    ${app_curl_result} =  XWCommon.Curl To Server  getapps
-    Log  ${app_curl_result}
-    IexceOracleSmartContractDocker.Check SubmitCallback Event In IexceOracleSmartContract  ${submitTxHash}  ${USER}  HelloWorld!!!
-    IexecOracleAPIimplSmartContractDocker.Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract  ${submitTxHash}  ${USER}  HelloWorld!!!
-    IexceOracleSmartContractDocker.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${submitTxHash}
+
+    @{work_result} =  IexceOracleSmartContractDocker.Check Work Is Recorded in IexceOracleSmartContract After Submit  ${submitTxHash}
+
+    IexceOracleSmartContractDocker.Check SubmitCallback Event In IexceOracleSmartContract  ${submitTxHash}  ${USER}  HelloWorld!!!  @{work_result}[4]
+    IexecOracleAPIimplSmartContractDocker.Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract  ${submitTxHash}  ${USER}  HelloWorld!!!  @{work_result}[4]
+
     # status 4 = COMPLETED
-    ${work_status} =  IexceOracleSmartContractDocker.Get Work Status  ${submitTxHash}
-    Should Be Equal As Strings  ${work_status}  4
+    Should Be Equal As Strings  @{work_result}[1]  4
 
 
 *** Keywords ***

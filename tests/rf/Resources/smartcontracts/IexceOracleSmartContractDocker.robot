@@ -15,12 +15,13 @@ Check Submit Event In IexceOracleSmartContract
 
 
 Check SubmitCallback Event In IexceOracleSmartContract
-    [Arguments]  ${submitTxHash}  ${user}  ${stdout}
+    [Arguments]  ${submitTxHash}  ${user}  ${stdout}  ${uri}
     ${watch_callback_events} =  Wait Until Keyword Succeeds  3 min  1 min  Watch SubmitCallback
     Should Be Equal As Strings  ${watch_callback_events[0]["event"]}  SubmitCallback
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["submitTxHash"]}  ${submitTxHash}
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["user"]}  ${user}
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["stdout"]}  ${stdout}
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["uri"]}  ${uri}
 
 
 Check Work Is Recorded in IexceOracleSmartContract After Submit
@@ -35,6 +36,10 @@ Check Work Is Recorded in IexceOracleSmartContract After Submit
     ${work_stderr} =  Get Work Stderr  ${submitTxHash}
     Should Be Equal As Strings  ${work_stderr}  @{work_result}[3]
     Should Be Empty  ${work_stderr}
+    ${work_uri} =  Get Work Uri  ${submitTxHash}
+    Should Be Equal As Strings  ${work_uri}  @{work_result}[4]
+    Should Contain  ${work_uri}  :
+    [Return]  @{work_result}
 
 Watch SubmitCallback
     ${truffletest_result} =  Run Process  cd iexec-oracle-contract && docker-compose -f docker-compose.dev.yml run iexec-oracle bash ./test/rf/watchSubmitCallbackInIexecOracle.sh ${IEXEC_ORACLE_SM_ADDRESS} ${HELLO_WORLD_SM_ADDRESS}  shell=yes
@@ -86,7 +91,8 @@ Get Work
     @{status} =  Get Regexp Matches  ${truffletest_result.stdout}  status:(?P<status>.*)  status
     @{stdout} =  Get Regexp Matches  ${truffletest_result.stdout}  stdout:(?P<stdout>.*)  stdout
     @{stderr} =  Get Regexp Matches  ${truffletest_result.stdout}  stderr:(?P<stderr>.*)  stderr
-    @{work_result} =  Create List  @{timestamp}[0]  @{status}[0]  @{stdout}[0]  @{stderr}[0]
+    @{uri} =  Get Regexp Matches  ${truffletest_result.stdout}  uri:(?P<uri>.*)  uri
+    @{work_result} =  Create List  @{timestamp}[0]  @{status}[0]  @{stdout}[0]  @{stderr}[0]  @{uri}[0]
     [Return]  @{work_result}
 
 Get Work Timestamp
@@ -125,7 +131,13 @@ Get Work Stderr
     @{stderr} =  Get Regexp Matches  ${truffletest_result.stdout}  stderr:(?P<stderr>.*)  stderr
     [Return]  @{stderr}[0]
 
-
-
+Get Work Uri
+    [Arguments]  ${submitTxHash}
+    ${truffletest_result} =  Run Process  cd iexec-oracle-contract && docker-compose -f docker-compose.dev.yml run iexec-oracle bash ./test/rf/getWorkUriInIexecOracle.sh ${IEXEC_ORACLE_SM_ADDRESS} ${HELLO_WORLD_SM_ADDRESS} ${submitTxHash}  shell=yes
+    Log  ${truffletest_result.stderr}
+    Log  ${truffletest_result.stdout}
+    Should Be Equal As Integers	${truffletest_result.rc}	0
+    @{uri} =  Get Regexp Matches  ${truffletest_result.stdout}  uri:(?P<uri>.*)  uri
+    [Return]  @{uri}[0]
 
 

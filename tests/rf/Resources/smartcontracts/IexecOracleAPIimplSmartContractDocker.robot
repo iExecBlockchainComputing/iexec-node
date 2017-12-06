@@ -5,12 +5,13 @@
 *** Keywords ***
 
 Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract
-    [Arguments]  ${submitTxHash}  ${user}  ${stdout}
+    [Arguments]  ${submitTxHash}  ${user}  ${stdout}  ${uri}
     ${watch_callback_events} =  Wait Until Keyword Succeeds  3 min  1 min  Watch IexecSubmitCallback
     Should Be Equal As Strings  ${watch_callback_events[0]["event"]}  IexecSubmitCallback
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["submitTxHash"]}  ${submitTxHash}
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["user"]}  ${user}
     Should Be Equal As Strings  ${watch_callback_events[0]["args"]["stdout"]}  ${stdout}
+    Should Be Equal As Strings  ${watch_callback_events[0]["args"]["uri"]}  ${uri}
 
 Watch IexecSubmitCallback
     ${truffletest_result} =  Run Process  cd iexec-oracle-contract && docker-compose -f docker-compose.dev.yml run iexec-oracle bash ./test/rf/watchIexecSubmitCallbackTest.sh ${IEXEC_ORACLE_SM_ADDRESS} ${HELLO_WORLD_SM_ADDRESS}  shell=yes
