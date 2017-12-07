@@ -33,7 +33,7 @@ Test HelloWorld Submit Iexec On Local Docker Geth
     Set Suite Variable  ${PROVIDER}  ${provider}
 
     # 1) : deploy /bin/echo binary in XWtremweb
-    ${app_uid} =  XWClient.XWSENDAPPCommand  ${HELLO_WORLD_SM_ADDRESS}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${app_uid} =  XWClient.XWSENDAPPCommand  ${HELLO_WORLD_SM_ADDRESS} DEPLOYABLE LINUX AMD64 /bin/echo
     XWServer.Count From Apps Where Uid  ${app_uid}  1
     XWServer.Count From Works  0
 
