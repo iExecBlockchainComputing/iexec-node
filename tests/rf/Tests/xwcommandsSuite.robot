@@ -9,7 +9,7 @@ Test Teardown  XWCommon.End XWtremWeb Command Test
 
 
 # to launch tests :
-# pybot -d Results -t "Test XWSendapp Command With LS Binary" ./tests/rf/Tests/xwcommandsSuite.robot
+# pybot -d Results  ./tests/rf/Tests/xwcommandsSuite.robot
 # Quicker for second launch :
 # pybot --variable XW_FORCE_GIT_CLONE:false -d Results ./tests/rf/Tests/xwcommandsSuite.robot
 #
@@ -180,7 +180,29 @@ Test Sendapp Call By A Provider Create A Private App And Force It To Public
     Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
 
 
-
+#Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
+#    [Documentation]  Testing XWSubmit and XWResults cmd
+#    [Tags]  CommandLine Tests
+#    ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yes #rm old ffmpeg binary
+#    ${wget_cmd_result} =  Run Process  curl ${FFMPEG_URI} -o ${BIN_DIR}/ffmpeg  shell=yes
+#    Log  ${wget_cmd_result.stdout}
+#    Should Be Equal As Integers  ${wget_cmd_result.rc}  0
+#    ${uid} =  XWClient.XWSENDAPPCommand  ffmpeg  DEPLOYABLE  LINUX  AMD64  ${BIN_DIR}${/}ffmpeg
+#    XWServer.Count From Apps Where Uid  ${uid}  1
+#    ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yes
+#    Should Be Equal As Integers  ${rm_cmd_result.rc}  0
+#    ${data_curl_result} =  XWCommon.Curl To Server  get/${uid}
+#    Log  ${data_curl_result}
+#    ${workuid} =  XWSUBMITCommand  ffmpeg -i demos/sample-videos/small.mp4 small.avi --xwenv http://techslides.com/demos/sample-videos/small.mp4
+#    LOG  ${workuid}
+#    Wait Until Keyword Succeeds  2 min  00 sec  Check XWSTATUS Completed  ${workuid}
+#    ${zip_file} =  XWRESULTSCommand  ${workuid}
+#    Should Contain  ${zip_file}  .zip
+#    ${cmd_result} =  Run Process  unzip -l ${zip_file} | grep small.avi  shell=yes
+#    Log  ${cmd_result.stderr}
+#    Log  ${cmd_result.stdout}
+#    Log  ${cmd_result.rc}
+#    Should Not Be Empty  ${cmd_result.stdout}
 
 
 
