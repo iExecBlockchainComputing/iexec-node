@@ -58,6 +58,11 @@ Prepare XWtremWeb Server And XWtremWeb Worker
     Run Keyword If  '${XW_FORCE_GIT_CLONE}' == 'true'  Git Clone XWtremWeb
     Compile XWtremWeb
     Install XWtremWeb
+    XWServer.Start XtremWeb Server  ${DIST_XWHEP_PATH}
+    #create a vworker
+    ${vworker.conf} =  XWClient.XWSENDUSERCommand  vworker vworkerp vworker VWORKER_USER
+    Log  ${vworker.conf}
+    XWServer.Stop XtremWeb Server
 
 Start XWtremWeb Server And XWtremWeb Worker
     Ping XWtremWeb Database
@@ -124,6 +129,7 @@ Install XWtremWeb
     ${install_result_successful} =  Get Lines Containing String  ${install_result.stdout}  That's all folks
     ${line_install_result_successful} =  Get Line Count  ${install_result_successful}
     Should Be Equal As Integers	${line_install_result_successful}	1
+
 
 
 Set MANDATINGLOGIN in Xtremweb Xlient Conf

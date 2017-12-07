@@ -6,8 +6,8 @@
 
 XWSENDAPPCommand
     [Documentation]  Usage :  SENDAPP appName appType cpuType osName URI | UID : inserts/updates an application; URI or UID points to binary file ; application name must be the first parameter
-    [Arguments]  ${appName}  ${appType}  ${cpuType}  ${osName}  ${uri-udi}
-    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwsendapp ${appName} ${appType} ${cpuType} ${osName} ${uri-udi}  shell=yes
+    [Arguments]  ${options}=${EMPTY}
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwsendapp ${options}  shell=yes
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers	${cmd_result.rc}	0
@@ -16,8 +16,8 @@ XWSENDAPPCommand
 
 XWSENDDATACommand
     [Documentation]  Usage :  SENDDATA dataName [cpuType] [osName] [dataType] [accessRigths] [dataFile | dataURI | dataUID] : sends data and uploads data if dataFile provided
-    [Arguments]  ${dataName}  ${osName}  ${cpuType}  ${dataType}  ${dataFile-dataURI-dataUID}
-    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwsenddata ${dataName} ${osName} ${cpuType} ${dataType} ${dataFile-dataURI-dataUID}  shell=yes
+    [Arguments]  ${options}=${EMPTY}
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwsenddata ${options}  shell=yes
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers	${cmd_result.rc}	0
@@ -76,16 +76,15 @@ XWWORKSCommand
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers	${cmd_result.rc}	0
-   # @{results_file} =  Get Regexp Matches  ${cmd_result.stdout}  INFO : Downloaded to : (?P<file>.*)  file
     [Return]  ${cmd_result.stdout}
 
 XWAPPSCommand
     [Documentation]  Usage :  XWAPPSCommand uid
-    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwapps  shell=yes
+    [Arguments]  ${options}=${EMPTY}
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwapps ${options}  shell=yes
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers	${cmd_result.rc}	0
-   # @{results_file} =  Get Regexp Matches  ${cmd_result.stdout}  INFO : Downloaded to : (?P<file>.*)  file
     [Return]  ${cmd_result.stdout}
 
 
@@ -95,16 +94,16 @@ XWDATASCommand
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers	${cmd_result.rc}	0
-   # @{results_file} =  Get Regexp Matches  ${cmd_result.stdout}  INFO : Downloaded to : (?P<file>.*)  file
     [Return]  ${cmd_result.stdout}
 
 XWSENDUSERCommand
     [Documentation]  Usage :  XWSENDUSERCommand SENDUSER login password email rights [<a user group UID | URI> ] : sends/updates a useruid
-    [Arguments]  ${login}  ${password}  ${email}
-    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwsenduser ${login} ${password} ${email}  shell=yes
+    [Arguments]  ${options}=${EMPTY}
+    ${cmd_result} =  Run Process  cd ${DIST_XWHEP_PATH}/bin && ./xwsenduser ${options}  shell=yes
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers	${cmd_result.rc}	0
+    [Return]  ${cmd_result.stdout}
 
 XWUSERSCommand
     [Documentation]  Usage :  XWUSERS

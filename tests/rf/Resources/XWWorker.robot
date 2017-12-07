@@ -12,8 +12,11 @@ Start XtremWeb Worker
     File Should Exist  ${DIST_XWHEP_PATH}/conf/xtremweb.worker.conf
     ${config_content} =  Get File  ${DIST_XWHEP_PATH}/conf/xtremweb.worker.conf
     ${config_content_filtered} =  Remove String Using Regexp  ${config_content}  LAUNCHERURL=${XWCONFIGURE.VALUES.XWUPGRADEURL}
-    # change default 443 to 9443 to not use sudo
-    #${config_content_filtered} =  Replace String  ${config_content_filtered}  HTTPSPORT=443  HTTPSPORT=${XWCONFIGURE.VALUES.HTTPSPORT}
+
+    ${config_content_filtered} =  Replace String  ${config_content_filtered}  LOGIN=worker  LOGIN=vworker
+    ${config_content_filtered} =  Replace String  ${config_content_filtered}  PASSWORD=worker  PASSWORD=vworkerp
+
+
     ${config_content_filtered} =  Replace String  ${config_content_filtered}  LOGGERLEVEL=INFO  LOGGERLEVEL=FINEST
     Create File  ${DIST_XWHEP_PATH}/conf/xtremweb.worker.conf  content=${config_content_filtered}
 

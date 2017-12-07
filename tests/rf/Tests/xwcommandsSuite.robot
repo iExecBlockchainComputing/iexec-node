@@ -9,6 +9,7 @@ Test Teardown  XWCommon.End XWtremWeb Command Test
 
 
 # to launch tests :
+
 # pybot -d Results  ./tests/rf/Tests/xwcommandsSuite.robot
 # Quicker for second launch :
 # pybot --variable XW_FORCE_GIT_CLONE:false -d Results ./tests/rf/Tests/xwcommandsSuite.robot
@@ -29,7 +30,7 @@ ${BIN_DIR} =  ${CURDIR}${/}../Resources/bin
 Test XWSenddata Command With LS Binary
     [Documentation]  Testing XWSenddata cmd
     [Tags]  CommandLine Tests
-    ${uid} =  XWClient.XWSENDDATACommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
+    ${uid} =  XWClient.XWSENDDATACommand  ls DEPLOYABLE LINUX AMD64 /bin/ls
     XWServer.Count From Datas Where Uid  ${uid}  1
     # TODO check also values : ls  macosx  x86_64  binary  /bin/ls in datas table
 
@@ -37,7 +38,7 @@ Test XWSenddata Command With LS Binary
 Test XWSendapp Command With LS Binary
     [Documentation]  Testing XWSendapp cmd
     [Tags]  CommandLine Tests
-    ${uid} =  XWClient.XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
+    ${uid} =  XWClient.XWSENDAPPCommand  ls DEPLOYABLE LINUX AMD64 /bin/ls
     XWServer.Count From Apps Where Uid  ${uid}  1
     ${stdout_datas} =  XWClient.XWDATASCommand
     #Log  ${stdout_datas}
@@ -54,7 +55,7 @@ Test XWSendapp Command With LS Binary
 Test XWSubmit and XWResults Command On LS Binary
     [Documentation]  Testing XWSubmit and XWResults cmd
     [Tags]  CommandLine Tests
-    ${uid} =  XWClient.XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
+    ${uid} =  XWClient.XWSENDAPPCommand  ls DEPLOYABLE LINUX AMD64 /bin/ls
     XWServer.Count From Apps Where Uid  ${uid}  1
     ${workuid} =  XWSUBMITCommand  ls
     LOG  ${workuid}
@@ -70,7 +71,7 @@ Test XWSubmit and XWResults Command On LS Binary
 Test XWSubmit and XWResults Command On LS Binary With Param
     [Documentation]  Testing XWSubmit and XWResults cmd with param
     [Tags]  CommandLine Tests
-    ${uid} =  XWClient.XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
+    ${uid} =  XWClient.XWSENDAPPCommand  ls DEPLOYABLE LINUX AMD64 /bin/ls
     XWServer.Count From Apps Where Uid  ${uid}  1
     ${workuid} =  XWSUBMITCommand  ls -atr
     LOG  ${workuid}
@@ -89,7 +90,7 @@ Test XWSubmit and XWResults Command On LS Binary With Param
 Test XWSENDUSER and XWUSERS Command
     [Documentation]  Testing Test XWSENDUSER and XWUSERS Command
     [Tags]  CommandLine Tests
-    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1}  nopass1  noemail1
+    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1} nopass1 noemail1
     ${stdout} =  XWUSERSCommand
     Log  ${stdout}
     Should Contain	${stdout}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'
@@ -98,7 +99,7 @@ Test Sendapp Call By A Admin Create A Public App
     [Documentation]  Test Sendapp Call By A Admin Create A Public App
     [Tags]  CommandLine Tests
     # deployed DAPP in the name of DAPP PROVIDER
-    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS_1}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS_1} DEPLOYABLE LINUX AMD64 /bin/echo
     ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
 
     ################## Public ##################
@@ -112,7 +113,7 @@ Test Sendapp Call By A Admin Create A Public App
 Test Sendapp Call By A Provider Create A Private App
     [Documentation]  Test Sendapp Call By A Provider Create A Private App
     [Tags]  CommandLine Tests
-    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1}  nopass1  noemail1
+    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1} nopass1 noemail1
     ${xwusers} =  XWUSERSCommand
     Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'
     @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'  useruid
@@ -121,7 +122,7 @@ Test Sendapp Call By A Provider Create A Private App
     XWCommon.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_1}
 
     # deployed DAPP in the name of DAPP PROVIDER
-    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS_1}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS_1} DEPLOYABLE LINUX AMD64 /bin/echo
     ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
     # we find dapp_provider as owner in the dapo description
     Should Contain	${curl_result}  @{dapp_provider_uid}[0]
@@ -131,12 +132,12 @@ Test Sendapp Call By A Provider Create A Private App
     ########################################
 
 Test Sendapp Call By A Provider Create A Private App And Force It To Public
-    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}  nopass2  noemail2
+    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_2} nopass2 noemail2
     ${xwusers} =  XWUSERSCommand
     Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_2}'
     @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS_2}'  useruid
 
-    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_3}  nopass3  noemail3
+    XWClient.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_3} nopass3 noemail3
     ${xwusers} =  XWUSERSCommand
     Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_3}'
 
@@ -144,7 +145,7 @@ Test Sendapp Call By A Provider Create A Private App And Force It To Public
     XWCommon.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_2}
 
     # deployed DAPP in the name of DAPP PROVIDER
-    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${app_uid} =  XWClient.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS_2} DEPLOYABLE LINUX AMD64 /bin/echo
     ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
     # we find dapp_provider as owner in the dapo description
     Should Contain	${curl_result}  @{dapp_provider_uid}[0]
@@ -183,6 +184,111 @@ Test Sendapp Call By A Provider Create A Private App And Force It To Public
     Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
 
 
+Test Mandat
+    ${worker.conf} =  XWClient.XWSENDUSERCommand  worker workerp worker WORKER_USER
+    Log  ${worker.conf}
+    Remove File  ${DIST_XWHEP_PATH}/worker.conf
+    Create File  ${DIST_XWHEP_PATH}/worker.conf  ${worker.conf}
+    ${user1.conf} =  XWClient.XWSENDUSERCommand  user1 user1 user1 STANDARD_USER
+    Log  ${user1.conf}
+    Remove File  ${DIST_XWHEP_PATH}/user1.conf
+    Create File  ${DIST_XWHEP_PATH}/user1.conf  ${user1.conf}
+    ${user2.conf} =  XWClient.XWSENDUSERCommand  user2 user2 user2 STANDARD_USER
+    Log  ${user2.conf}
+    Remove File  ${DIST_XWHEP_PATH}/user2.conf
+    Create File  ${DIST_XWHEP_PATH}/user2.conf  ${user2.conf}
+    ${mandat.conf} =  XWClient.XWSENDUSERCommand  mandat mandat mandat MANDATED_USER
+    Log  ${mandat.conf}
+    Remove File  ${DIST_XWHEP_PATH}/mandat.conf
+    Create File  ${DIST_XWHEP_PATH}/mandat.conf  ${mandat.conf}
+
+    ${app_uid_ls_pub} =  XWClient.XWSENDAPPCommand  ls_pub DEPLOYABLE LINUX AMD64 /bin/ls
+    ${curl_result_ls_pub} =  XWCommon.Curl To Server  get/${app_uid_ls_pub}
+
+    ${app_uid_ls_priv_user1} =  XWClient.XWSENDAPPCommand  ls_priv_user1 DEPLOYABLE LINUX AMD64 /bin/ls --xwconfig ${DIST_XWHEP_PATH}/user1.conf
+    ${curl_result_ls_priv_user1} =  XWCommon.Curl To Server  get/${app_uid_ls_priv_user1}
+    Log  ${curl_result_ls_priv_user1}
+
+    ${app_uid_ls_priv_stickybit_user1} =  XWClient.XWSENDAPPCommand  ls_priv_stickybit_user1 DEPLOYABLE LINUX AMD64 /bin/ls --xwconfig ${DIST_XWHEP_PATH}/user1.conf
+    ${curl_result_ls_priv_stickybit_user1} =  XWCommon.Curl To Server  get/${app_uid_ls_priv_stickybit_user1}
+    ${xwapps_result} =  XWClient.XWAPPSCommand  ls_priv_stickybit_user1 --xwformat xml --xwconfig ${DIST_XWHEP_PATH}/user1.conf | grep '<app>'
+
+    Log  ${xwapps_result}
+    ${xwapps_result_replace} =  Replace String  ${xwapps_result}  0x700  0x1700
+    Log  ${xwapps_result_replace}
+    Remove File  ${DIST_XWHEP_PATH}/ls_priv_stickybit_user1.xml
+    Create File  ${DIST_XWHEP_PATH}/ls_priv_stickybit_user1.xml  ${xwapps_result_replace}
+
+    ${app_uid_ls_priv_stickybit_user1} =  XWClient.XWSENDAPPCommand  --xwconfig ${DIST_XWHEP_PATH}/user1.conf --xwxml ${DIST_XWHEP_PATH}/ls_priv_stickybit_user1.xml
+    ${curl_result_ls_priv_stickybit_user1} =  XWCommon.Curl To Server  get/${app_uid_ls_priv_stickybit_user1}
+
+
+    ${app_uid_ls_priv_user2} =  XWClient.XWSENDAPPCommand  ls_priv_user2 DEPLOYABLE LINUX AMD64 /bin/ls --xwconfig ${DIST_XWHEP_PATH}/user2.conf
+    ${curl_result_ls_priv_user2} =  XWCommon.Curl To Server  get/${app_uid_ls_priv_user2}
+    Log  ${curl_result_ls_priv_user2}
+
+
+    ${result} =  XWClient.XWAPPSCommand
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Contain  ${result}  ls_priv_user1
+    Should Contain  ${result}  ls_priv_user2
+
+    ${result} =  XWClient.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/mandat.conf -DMANDATINGLOGIN=admin
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Contain  ${result}  ls_priv_user1
+    Should Contain  ${result}  ls_priv_user2
+
+
+    ${result} =  XWClient.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/user1.conf
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Contain  ${result}  ls_priv_user1
+    Should Not Contain  ${result}  ls_priv_user2
+
+    ${result} =  XWClient.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/mandat.conf -DMANDATINGLOGIN=user1
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Contain  ${result}  ls_priv_user1
+    Should Not Contain  ${result}  ls_priv_user2
+
+
+    ${result} =  XWClient.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/user2.conf
+    Should Contain  ${result}  ls_pub
+    Should Not Contain  ${result}  ls_priv_stickybit_user1
+    Should Not Contain  ${result}  ls_priv_user1
+    Should Contain  ${result}  ls_priv_user2
+
+    ${result} =  XWClient.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/mandat.conf -DMANDATINGLOGIN=user2
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Not Contain  ${result}  ls_priv_user1
+    Should Contain  ${result}  ls_priv_user2
+
+    ${result} =  XWClient.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/mandat.conf
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Not Contain  ${result}  ls_priv_user1
+    Should Not Contain  ${result}  ls_priv_user2
+
+
+    # test with Mandat user. a VWorker must be present to take this work
+    ${workuid} =  XWSUBMITCommand  --xwconfig ${DIST_XWHEP_PATH}/mandat.conf --xwlabel mandat_user_ls_priv_stickybit_user1 -DMANDATINGLOGIN=user1 ls_priv_stickybit_user1
+    LOG  ${workuid}
+    ${curl_submit} =  XWCommon.Curl To Server  get/${workuid}
+    Log  ${curl_submit}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+
+    # test with Admin user. a VWorker must be present to take this work
+    ${workuid} =  XWSUBMITCommand  --xwlabel admin_user_ls_priv_stickybit_user1 -DMANDATINGLOGIN=user1 ls_priv_stickybit_user1
+    LOG  ${workuid}
+    ${curl_submit} =  XWCommon.Curl To Server  get/${workuid}
+    Log  ${curl_submit}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+
+
+
 Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     [Documentation]  Testing XWSubmit and XWResults cmd
     [Tags]  CommandLine Tests
@@ -190,7 +296,7 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     ${wget_cmd_result} =  Run Process  curl ${FFMPEG_URI} -o ${BIN_DIR}/ffmpeg  shell=yes
     Log  ${wget_cmd_result.stdout}
     Should Be Equal As Integers  ${wget_cmd_result.rc}  0
-    ${uid} =  XWClient.XWSENDAPPCommand  ffmpeg  DEPLOYABLE  LINUX  AMD64  ${BIN_DIR}${/}ffmpeg
+    ${uid} =  XWClient.XWSENDAPPCommand  ffmpeg DEPLOYABLE LINUX AMD64 ${BIN_DIR}${/}ffmpeg
     XWServer.Count From Apps Where Uid  ${uid}  1
     ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yes
     Should Be Equal As Integers  ${rm_cmd_result.rc}  0
@@ -206,7 +312,6 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     Log  ${cmd_result.stdout}
     Log  ${cmd_result.rc}
     Should Not Be Empty  ${cmd_result.stdout}
-
 
 
 #Test 2.2 Soumettre un job avec ligne de commande
