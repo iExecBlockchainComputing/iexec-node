@@ -21,6 +21,9 @@ ${A_DAPP_ETHEREUM_ADDRESS_3} =  0xdapppethereumaddress00000000000000000003
 ${ANOTHER_ETHEREUM_ADDRESS}  =  0xanotheruserethereumaddress00000000000000
 
 
+${FFMPEG_URI} =  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapp-samples/ffmpeg/apps/Ffmpeg
+${BIN_DIR} =  ${CURDIR}${/}../Resources/bin
+
 *** Test Cases ***
 
 Test XWSenddata Command With LS Binary
@@ -180,29 +183,29 @@ Test Sendapp Call By A Provider Create A Private App And Force It To Public
     Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
 
 
-#Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
-#    [Documentation]  Testing XWSubmit and XWResults cmd
-#    [Tags]  CommandLine Tests
-#    ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yes #rm old ffmpeg binary
-#    ${wget_cmd_result} =  Run Process  curl ${FFMPEG_URI} -o ${BIN_DIR}/ffmpeg  shell=yes
-#    Log  ${wget_cmd_result.stdout}
-#    Should Be Equal As Integers  ${wget_cmd_result.rc}  0
-#    ${uid} =  XWClient.XWSENDAPPCommand  ffmpeg  DEPLOYABLE  LINUX  AMD64  ${BIN_DIR}${/}ffmpeg
-#    XWServer.Count From Apps Where Uid  ${uid}  1
-#    ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yes
-#    Should Be Equal As Integers  ${rm_cmd_result.rc}  0
-#    ${data_curl_result} =  XWCommon.Curl To Server  get/${uid}
-#    Log  ${data_curl_result}
-#    ${workuid} =  XWSUBMITCommand  ffmpeg -i demos/sample-videos/small.mp4 small.avi --xwenv http://techslides.com/demos/sample-videos/small.mp4
-#    LOG  ${workuid}
-#    Wait Until Keyword Succeeds  2 min  00 sec  Check XWSTATUS Completed  ${workuid}
-#    ${zip_file} =  XWRESULTSCommand  ${workuid}
-#    Should Contain  ${zip_file}  .zip
-#    ${cmd_result} =  Run Process  unzip -l ${zip_file} | grep small.avi  shell=yes
-#    Log  ${cmd_result.stderr}
-#    Log  ${cmd_result.stdout}
-#    Log  ${cmd_result.rc}
-#    Should Not Be Empty  ${cmd_result.stdout}
+Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
+    [Documentation]  Testing XWSubmit and XWResults cmd
+    [Tags]  CommandLine Tests
+    ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yes #rm old ffmpeg binary
+    ${wget_cmd_result} =  Run Process  curl ${FFMPEG_URI} -o ${BIN_DIR}/ffmpeg  shell=yes
+    Log  ${wget_cmd_result.stdout}
+    Should Be Equal As Integers  ${wget_cmd_result.rc}  0
+    ${uid} =  XWClient.XWSENDAPPCommand  ffmpeg  DEPLOYABLE  LINUX  AMD64  ${BIN_DIR}${/}ffmpeg
+    XWServer.Count From Apps Where Uid  ${uid}  1
+    ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yes
+    Should Be Equal As Integers  ${rm_cmd_result.rc}  0
+    ${data_curl_result} =  XWCommon.Curl To Server  get/${uid}
+    Log  ${data_curl_result}
+    ${workuid} =  XWSUBMITCommand  ffmpeg -i demos/sample-videos/small.mp4 small.avi --xwenv http://techslides.com/demos/sample-videos/small.mp4
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  2 min  00 sec  Check XWSTATUS Completed  ${workuid}
+    ${zip_file} =  XWRESULTSCommand  ${workuid}
+    Should Contain  ${zip_file}  .zip
+    ${cmd_result} =  Run Process  unzip -l ${zip_file} | grep small.avi  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+    Log  ${cmd_result.rc}
+    Should Not Be Empty  ${cmd_result.stdout}
 
 
 
