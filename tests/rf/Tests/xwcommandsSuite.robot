@@ -21,6 +21,9 @@ ${A_DAPP_ETHEREUM_ADDRESS_3} =  0xdapppethereumaddress00000000000000000003
 ${ANOTHER_ETHEREUM_ADDRESS}  =  0xanotheruserethereumaddress00000000000000
 
 
+${FFMPEG_URI} =  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapp-samples/ffmpeg/apps/Ffmpeg
+${BIN_DIR} =  ${CURDIR}${/}../Resources/bin
+
 *** Test Cases ***
 
 Test XWSenddata Command With LS Binary
