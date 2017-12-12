@@ -24,9 +24,9 @@ Init Bridge
     Append To File  iexec-bridge/.env  XW_HOST\=${XWCONFIGURE.VALUES.XWSERVER}\n
     Append To File  iexec-bridge/.env  XW_PORT\=${XWCONFIGURE.VALUES.HTTPSPORT}\n
     #Append To File  iexec-bridge/.env  IEXEC_ORACLE\=${IEXEC_ORACLE_SM_ADDRESS}\n
-    ${docker_build} =  Run Process  cd iexec-bridge && docker build -t iexec-bridge:latest . -f ./Dockerfile.dev && cd -  shell=yes
-    Log  ${docker_build.stderr}
-    Should Be Empty	${docker_build.stderr}
+    ${docker_build} =  Run Process  cd iexec-bridge && docker build -t iexec-bridge:latest . -f ./Dockerfile.dev  shell=yes  	stderr=STDOUT  timeout=140s  stdout=stdoutbridge.txt
+    #Log  ${docker_build.stderr}
+    #Should Be Empty	${docker_build.stderr}
     Log  ${docker_build.stdout}
     Should Be Equal As Integers	${docker_build.rc}	0
 

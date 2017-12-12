@@ -33,7 +33,47 @@ Test HelloWorld Submit Iexec On Local Docker Geth
     Set Suite Variable  ${PROVIDER}  ${provider}
 
     # 1) : deploy /bin/echo binary in XWtremweb
+    #${app_uid} =  XWClient.XWSENDAPPCommand  ${HELLO_WORLD_SM_ADDRESS} DEPLOYABLE LINUX AMD64 /bin/echo
+
+    # 1.1 : create user and provider in xw
+    XWClient.XWSENDUSERCommand  ${USER} nopass1 noemail1
+    ${xwusers} =  XWUSERSCommand
+    Should Contain	${xwusers}	LOGIN='${USER}'
+
+    XWClient.XWSENDUSERCommand  ${PROVIDER} nopass2 noemail2
+    ${xwusers} =  XWUSERSCommand
+    Should Contain	${xwusers}	LOGIN='${PROVIDER}'
+    @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${PROVIDER}'  useruid
+
+    # 1.2 : deploy as provider and set stickybit in app in xw
+    # ADD MANDATINGLOGIN to the DAPP PROVIDER
+    XWCommon.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${PROVIDER}
+
+    # deployed DAPP in the name of DAPP PROVIDER
     ${app_uid} =  XWClient.XWSENDAPPCommand  ${HELLO_WORLD_SM_ADDRESS} DEPLOYABLE LINUX AMD64 /bin/echo
+    ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
+    # we find dapp_provider as owner in the dapo description
+    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
+
+    ################## A PRIVATE APP ##################
+    Should Contain	${curl_result}  0x700
+    ########################################
+
+    # UPDATE DAPP to 0x1700 rights
+    XWCommon.Remove MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}
+    XWClient.XWCMODCommand  0x1700  ${app_uid}
+
+    ${curl_result} =  XWCommon.Curl To Server  get/${app_uid}
+    # we find dapp_provider as owner in the dapo description
+    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
+
+    ################## we have now a Private with stickybit.  ##################
+    Should Contain	${curl_result}  0x1700
+    ########################################
+
+
+    XWCommon.Remove MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}
+
     XWServer.Count From Apps Where Uid  ${app_uid}  1
     XWServer.Count From Works  0
 
@@ -48,6 +88,9 @@ Test HelloWorld Submit Iexec On Local Docker Geth
     ${app_curl_result} =  XWCommon.Curl To Server  get/@{uid}[0]
     Log  ${app_curl_result}
 
+
+
+
     # 2) : start a echo work
     ${submitTxHash} =  IexecOracleAPIimplSmartContractDocker.Submit  HelloWorld!!!
 
@@ -60,8 +103,25 @@ Test HelloWorld Submit Iexec On Local Docker Geth
     IexceOracleSmartContractDocker.Check SubmitCallback Event In IexceOracleSmartContract  ${submitTxHash}  ${USER}  HelloWorld!!!  @{work_result}[4]
     IexecOracleAPIimplSmartContractDocker.Check IexecSubmitCallback Event In IexecOracleAPIimplSmartContract  ${submitTxHash}  ${USER}  HelloWorld!!!  @{work_result}[4]
 
-    # status 4 = COMPLETED
+    # status 4 = COMPLETED  394fa1df-1d99-4ea3-864a-940120e26c50
     Should Be Equal As Strings  @{work_result}[1]  4
+
+    Log  @{work_result}[4]
+
+    # check result as admin
+    ${results_file} =  XWRESULTSCommand  @{work_result}[4]
+    Log  ${results_file}
+    ${results_file_content} =  Get File  ${results_file}
+    Log  ${results_file_content}
+
+
+    # check result as user
+    XWCommon.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${USER}
+
+    ${results_file} =  XWRESULTSCommand  @{work_result}[4]
+    Log  ${results_file}
+    ${results_file_content} =  Get File  ${results_file}
+    Log  ${results_file_content}
 
 
 *** Keywords ***

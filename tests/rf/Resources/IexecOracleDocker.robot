@@ -10,9 +10,7 @@ ${HELLO_WORLD_SM_ADDRESS}
 
 Init Oracle Docker
     Run Keyword If  '${IEXEC_ORACLE_FORCE_GIT_CLONE}' == 'true'  Git Clone Iexec Oracle Docker
-    ${docker_build} =  Run Process  cd iexec-oracle-contract && docker build -t iexec-oracle-contract:latest . -f ./Dockerfile.dev && cd -  shell=yes
-    Log  ${docker_build.stderr}
-    Should Be Empty	${docker_build.stderr}
+    ${docker_build} =  Run Process  cd iexec-oracle-contract && docker build -t iexec-oracle-contract:latest . -f ./Dockerfile.dev  shell=yes  	stderr=STDOUT  timeout=140s  stdout=stdoutoracle.txt
     Log  ${docker_build.stdout}
     Should Be Equal As Integers	${docker_build.rc}	0
 
