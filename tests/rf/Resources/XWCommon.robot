@@ -121,7 +121,7 @@ Install XWtremWeb
     Set Suite Variable  ${DIST_XWHEP_PATH}  @{list_directories_dist_path}[0]
     Directory Should Exist  ${DIST_XWHEP_PATH}
     Create XWCONFIGURE.VALUES FILE  ${DIST_XWHEP_PATH}
-    ${install_result} =  Run Process  cd ${DIST_XWHEP_PATH} && ./bin/xwconfigure --yes --nopkg --rmdb  shell=yes
+    ${install_result} =  Run Process  cd ${DIST_XWHEP_PATH} && ./bin/xwconfigure --yes --nopkg --rmdb  shell=yes  stderr=STDOUT  timeout=140s  stdout=stdoutxwconfigure.txt
     #Should Be Empty	${install_result.stderr} some errors
     Log  ${install_result.stdout}
     Should Be Equal As Integers	${install_result.rc}	0
