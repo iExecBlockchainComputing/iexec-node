@@ -74,9 +74,14 @@ Stop XWtremWeb Server And XWtremWeb Worker
     XWServer.Stop XtremWeb Server
     Log XtremWeb Server
     XWWorker.Stop XtremWeb Worker
+    Log XtremWeb Worker
 
 Log XtremWeb Server
     XWServer.Log XtremWeb Process Log File
+
+Log XtremWeb Worker
+    XWWorker.Log XtremWeb Process Log File
+
 
 Begin XWtremWeb Command Test
     Ping XWtremWeb Database

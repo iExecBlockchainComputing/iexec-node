@@ -36,3 +36,7 @@ Check XtremWeb Worker Start From Log
 Stop XtremWeb Worker
     Log  Stop XtremWeb Worker
     Terminate Process  ${WORKER_PROCESS}
+
+
+Log XtremWeb Process Log File
+     Log File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
