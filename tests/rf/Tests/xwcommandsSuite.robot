@@ -314,9 +314,12 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     Log  ${cmd_result.stdout}
     Log  ${cmd_result.rc}
 
-    ${p}  ${e} =  Split Extension	 ${zip_file}
-    ${err} =  GET FILE  ${p}/stderr.txt
+    ${err} =  GET FILE  stderr.txt
     LOG  ${err}
+
+   # ${p}  ${e} =  Split Extension	 ${zip_file}
+   # ${err} =  GET FILE  ${p}/stderr.txt
+   # LOG  ${err}
     File Should Exist  ${dirnamezip.stdout}/small.avi
     #Should Not Be Empty  ${cmd_result.stdout}
 
