@@ -10,7 +10,7 @@ Test Teardown  XWCommon.End XWtremWeb Command Test
 
 # to launch tests :
 
-# pybot -d Results  ./tests/rf/Tests/xwcommandsSuite.robot
+# pybot -d Results -t "Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary"  ./tests/rf/Tests/xwcommandsSuite.robot
 # Quicker for second launch :
 # pybot --variable XW_FORCE_GIT_CLONE:false -d Results ./tests/rf/Tests/xwcommandsSuite.robot
 #
@@ -313,7 +313,9 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
     Log  ${cmd_result.rc}
-    File Should Exist  ${dirnamezip}/small.avi
+    ${err} =  GET FILE  ${dirnamezip.stdout}/stderr.txt
+    LOG  ${err}
+    File Should Exist  ${dirnamezip.stdout}/small.avi
     #Should Not Be Empty  ${cmd_result.stdout}
 
 
