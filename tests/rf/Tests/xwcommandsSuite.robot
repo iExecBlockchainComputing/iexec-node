@@ -319,6 +319,10 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     Log  ${cmd_result.stdout}
     Log  ${cmd_result.rc}
 
+    ${cmd_result} =  Run Process  ls  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+
     ${err} =  GET FILE  stderr.txt
     LOG  ${err}
 
