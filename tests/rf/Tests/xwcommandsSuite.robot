@@ -309,6 +309,11 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     Should Contain  ${zip_file}  .zip
     ${dirnamezip} =  Run Process  dirname ${zip_file}  shell=yes
     Log  ${dirnamezip.stdout}
+
+    ${cmd_result} =  Run Process  pwd  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+
     ${cmd_result} =  Run Process  unzip -l ${zip_file}  shell=yes
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
