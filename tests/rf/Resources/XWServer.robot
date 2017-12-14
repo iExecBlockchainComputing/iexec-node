@@ -45,7 +45,7 @@ Check XtremWeb Server Start From Log
 Stop XtremWeb Server
     Terminate Process  ${SERVER_PROCESS}
 
-Log XtremWeb Process Log File
+Log XtremWeb Server Log File
      Log File  ${DIST_XWHEP_PATH}/xwhep.server.process.log
 
 

@@ -77,10 +77,10 @@ Stop XWtremWeb Server And XWtremWeb Worker
     Log XtremWeb Worker
 
 Log XtremWeb Server
-    XWServer.Log XtremWeb Process Log File
+    XWServer.Log XtremWeb Server Log File
 
 Log XtremWeb Worker
-    XWWorker.Log XtremWeb Process Log File
+    XWWorker.Log XtremWeb Worker Log File
 
 
 Begin XWtremWeb Command Test

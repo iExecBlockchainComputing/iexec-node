@@ -38,5 +38,5 @@ Stop XtremWeb Worker
     Terminate Process  ${WORKER_PROCESS}
 
 
-Log XtremWeb Process Log File
+Log XtremWeb Worker Log File
      Log File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
