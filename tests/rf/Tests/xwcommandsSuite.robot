@@ -314,7 +314,7 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
 
-    ${cmd_result} =  Run Process  unzip -l ${zip_file}  shell=yes
+    ${cmd_result} =  Run Process  unzip ${zip_file}  shell=yes
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
     Log  ${cmd_result.rc}
