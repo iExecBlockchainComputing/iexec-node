@@ -28,7 +28,7 @@ Start XtremWeb Server
     Set Suite Variable  ${SERVER_PROCESS}  ${created_process}
     #test multiple time string : started, listening on port :  in log
     Wait Until Keyword Succeeds  2 min	5 sec  Check XtremWeb Server Start From Log  ${DIST_XWHEP_PATH}/xwhep.server.process.log
-    Log XtremWeb Process Log File
+    Log XtremWeb Server Log File
 
 Restart XtremWeb Server
     Stop XtremWeb Server
@@ -36,7 +36,7 @@ Restart XtremWeb Server
 
 Check XtremWeb Server Start From Log
     [Arguments]  ${log}
-    Log XtremWeb Process Log File
+    Log XtremWeb Server Log File
     ${ret} =  Grep File  ${log}  listening on port : ${XWCONFIGURE.VALUES.HTTPSPORT}
     ${line_count} =  Get Line Count  ${ret}
     #listening on port : must be present twice for success
