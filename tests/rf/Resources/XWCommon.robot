@@ -129,7 +129,7 @@ Install XWtremWeb
     ${install_result} =  Run Process  cd ${DIST_XWHEP_PATH} && ./bin/xwconfigure --yes --nopkg --rmdb  shell=yes  stderr=STDOUT  timeout=140s  stdout=stdoutxwconfigure.txt
     #Should Be Empty	${install_result.stderr} some errors
     Log  ${install_result.stdout}
-    #Should Be Equal As Integers	${install_result.rc}	0
+    Should Be Equal As Integers	${install_result.rc}	0
 
     ${install_result_successful} =  Get Lines Containing String  ${install_result.stdout}  That's all folks
     ${line_install_result_successful} =  Get Line Count  ${install_result_successful}
