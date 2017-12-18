@@ -21,10 +21,7 @@ apt-get -y install openjdk-8-jdk
 
 apt-get -y install ethereum
 
-
-DEBIAN_FRONTEND=noninteractive apt-get install -y -qy python-pip groff-base
-
-apt-get -y install zip unzip wget make ant gcc uuid uuid-runtime vim git
+apt-get -y install python-pip groff-base zip unzip wget make ant gcc uuid uuid-runtime vim git
 
 pip install robotframework
 pip install robotframework-selenium2library
