@@ -15,18 +15,10 @@ or this :
 ```
 add-apt-repository -y ppa:ethereum/ethereum
 apt-get update -q
-apt-get -y install icedtea-8-plugin
-apt-get -y install openjdk-8-jre
-apt-get -y install openjdk-8-jdk
 
-apt-get -y install ethereum
+apt-get -y install icedtea-8-plugin openjdk-8-jre openjdk-8-jdk ethereum python-pip groff-base zip unzip wget make ant gcc uuid uuid-runtime vim git
 
-apt-get -y install python-pip groff-base zip unzip wget make ant gcc uuid uuid-runtime vim git
-
-pip install robotframework
-pip install robotframework-selenium2library
-pip install robotframework-databaselibrary
-pip install pymysql
+pip install robotframework robotframework-selenium2library robotframework-databaselibrary pymysql
 
 
 ```
