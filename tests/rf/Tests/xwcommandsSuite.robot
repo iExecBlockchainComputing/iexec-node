@@ -298,11 +298,11 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     Should Be Equal As Integers  ${wget_cmd_result.rc}  0
     ${uid} =  XWClient.XWSENDAPPCommand  ffmpeg DEPLOYABLE LINUX AMD64 ${BIN_DIR}${/}ffmpeg
     XWServer.Count From Apps Where Uid  ${uid}  1
-    ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yes
+    ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yescd
     Should Be Equal As Integers  ${rm_cmd_result.rc}  0
     ${data_curl_result} =  XWCommon.Curl To Server  get/${uid}
     Log  ${data_curl_result}
-    ${workuid} =  XWSUBMITCommand  ffmpeg -i demos/sample-videos/small.mp4 small.avi --xwenv http://techslides.com/demos/sample-videos/small.mp4
+    ${workuid} =  XWSUBMITCommand  ffmpeg -i small.mp4 small.avi --xwenv http://techslides.com/demos/sample-videos/small.mp4
     LOG  ${workuid}
     Wait Until Keyword Succeeds  3 min  5 sec  Check XWSTATUS Completed  ${workuid}
     ${zip_file} =  XWRESULTSCommand  ${workuid}
