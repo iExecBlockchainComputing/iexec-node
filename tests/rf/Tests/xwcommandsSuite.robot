@@ -313,6 +313,7 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     ${cmd_result} =  Run Process  pwd  shell=yes
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
+    ${rm_cmd_result} =  Run Process  rm -f small.avi  shell=yes #rm old small.avi
 
     ${cmd_result} =  Run Process  unzip -o ${zip_file}  shell=yes
     Log  ${cmd_result.stderr}
@@ -323,13 +324,13 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
 
-    ${err} =  GET FILE  stderr.txt
-    LOG  ${err}
+   # ${err} =  GET FILE  stderr.txt
+   # LOG  ${err}
 
    # ${p}  ${e} =  Split Extension	 ${zip_file}
    # ${err} =  GET FILE  ${p}/stderr.txt
    # LOG  ${err}
-    File Should Exist  ${dirnamezip.stdout}/small.avi
+    File Should Exist  small.avi
     #Should Not Be Empty  ${cmd_result.stdout}
 
 
