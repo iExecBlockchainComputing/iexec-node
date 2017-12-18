@@ -304,7 +304,7 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     Log  ${data_curl_result}
     ${workuid} =  XWSUBMITCommand  ffmpeg -i demos/sample-videos/small.mp4 small.avi --xwenv http://techslides.com/demos/sample-videos/small.mp4
     LOG  ${workuid}
-    Wait Until Keyword Succeeds  3 min  00 sec  Check XWSTATUS Completed  ${workuid}
+    Wait Until Keyword Succeeds  3 min  5 sec  Check XWSTATUS Completed  ${workuid}
     ${zip_file} =  XWRESULTSCommand  ${workuid}
     Should Contain  ${zip_file}  .zip
 
