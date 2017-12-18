@@ -307,31 +307,19 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     Wait Until Keyword Succeeds  3 min  00 sec  Check XWSTATUS Completed  ${workuid}
     ${zip_file} =  XWRESULTSCommand  ${workuid}
     Should Contain  ${zip_file}  .zip
-    ${dirnamezip} =  Run Process  dirname ${zip_file}  shell=yes
-    Log  ${dirnamezip.stdout}
 
-    ${cmd_result} =  Run Process  pwd  shell=yes
-    Log  ${cmd_result.stderr}
-    Log  ${cmd_result.stdout}
-    ${rm_cmd_result} =  Run Process  rm -f small.avi  shell=yes #rm old small.avi
+    Run Process  rm -f small.avi  shell=yes #rm old small.avi
+    Run Process  rm -f stderr.txt  shell=yes #rm old stderr.txt
 
     ${cmd_result} =  Run Process  unzip -o ${zip_file}  shell=yes
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
     Log  ${cmd_result.rc}
 
-    ${cmd_result} =  Run Process  ls  shell=yes
-    Log  ${cmd_result.stderr}
-    Log  ${cmd_result.stdout}
+    ${stderr} =  GET FILE  stderr.txt
+    LOG  ${stderr}
 
-   # ${err} =  GET FILE  stderr.txt
-   # LOG  ${err}
-
-   # ${p}  ${e} =  Split Extension	 ${zip_file}
-   # ${err} =  GET FILE  ${p}/stderr.txt
-   # LOG  ${err}
     File Should Exist  small.avi
-    #Should Not Be Empty  ${cmd_result.stdout}
 
 
 #Test 2.2 Soumettre un job avec ligne de commande
