@@ -16,9 +16,18 @@ or this :
 add-apt-repository -y ppa:ethereum/ethereum
 apt-get update -q
 
-apt-get -y install icedtea-8-plugin openjdk-8-jre openjdk-8-jdk ethereum python-pip groff-base zip unzip wget make ant gcc uuid uuid-runtime vim git
+apt-get -y install icedtea-8-plugin openjdk-8-jre openjdk-8-jdk ethereum python-pip groff-base zip unzip wget make ant gcc uuid uuid-runtime vim git mysql-client
 
 pip install robotframework robotframework-selenium2library robotframework-databaselibrary pymysql
+
+echo "mysql-server mysql-server/root_password password root" | debconf-set-selections
+echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections
+apt-get install -y mysql-server
+
+mkdir /var/xwhep && chmod 777 /var/xwhep && chmod 777 /var/log
+
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+
 
 
 ```
