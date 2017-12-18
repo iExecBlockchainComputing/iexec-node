@@ -11,6 +11,28 @@ ubuntu and see bootstrap.sh for lib needed:
 
 [bootstrap.sh](../../vagrant/bootstrap.sh)
 
+or this :
+```
+add-apt-repository -y ppa:ethereum/ethereum
+apt-get update -q
+apt-get -y install icedtea-8-plugin
+apt-get -y install openjdk-8-jre
+apt-get -y install openjdk-8-jdk
+
+apt-get -y install ethereum
+
+
+DEBIAN_FRONTEND=noninteractive apt-get install -y -qy python-pip groff-base
+
+apt-get -y install zip unzip wget make ant gcc uuid uuid-runtime vim git
+
+pip install robotframework
+pip install robotframework-selenium2library
+pip install robotframework-databaselibrary
+pip install pymysql
+
+
+```
 
 ### General 
 Before tests launch select your targeted iexec repo to test in 
