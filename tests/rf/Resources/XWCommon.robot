@@ -12,7 +12,8 @@ ${RF_RESULT_PATH} =  ../Results
 ${XW_GIT_URL} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
 ${XW_GIT_BRANCH} =  master
 ${XW_FORCE_GIT_CLONE} =  false
-${BUILD_PATH} =  ./xtremweb-hep/build
+${XW_PATH} =  ./xtremweb-hep/
+${BUILD_PATH} =  ${XW_PATH}/build
 ${DIST_PATH} =  ${BUILD_PATH}/dist
 ${DIST_XWHEP_PATH}
 ${XW_CACHE_DIR} =  /tmp
@@ -110,18 +111,18 @@ Git Clone XWtremWeb
     Should Be Equal As Integers	${git_result.rc}	0
 
 Compile XWtremWeb
-    ${compile_result} =  Run Process  cd ${BUILD_PATH} && make clean && make  shell=yes
+    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll  shell=yes
     Log  ${compile_result.stderr}
     #Should Be Empty	${compile_result.stderr} some warnings ...
     Log  ${compile_result.stdout}
     Should Be Equal As Integers	${compile_result.rc}	0
     ${extract_build_successful} =  Get Lines Containing String  ${compile_result.stdout}  BUILD SUCCESSFUL
     ${line_count_build_successful} =  Get Line Count  ${extract_build_successful}
-    Should Be Equal As Integers	${line_count_build_successful}	3
+    Should Be Equal As Integers	${line_count_build_successful}	1
 
 
 Install XWtremWeb
-    @{list_directories_dist_path} =  List Directories In Directory  ${DIST_PATH}  xwhep-*  absolute
+    @{list_directories_dist_path} =  List Directories In Directory  ${DIST_PATH}  xtremweb-*  absolute
     Log  @{list_directories_dist_path}[0]
     Set Suite Variable  ${DIST_XWHEP_PATH}  @{list_directories_dist_path}[0]
     Directory Should Exist  ${DIST_XWHEP_PATH}

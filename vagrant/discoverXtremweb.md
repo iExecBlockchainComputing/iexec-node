@@ -7,9 +7,9 @@ cd ~/iexecdev/
 
 git clone https://github.com/iExecBlockchainComputing/xtremweb-hep.git
 
-cd ~/iexecdev/xtremweb-hep/build
+cd ~/iexecdev/xtremweb-hep/
 
-make clean && make
+./gradlew buildAll
 
 export XTREMWEB_VERSION=$(ls ~/iexecdev/xtremweb-hep/build/dist/)
 
