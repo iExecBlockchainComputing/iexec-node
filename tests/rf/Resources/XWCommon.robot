@@ -14,10 +14,12 @@ ${XW_GIT_BRANCH} =  master
 ${XW_FORCE_GIT_CLONE} =  false
 ${XW_PATH} =  ./xtremweb-hep/
 ${BUILD_PATH} =  ${XW_PATH}/build
+${RESOURCES_PATH} =  ${XW_PATH}/src/main/resources
 ${DIST_PATH} =  ${BUILD_PATH}/dist
 ${DIST_XWHEP_PATH}
 ${XW_CACHE_DIR} =  /tmp
 ${XW_SERVER_NAME} =  vagrant-ubuntu-trusty-64
+
 
 ## xwconfigure.values
 ${XWCONFIGURE.VALUES.XWUSER} =  root
@@ -111,6 +113,7 @@ Git Clone XWtremWeb
     Should Be Equal As Integers	${git_result.rc}	0
 
 Compile XWtremWeb
+    Create XWCONFIGURE.VALUES FILE  ${RESOURCES_PATH}
     ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll  shell=yes
     Log  ${compile_result.stderr}
     #Should Be Empty	${compile_result.stderr} some warnings ...
@@ -126,7 +129,6 @@ Install XWtremWeb
     Log  @{list_directories_dist_path}[0]
     Set Suite Variable  ${DIST_XWHEP_PATH}  @{list_directories_dist_path}[0]
     Directory Should Exist  ${DIST_XWHEP_PATH}
-    Create XWCONFIGURE.VALUES FILE  ${DIST_XWHEP_PATH}
     ${install_result} =  Run Process  cd ${DIST_XWHEP_PATH} && ./bin/xwconfigure --yes --nopkg --rmdb  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwconfigure.txt
     #Should Be Empty	${install_result.stderr} some errors
     Log  ${install_result.stdout}
