@@ -18,7 +18,8 @@ ${RESOURCES_PATH} =  ${XW_PATH}/src/main/resources
 ${DIST_PATH} =  ${BUILD_PATH}/dist
 ${DIST_XWHEP_PATH}
 ${XW_CACHE_DIR} =  /tmp
-${XW_SERVER_NAME} =  vagrant-ubuntu-trusty-64
+${XW_SERVER_NAME} =  localhost
+#vagrant-ubuntu-trusty-64
 
 
 ## xwconfigure.values
@@ -114,7 +115,7 @@ Git Clone XWtremWeb
 
 Compile XWtremWeb
     Create XWCONFIGURE.VALUES FILE  ${RESOURCES_PATH}
-    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll  shell=yes
+    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll generateKeys  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwbuild.txt
     Log  ${compile_result.stderr}
     #Should Be Empty	${compile_result.stderr} some warnings ...
     Log  ${compile_result.stdout}
@@ -129,7 +130,7 @@ Install XWtremWeb
     Log  @{list_directories_dist_path}[0]
     Set Suite Variable  ${DIST_XWHEP_PATH}  @{list_directories_dist_path}[0]
     Directory Should Exist  ${DIST_XWHEP_PATH}
-    ${install_result} =  Run Process  cd ${DIST_XWHEP_PATH} && ./bin/xwconfigure --yes --nopkg --rmdb  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwconfigure.txt
+    ${install_result} =  Run Process  cd ${DIST_XWHEP_PATH} && ./bin/xwconfigure --yes --nopkg --rmdb  shell=yes  stderr=STDOUT  timeout=60s  stdout=stdoutxwconfigure.txt
     #Should Be Empty	${install_result.stderr} some errors
     Log  ${install_result.stdout}
     Should Be Equal As Integers	${install_result.rc}	0
