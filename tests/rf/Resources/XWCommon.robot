@@ -18,8 +18,7 @@ ${RESOURCES_PATH} =  ${XW_PATH}/src/main/resources
 ${DIST_PATH} =  ${BUILD_PATH}/dist
 ${DIST_XWHEP_PATH}
 ${XW_CACHE_DIR} =  /tmp
-${XW_SERVER_NAME} =  localhost
-#vagrant-ubuntu-trusty-64
+${XW_SERVER_NAME} =  vagrant-ubuntu-trusty-64
 
 
 ## xwconfigure.values
@@ -124,20 +123,24 @@ Compile XWtremWeb
     ${line_count_build_successful} =  Get Line Count  ${extract_build_successful}
     Should Be Equal As Integers	${line_count_build_successful}	1
 
-
 Install XWtremWeb
     @{list_directories_dist_path} =  List Directories In Directory  ${DIST_PATH}  xtremweb-*  absolute
     Log  @{list_directories_dist_path}[0]
     Set Suite Variable  ${DIST_XWHEP_PATH}  @{list_directories_dist_path}[0]
     Directory Should Exist  ${DIST_XWHEP_PATH}
-    ${install_result} =  Run Process  cd ${DIST_XWHEP_PATH} && ./bin/xwconfigure --yes --nopkg --rmdb  shell=yes  stderr=STDOUT  timeout=60s  stdout=stdoutxwconfigure.txt
-    #Should Be Empty	${install_result.stderr} some errors
-    Log  ${install_result.stdout}
-    Should Be Equal As Integers	${install_result.rc}	0
+    ${database_setup_result} =  Run Process  cd ${DIST_XWHEP_PATH} && ./bin/setupDatabase --yes --rmdb  shell=yes
+    Log  ${database_setup_result.stdout}
+    ${database_result_successful} =  Get Lines Containing String  ${database_setup_result.stdout}  That's all for database
+    ${line_database_result_successful} =  Get Line Count  ${database_result_successful}
+    Should Be Equal As Integers  ${line_database_result_successful}  1
 
-    ${install_result_successful} =  Get Lines Containing String  ${install_result.stdout}  That's all folks
-    ${line_install_result_successful} =  Get Line Count  ${install_result_successful}
-    Should Be Equal As Integers	${line_install_result_successful}	1
+    #${install_result} =  Run Process  cd ${DIST_XWHEP_PATH} && ./bin/xwconfigure --yes --nopkg  shell=yes  stderr=STDOUT  timeout=15s  stdout=stdoutxwconfigure.txt
+    #Should Be Empty	${install_result.stderr} some errors
+    #Log  ${install_result.stdout}
+    #Should Be Equal As Integers	${install_result.rc}	0
+    #${install_result_successful} =  Get Lines Containing String  ${install_result.stdout}  That's all folks
+    #${line_install_result_successful} =  Get Line Count  ${install_result_successful}
+    #Should Be Equal As Integers	${line_install_result_successful}	1
 
 
 
