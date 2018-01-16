@@ -18,7 +18,8 @@ ${RESOURCES_PATH} =  ${XW_PATH}/src/main/resources
 ${DIST_PATH} =  ${BUILD_PATH}/dist
 ${DIST_XWHEP_PATH}
 ${XW_CACHE_DIR} =  /tmp
-${XW_SERVER_NAME} =  vagrant-ubuntu-trusty-64
+${XW_SERVER_NAME} =  localhost
+#vagrant-ubuntu-trusty-64
 
 
 ## xwconfigure.values
@@ -44,9 +45,7 @@ ${XWCONFIGURE.VALUES.CERTO} =  MrRobotFramework
 ${XWCONFIGURE.VALUES.CERTL} =  MrRobotFramework
 ${XWCONFIGURE.VALUES.CERTC} =  fr
 ${XWCONFIGURE.VALUES.SSLKEYPASSPHRASE} =  MrRobotFramework
-${XWCONFIGURE.VALUES.SSLKEYSERVERPASSWORD} =  MrRobotFramework
-${XWCONFIGURE.VALUES.SSLKEYWORKERPASSWORD} =  MrRobotFramework
-${XWCONFIGURE.VALUES.SSLKEYCLIENTPASSWORD} =  MrRobotFramework
+${XWCONFIGURE.VALUES.SSLTRUSTSTOREPASSWORD} =  changeit
 ${XWCONFIGURE.VALUES.X509CERTDIR} =  /tmp/castore
 ${XWCONFIGURE.VALUES.USERCERTDIR} =
 ${XWCONFIGURE.VALUES.XWUPGRADEURL} =  http://${XW_SERVER_NAME}:8080/somewhere/xtremweb.jar
@@ -77,7 +76,7 @@ Stop XWtremWeb Server And XWtremWeb Worker
     XWServer.Stop XtremWeb Server
     Log XtremWeb Server
     XWWorker.Stop XtremWeb Worker
-    Log XtremWeb Worker
+    #Log XtremWeb Worker
 
 Log XtremWeb Server
     XWServer.Log XtremWeb Server Log File
@@ -114,7 +113,7 @@ Git Clone XWtremWeb
 
 Compile XWtremWeb
     Create XWCONFIGURE.VALUES FILE  ${RESOURCES_PATH}
-    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll generateKeys  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwbuild.txt
+    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll generateKeys  shell=yes  stderr=STDOUT  timeout=30s  stdout=stdoutxwbuild.txt
     Log  ${compile_result.stderr}
     #Should Be Empty	${compile_result.stderr} some warnings ...
     Log  ${compile_result.stdout}
@@ -202,9 +201,7 @@ Create XWCONFIGURE.VALUES FILE
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  CERTC='${XWCONFIGURE.VALUES.CERTC}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  CERTC='${XWCONFIGURE.VALUES.CERTC}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  SSLKEYPASSPHRASE='${XWCONFIGURE.VALUES.SSLKEYPASSPHRASE}'\n
-    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  SSLKEYSERVERPASSWORD='${XWCONFIGURE.VALUES.SSLKEYSERVERPASSWORD}'\n
-    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  SSLKEYWORKERPASSWORD='${XWCONFIGURE.VALUES.SSLKEYWORKERPASSWORD}'\n
-    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  SSLKEYCLIENTPASSWORD='${XWCONFIGURE.VALUES.SSLKEYCLIENTPASSWORD}'\n
+    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  SSLTRUSTSTOREPASSWORD='${XWCONFIGURE.VALUES.SSLTRUSTSTOREPASSWORD}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  X509CERTDIR='${XWCONFIGURE.VALUES.X509CERTDIR}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  USERCERTDIR='${XWCONFIGURE.VALUES.USERCERTDIR}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWUPGRADEURL='${XWCONFIGURE.VALUES.XWUPGRADEURL}'\n

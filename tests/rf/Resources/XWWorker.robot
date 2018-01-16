@@ -1,4 +1,5 @@
 *** Settings ***
+Resource  ./DockerHelper.robot
 
 *** Variables ***
 
@@ -27,6 +28,34 @@ Start XtremWeb Worker
     #  TODO check woker start
     Log File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
 
+Start XtremWeb Worker In Docker
+    [Arguments]  ${DIST_XWHEP_PATH}
+    Log  ${DIST_XWHEP_PATH}/conf/xtremweb.worker.conf
+    File Should Exist  ${DIST_XWHEP_PATH}/conf/xtremweb.worker.conf
+    ${config_content} =  Get File  ${DIST_XWHEP_PATH}/conf/xtremweb.worker.conf
+    ${config_content_filtered} =  Remove String Using Regexp  ${config_content}  LAUNCHERURL=${XWCONFIGURE.VALUES.XWUPGRADEURL}
+
+    ${config_content_filtered} =  Replace String  ${config_content_filtered}  LOGIN=worker  LOGIN=vworker
+    ${config_content_filtered} =  Replace String  ${config_content_filtered}  PASSWORD=worker  PASSWORD=vworkerp
+
+
+    ${config_content_filtered} =  Replace String  ${config_content_filtered}  LOGGERLEVEL=INFO  LOGGERLEVEL=FINEST
+    Create File  ${DIST_XWHEP_PATH}/conf/xtremweb.worker.conf  content=${config_content_filtered}
+
+    #Remove File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
+
+    ${created_process} =  Start Process  docker run --env XWSERVERADDR\="172.18.0.1" --env XWSERVERNAME\="james-xps" -v ~/iexecdev/xtremweb-hep/build/dist/xtremweb-12.2.3-SNAPSHOT/keystore/xwhepcert.pem:/xwhep/certificate/xwhepcert.pem xtremweb/worker:12.2.3-SNAPSHOT  shell=yes  stderr=STDOUT  stdout=${DIST_XWHEP_PATH}/xwhep.worker.process.log
+
+    ${container_id} =  Wait Until Keyword Succeeds  3 min   10 sec  DockerHelper.Get Docker Container Id From Image  xtremweb/worker:12.2.3-SNAPSHOT
+    Log  ${container_id}
+
+    ${container_log} =  DockerHelper.Logs By Container Id  ${container_id}    
+
+    Set Suite Variable  ${WORKER_PROCESS}  ${created_process}
+    #Wait Until Keyword Succeeds  2 min 5 sec  Check XtremWeb Worker Start From Log  ${container_log}
+    #  TODO check woker start
+    Log File  ${container_log}
+
 Check XtremWeb Worker Start From Log
     [Arguments]  ${log}
     ${ret} =  Grep File  ${log}  INFO : Server gave no work to compute
@@ -39,4 +68,4 @@ Stop XtremWeb Worker
 
 
 Log XtremWeb Worker Log File
-     Log File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
+     #Log File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
