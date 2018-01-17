@@ -69,7 +69,7 @@ Prepare XWtremWeb Server And XWtremWeb Worker
 Start XWtremWeb Server And XWtremWeb Worker
     Ping XWtremWeb Database
     XWServer.Start XtremWeb Server  ${DIST_XWHEP_PATH}
-    XWWorker.Start XtremWeb Worker  ${DIST_XWHEP_PATH}
+    XWWorker.Start XtremWeb Worker In Docker  ${DIST_XWHEP_PATH}
 
 
 Stop XWtremWeb Server And XWtremWeb Worker
@@ -113,7 +113,7 @@ Git Clone XWtremWeb
 
 Compile XWtremWeb
     Create XWCONFIGURE.VALUES FILE  ${RESOURCES_PATH}
-    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll generateKeys  shell=yes  stderr=STDOUT  timeout=30s  stdout=stdoutxwbuild.txt
+    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll generateKeys buildImages  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwbuild.txt
     Log  ${compile_result.stderr}
     #Should Be Empty	${compile_result.stderr} some warnings ...
     Log  ${compile_result.stdout}

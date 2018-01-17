@@ -44,7 +44,7 @@ Start XtremWeb Worker In Docker
 
     #Remove File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
 
-    ${created_process} =  Start Process  docker run --env XWSERVERADDR\="172.18.0.1" --env XWSERVERNAME\="james-xps" -v ~/iexecdev/xtremweb-hep/build/dist/xtremweb-12.2.3-SNAPSHOT/keystore/xwhepcert.pem:/xwhep/certificate/xwhepcert.pem xtremweb/worker:12.2.3-SNAPSHOT  shell=yes  stderr=STDOUT  stdout=${DIST_XWHEP_PATH}/xwhep.worker.process.log
+    ${created_process} =  Start Process  docker run --env XWSERVERADDR\="172.18.0.1" --env XWSERVERNAME\="james-xps" -v ~/iexecdev/iexec-node/xtremweb-hep/build/dist/xtremweb-12.2.3-SNAPSHOT/keystore/xwhepcert.pem:/xwhep/certificate/xwhepcert.pem xtremweb/worker:12.2.3-SNAPSHOT  shell=yes  stderr=STDOUT  stdout=${DIST_XWHEP_PATH}/xwhep.worker.process.log
 
     ${container_id} =  Wait Until Keyword Succeeds  3 min   10 sec  DockerHelper.Get Docker Container Id From Image  xtremweb/worker:12.2.3-SNAPSHOT
     Log  ${container_id}
@@ -54,7 +54,7 @@ Start XtremWeb Worker In Docker
     Set Suite Variable  ${WORKER_PROCESS}  ${created_process}
     #Wait Until Keyword Succeeds  2 min 5 sec  Check XtremWeb Worker Start From Log  ${container_log}
     #  TODO check woker start
-    Log File  ${container_log}
+    Log File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
 
 Check XtremWeb Worker Start From Log
     [Arguments]  ${log}
