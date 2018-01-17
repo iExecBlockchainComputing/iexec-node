@@ -1,5 +1,6 @@
 *** Settings ***
 Resource  ./DockerHelper.robot
+Resource  ./XWCommon.robot
 
 *** Variables ***
 
@@ -42,16 +43,16 @@ Start XtremWeb Worker In Docker
     ${config_content_filtered} =  Replace String  ${config_content_filtered}  LOGGERLEVEL=INFO  LOGGERLEVEL=FINEST
     Create File  ${DIST_XWHEP_PATH}/conf/xtremweb.worker.conf  content=${config_content_filtered}
 
-    #Remove File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
+    Remove File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
+    ${xtremweb_version} =  XWCommon.Get Xtremweb Version  ${DIST_XWHEP_PATH}
+    ${created_process} =  Start Process  docker run --env XWSERVERADDR\="172.18.0.1" --env XWSERVERNAME\="james-xps" -v ${DIST_XWHEP_PATH}/keystore/xwhepcert.pem:/xwhep/certificate/xwhepcert.pem xtremweb/worker:${xtremweb_version}  shell=yes  stderr=STDOUT  stdout=${DIST_XWHEP_PATH}/xwhep.worker.process.log
 
-    ${created_process} =  Start Process  docker run --env XWSERVERADDR\="172.18.0.1" --env XWSERVERNAME\="james-xps" -v ~/iexecdev/iexec-node/xtremweb-hep/build/dist/xtremweb-12.2.3-SNAPSHOT/keystore/xwhepcert.pem:/xwhep/certificate/xwhepcert.pem xtremweb/worker:12.2.3-SNAPSHOT  shell=yes  stderr=STDOUT  stdout=${DIST_XWHEP_PATH}/xwhep.worker.process.log
-
-    ${container_id} =  Wait Until Keyword Succeeds  3 min   10 sec  DockerHelper.Get Docker Container Id From Image  xtremweb/worker:12.2.3-SNAPSHOT
+    ${container_id} =  Wait Until Keyword Succeeds  3 min   10 sec  DockerHelper.Get Docker Container Id From Image  xtremweb/worker:${xtremweb_version}
     Log  ${container_id}
 
     ${container_log} =  DockerHelper.Logs By Container Id  ${container_id}    
 
-    Set Suite Variable  ${WORKER_PROCESS}  ${created_process}
+    Set Suite Variable  ${WORKER_PROCESS}  ${container_id}
     #Wait Until Keyword Succeeds  2 min 5 sec  Check XtremWeb Worker Start From Log  ${container_log}
     #  TODO check woker start
     Log File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
@@ -66,6 +67,10 @@ Stop XtremWeb Worker
     Log  Stop XtremWeb Worker
     Terminate Process  ${WORKER_PROCESS}
 
+Stop XtremWeb Worker In Docker
+    Log  Stop XtremWeb Worker
+    DockerHelper.Stop And Remove All Containers
+
 
 Log XtremWeb Worker Log File
-     #Log File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log
+     Log File  ${DIST_XWHEP_PATH}/xwhep.worker.process.log

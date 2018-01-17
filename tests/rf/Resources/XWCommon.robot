@@ -75,7 +75,7 @@ Start XWtremWeb Server And XWtremWeb Worker
 Stop XWtremWeb Server And XWtremWeb Worker
     XWServer.Stop XtremWeb Server
     Log XtremWeb Server
-    XWWorker.Stop XtremWeb Worker
+    XWWorker.Stop XtremWeb Worker In Docker
     #Log XtremWeb Worker
 
 Log XtremWeb Server
@@ -208,3 +208,11 @@ Create XWCONFIGURE.VALUES FILE
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  HTTPSPORT='${XWCONFIGURE.VALUES.HTTPSPORT}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  LOGGERLEVEL=INFO\n
     LOG FILE  ${DIST_XWHEP_PATH}/conf/xwconfigure.values
+
+Get Xtremweb Version
+    [Arguments]  ${DIST_XWHEP_PATH}
+    ${result} =  Run Process  basename ${DIST_XWHEP_PATH} | sed s/xtremweb-//g  shell=yes
+    Log  ${result.stdout}
+    Log  ${result.stderr}
+    Should Be Equal As Integers  ${result.rc}   0
+    [Return]  ${result.stdout}
