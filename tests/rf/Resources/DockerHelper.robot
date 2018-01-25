@@ -8,7 +8,7 @@
 
 Get Docker Container Id From Image
     [Arguments]  ${docker_image}
-    ${container_id} =  Run Process  docker ps --filter \"ancestor\=${docker_image}\" --format \"{{.ID}}\"  shell=yes
+    ${container_id} =  Run Process  docker ps -a --filter \"ancestor\=${docker_image}\" --format \"{{.ID}}\"  shell=yes
     Log  ${container_id.stdout}
     Log  ${container_id.stderr}
     Should not be empty  ${container_id.stdout}
@@ -37,6 +37,12 @@ Stop And Remove All Containers
 Remove All Images
     Stop And Remove All Containers
     Run Process  docker rmi $(docker images -q)  shell=yes
+
+Remove Container
+    [Arguments]  ${container_id}
+    Log  ${container_id}
+    Run Process  docker rm -f ${container_id}  shell=yes
+
 
 
 Init Webproxy Network
