@@ -26,12 +26,47 @@ ${FFMPEG_URI} =  https://raw.githubusercontent.com/iExecBlockchainComputing/iexe
 ${BIN_DIR} =  ${CURDIR}${/}../Resources/bin
 
 
-*** TESTS OK ***
+
+*** Test Cases ***  
+
+Test XWSubmit and XWResults Command On LS Binary
+    [Documentation]  Testing XWSubmit and XWResults cmd
+    [Tags]  CommandLine Tests
+    ${uid} =  XWClientDocker.XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
+    XWServerDocker.Count From Apps Where Uid  ${uid}  1
+    ${workuid} =  XWSUBMITCommand  ls
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min  5 sec  Check XWSTATUS Completed  ${workuid}
+    ${results_file} =  XWRESULTSCommand  ${workuid}
+    ${results_file_content} =  GET FILE  ${results_file}
+    ${results_file_content_lines_count} =  Get Line Count  ${results_file_content}
+    Should Be Equal As Integers  ${results_file_content_lines_count}  2
+    @{results_file_lines} =  Split To Lines  ${results_file_content}
+    Should Be Equal As Strings  @{results_file_lines}[0]  stderr.txt
+    Should Be Equal As Strings  @{results_file_lines}[1]  stdout.txt
+
+Test XWSubmit and XWResults Command On LS Binary With Param
+    [Documentation]  Testing XWSubmit and XWResults cmd with param
+    [Tags]  CommandLine Tests
+    ${uid} =  XWClientDocker.XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
+    XWServerDocker.Count From Apps Where Uid  ${uid}  1
+    ${workuid} =  XWSUBMITCommand  ls -atr
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min  5 sec  XWClientDocker.Check XWSTATUS Completed  ${workuid}
+    ${results_file} =  XWRESULTSCommand  ${workuid}
+    ${results_file_content} =  GET FILE  ${results_file}
+    ${results_file_content_lines_count} =  Get Line Count  ${results_file_content}
+    Should Be Equal As Integers  ${results_file_content_lines_count}  4
+    @{results_file_lines} =  Split To Lines  ${results_file_content}
+    Should Be Equal As Strings  @{results_file_lines}[0]  ..
+    Should Be Equal As Strings  @{results_file_lines}[1]  stdout.txt
+    Should Be Equal As Strings  @{results_file_lines}[2]  stderr.txt
+    Should Be Equal As Strings  @{results_file_lines}[3]  .
 
 Test XWSendapp Command With LS Binary
     [Documentation]  Testing XWSendapp cmd
     [Tags]  CommandLine Tests
-    ${uid} =  XWClientDocker.XWSENDAPPCommand  ls DEPLOYABLE LINUX AMD64 /bin/ls
+    ${uid} =  XWClientDocker.XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
     XWServerDocker.Count From Apps Where Uid  ${uid}  1
     ${stdout_datas} =  XWClientDocker.XWDATASCommand
     #Log  ${stdout_datas}
@@ -64,7 +99,7 @@ Test Sendapp Call By A Admin Create A Public App
     [Documentation]  Test Sendapp Call By A Admin Create A Public App
     [Tags]  CommandLine Tests
     # deployed DAPP in the name of DAPP PROVIDER
-    ${app_uid} =  XWClientDocker.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS_1} DEPLOYABLE LINUX AMD64 /bin/echo
+    ${app_uid} =  XWClientDocker.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS_1}  DEPLOYABLE  LINUX  AMD64  /bin/echo
     ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
 
     ################## Public ##################
@@ -75,227 +110,6 @@ Test Sendapp Call By A Admin Create A Public App
     LOG  ${workuid}
     Wait Until Keyword Succeeds  3 min  5 sec  Check XWSTATUS Completed  ${workuid}
 
-    
-Test XWSubmit and XWResults Command On LS Binary
-    [Documentation]  Testing XWSubmit and XWResults cmd
-    [Tags]  CommandLine Tests
-    ${uid} =  XWClientDocker.XWSENDAPPCommand  ls DEPLOYABLE LINUX AMD64 /bin/ls
-    XWServerDocker.Count From Apps Where Uid  ${uid}  1
-    ${workuid} =  XWSUBMITCommand  ls
-    LOG  ${workuid}
-    Wait Until Keyword Succeeds  3 min  5 sec  Check XWSTATUS Completed  ${workuid}
-    #${results_file} =  XWRESULTSCommand  ${workuid}
-    ${results_file_content} =  XWRESULTSCommand  ${workuid}
-    ${results_file_content_lines_count} =  Get Line Count  ${results_file_content}
-    Should Be Equal As Integers ${results_file_content_lines_count}  2
-    @{results_file_lines} =  Split To Lines  ${results_file_content}
-    Should Be Equal As Strings  @{results_file_lines}[0]  stderr.txt
-    Should Be Equal As Strings  @{results_file_lines}[1]  stdout.txt
-
-
-
-*** Test Cases ***
-
-
-
-
-Test XWSubmit and XWResults Command On LS Binary With Param
-    [Documentation]  Testing XWSubmit and XWResults cmd with param
-    [Tags]  CommandLine Tests
-    ${uid} =  XWClientDocker.XWSENDAPPCommand  ls DEPLOYABLE LINUX AMD64 /bin/ls
-    XWServerDocker.Count From Apps Where Uid  ${uid}  1
-    ${workuid} =  XWSUBMITCommand  ls -atr
-    LOG  ${workuid}
-    Wait Until Keyword Succeeds  3 min	5 sec  XWClientDocker.Check XWSTATUS Completed  ${workuid}
-    ${results_file} =  XWRESULTSCommand  ${workuid}
-    ${results_file_content} =  Get File  ${results_file}
-    ${results_file_content_lines_count} =  Get Line Count  ${results_file_content}
-    Should Be Equal As Integers	${results_file_content_lines_count}  4
-    @{results_file_lines} =  Split To Lines  ${results_file_content}
-    Should Be Equal As Strings  @{results_file_lines}[0]  ..
-    Should Be Equal As Strings	@{results_file_lines}[1]  stdout.txt
-    Should Be Equal As Strings	@{results_file_lines}[2]  stderr.txt
-    Should Be Equal As Strings	@{results_file_lines}[3]  .
-
-
-Test Sendapp Call By A Provider Create A Private App
-    [Documentation]  Test Sendapp Call By A Provider Create A Private App
-    [Tags]  CommandLine Tests
-    XWClientDocker.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1} nopass1 noemail1
-    ${xwusers} =  XWUSERSCommand
-    Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'
-    @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'  useruid
-
-    # ADD MANDATINGLOGIN to the DAPP PROVIDER
-    XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_1}
-
-    # deployed DAPP in the name of DAPP PROVIDER
-    ${app_uid} =  XWClientDocker.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS_1} DEPLOYABLE LINUX AMD64 /bin/echo
-    ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
-    # we find dapp_provider as owner in the dapo description
-    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
-
-    ################## A PRIVATE APP ##################
-    Should Contain	${curl_result}  0x700
-    ########################################
-
-Test Sendapp Call By A Provider Create A Private App And Force It To Public
-    XWClientDocker.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_2} nopass2 noemail2
-    ${xwusers} =  XWUSERSCommand
-    Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_2}'
-    @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS_2}'  useruid
-
-    XWClientDocker.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_3} nopass3 noemail3
-    ${xwusers} =  XWUSERSCommand
-    Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_3}'
-
-    # ADD MANDATINGLOGIN to the DAPP PROVIDER
-    XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_2}
-
-    # deployed DAPP in the name of DAPP PROVIDER
-    ${app_uid} =  XWClientDocker.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS_2} DEPLOYABLE LINUX AMD64 /bin/echo
-    ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
-    # we find dapp_provider as owner in the dapo description
-    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
-
-    ################## A PRIVATE APP ##################
-    Should Contain	${curl_result}  0x700
-    ########################################
-
-    # UPDATE DAPP to 0x755 rights
-    XWCommonDocker.Remove MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}
-    XWClientDocker.XWCMODCommand  0x755  ${app_uid}
-
-    ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
-    # we find dapp_provider as owner in the dapo description
-    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
-
-    ################## we have now a PUBLIC APP owned by provider.  ##################
-    Should Contain	${curl_result}  0x755
-    ########################################
-
-    # User  and worker are now happyly using this public app from Mr Provider
-    ${workuid} =  XWSUBMITCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}
-    LOG  ${workuid}
-    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
-
-    # ADD MANDATINGLOGIN to the provider
-    XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_2}
-    ${workuid} =  XWSUBMITCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}
-    LOG  ${workuid}
-    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
-
-    # ADD MANDATINGLOGIN to the a random guy => do not work
-    XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_3}
-    ${workuid} =  XWSUBMITCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}
-    LOG  ${workuid}
-    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
-
-
-Test Mandat
-    ${worker.conf} =  XWClientDocker.XWSENDUSERCommand  worker workerp worker WORKER_USER
-    Log  ${worker.conf}
-    Remove File  ${DIST_XWHEP_PATH}/worker.conf
-    Create File  ${DIST_XWHEP_PATH}/worker.conf  ${worker.conf}
-    ${user1.conf} =  XWClientDocker.XWSENDUSERCommand  user1 user1 user1 STANDARD_USER
-    Log  ${user1.conf}
-    Remove File  ${DIST_XWHEP_PATH}/user1.conf
-    Create File  ${DIST_XWHEP_PATH}/user1.conf  ${user1.conf}
-    ${user2.conf} =  XWClientDocker.XWSENDUSERCommand  user2 user2 user2 STANDARD_USER
-    Log  ${user2.conf}
-    Remove File  ${DIST_XWHEP_PATH}/user2.conf
-    Create File  ${DIST_XWHEP_PATH}/user2.conf  ${user2.conf}
-    ${mandat.conf} =  XWClientDocker.XWSENDUSERCommand  mandat mandat mandat MANDATED_USER
-    Log  ${mandat.conf}
-    Remove File  ${DIST_XWHEP_PATH}/mandat.conf
-    Create File  ${DIST_XWHEP_PATH}/mandat.conf  ${mandat.conf}
-
-    ${app_uid_ls_pub} =  XWClientDocker.XWSENDAPPCommand  ls_pub DEPLOYABLE LINUX AMD64 /bin/ls
-    ${curl_result_ls_pub} =  XWCommonDocker.Curl To Server  get/${app_uid_ls_pub}
-
-    ${app_uid_ls_priv_user1} =  XWClientDocker.XWSENDAPPCommand  ls_priv_user1 DEPLOYABLE LINUX AMD64 /bin/ls --xwconfig ${DIST_XWHEP_PATH}/user1.conf
-    ${curl_result_ls_priv_user1} =  XWCommonDocker.Curl To Server  get/${app_uid_ls_priv_user1}
-    Log  ${curl_result_ls_priv_user1}
-
-    ${app_uid_ls_priv_stickybit_user1} =  XWClientDocker.XWSENDAPPCommand  ls_priv_stickybit_user1 DEPLOYABLE LINUX AMD64 /bin/ls --xwconfig ${DIST_XWHEP_PATH}/user1.conf
-    ${curl_result_ls_priv_stickybit_user1} =  XWCommonDocker.Curl To Server  get/${app_uid_ls_priv_stickybit_user1}
-    ${xwapps_result} =  XWClientDocker.XWAPPSCommand  ls_priv_stickybit_user1 --xwformat xml --xwconfig ${DIST_XWHEP_PATH}/user1.conf | grep '<app>'
-
-    Log  ${xwapps_result}
-    ${xwapps_result_replace} =  Replace String  ${xwapps_result}  0x700  0x1700
-    Log  ${xwapps_result_replace}
-    Remove File  ${DIST_XWHEP_PATH}/ls_priv_stickybit_user1.xml
-    Create File  ${DIST_XWHEP_PATH}/ls_priv_stickybit_user1.xml  ${xwapps_result_replace}
-
-    ${app_uid_ls_priv_stickybit_user1} =  XWClientDocker.XWSENDAPPCommand  --xwconfig ${DIST_XWHEP_PATH}/user1.conf --xwxml ${DIST_XWHEP_PATH}/ls_priv_stickybit_user1.xml
-    ${curl_result_ls_priv_stickybit_user1} =  XWCommonDocker.Curl To Server  get/${app_uid_ls_priv_stickybit_user1}
-
-
-    ${app_uid_ls_priv_user2} =  XWClientDocker.XWSENDAPPCommand  ls_priv_user2 DEPLOYABLE LINUX AMD64 /bin/ls --xwconfig ${DIST_XWHEP_PATH}/user2.conf
-    ${curl_result_ls_priv_user2} =  XWCommonDocker.Curl To Server  get/${app_uid_ls_priv_user2}
-    Log  ${curl_result_ls_priv_user2}
-
-
-    ${result} =  XWClientDocker.XWAPPSCommand
-    Should Contain  ${result}  ls_pub
-    Should Contain  ${result}  ls_priv_stickybit_user1
-    Should Contain  ${result}  ls_priv_user1
-    Should Contain  ${result}  ls_priv_user2
-
-    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/mandat.conf -DMANDATINGLOGIN=admin
-    Should Contain  ${result}  ls_pub
-    Should Contain  ${result}  ls_priv_stickybit_user1
-    Should Contain  ${result}  ls_priv_user1
-    Should Contain  ${result}  ls_priv_user2
-
-
-    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/user1.conf
-    Should Contain  ${result}  ls_pub
-    Should Contain  ${result}  ls_priv_stickybit_user1
-    Should Contain  ${result}  ls_priv_user1
-    Should Not Contain  ${result}  ls_priv_user2
-
-    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/mandat.conf -DMANDATINGLOGIN=user1
-    Should Contain  ${result}  ls_pub
-    Should Contain  ${result}  ls_priv_stickybit_user1
-    Should Contain  ${result}  ls_priv_user1
-    Should Not Contain  ${result}  ls_priv_user2
-
-
-    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/user2.conf
-    Should Contain  ${result}  ls_pub
-    Should Not Contain  ${result}  ls_priv_stickybit_user1
-    Should Not Contain  ${result}  ls_priv_user1
-    Should Contain  ${result}  ls_priv_user2
-
-    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/mandat.conf -DMANDATINGLOGIN=user2
-    Should Contain  ${result}  ls_pub
-    Should Contain  ${result}  ls_priv_stickybit_user1
-    Should Not Contain  ${result}  ls_priv_user1
-    Should Contain  ${result}  ls_priv_user2
-
-    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig ${DIST_XWHEP_PATH}/mandat.conf
-    Should Contain  ${result}  ls_pub
-    Should Contain  ${result}  ls_priv_stickybit_user1
-    Should Not Contain  ${result}  ls_priv_user1
-    Should Not Contain  ${result}  ls_priv_user2
-
-
-    # test with Mandat user. a VWorker must be present to take this work
-    ${workuid} =  XWSUBMITCommand  --xwconfig ${DIST_XWHEP_PATH}/mandat.conf --xwlabel mandat_user_ls_priv_stickybit_user1 -DMANDATINGLOGIN=user1 ls_priv_stickybit_user1
-    LOG  ${workuid}
-    ${curl_submit} =  XWCommonDocker.Curl To Server  get/${workuid}
-    Log  ${curl_submit}
-    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
-
-    # test with Admin user. a VWorker must be present to take this work
-    ${workuid} =  XWSUBMITCommand  --xwlabel admin_user_ls_priv_stickybit_user1 -DMANDATINGLOGIN=user1 ls_priv_stickybit_user1
-    LOG  ${workuid}
-    ${curl_submit} =  XWCommonDocker.Curl To Server  get/${workuid}
-    Log  ${curl_submit}
-    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
-
-
 
 Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     [Documentation]  Testing XWSubmit and XWResults cmd
@@ -304,7 +118,7 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     ${wget_cmd_result} =  Run Process  curl ${FFMPEG_URI} -o ${BIN_DIR}/ffmpeg  shell=yes
     Log  ${wget_cmd_result.stdout}
     Should Be Equal As Integers  ${wget_cmd_result.rc}  0
-    ${uid} =  XWClientDocker.XWSENDAPPCommand  ffmpeg DEPLOYABLE LINUX AMD64 ${BIN_DIR}${/}ffmpeg
+    ${uid} =  XWClientDocker.XWSENDAPPCommand  ffmpeg  DEPLOYABLE  LINUX  AMD64  ${BIN_DIR}${/}ffmpeg
     XWServerDocker.Count From Apps Where Uid  ${uid}  1
     ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yescd
     Should Be Equal As Integers  ${rm_cmd_result.rc}  0
@@ -328,6 +142,199 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     LOG  ${stderr}
 
     File Should Exist  small.avi
+
+
+Test Sendapp Call By A Provider Create A Private App
+    [Documentation]  Test Sendapp Call By A Provider Create A Private App
+    [Tags]  CommandLine Tests
+    XWClientDocker.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1} nopass1 noemail1
+    ${xwusers} =  XWUSERSCommand
+    Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'
+    @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'  useruid
+
+    # ADD MANDATINGLOGIN to the DAPP PROVIDER
+    #XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_1}
+
+    # deployed DAPP in the name of DAPP PROVIDER
+    ${app_uid} =  XWClientDocker.XWSENDAPPCommandWithMandat  ${A_DAPP_ETHEREUM_ADDRESS_1}  ${A_DAPP_ETHEREUM_ADDRESS_1}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
+    # we find dapp_provider as owner in the dapo description
+    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
+
+    ################## A PRIVATE APP ##################
+    Should Contain	${curl_result}  0x700
+    ########################################
+
+
+ 
+
+Test Sendapp Call By A Provider Create A Private App And Force It To Public
+    XWClientDocker.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_2} nopass2 noemail2
+    ${xwusers} =  XWUSERSCommand
+    Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_2}'
+    @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS_2}'  useruid
+
+    XWClientDocker.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_3} nopass3 noemail3
+    ${xwusers} =  XWUSERSCommand
+    Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_3}'
+
+    # ADD MANDATINGLOGIN to the DAPP PROVIDER
+    #XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_2}
+
+    # deployed DAPP in the name of DAPP PROVIDER
+    ${app_uid} =  XWClientDocker.XWSENDAPPCommandWithMandat  ${A_DAPP_ETHEREUM_ADDRESS_2}  ${A_DAPP_ETHEREUM_ADDRESS_2}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
+    # we find dapp_provider as owner in the dapo description
+    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
+
+    ################## A PRIVATE APP ##################
+    Should Contain	${curl_result}  0x700
+    ########################################
+
+    # UPDATE DAPP to 0x755 rights
+    #XWCommonDocker.Remove MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}
+    XWClientDocker.XWCMODCommand  0x755  ${app_uid}
+
+    ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
+    # we find dapp_provider as owner in the dapo description
+    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
+
+    ################## we have now a PUBLIC APP owned by provider.  ##################
+    Should Contain	${curl_result}  0x755
+    ########################################
+
+    # User  and worker are now happyly using this public app from Mr Provider
+    ${workuid} =  XWSUBMITCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+
+    # ADD MANDATINGLOGIN to the provider
+    #XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    ${workuid} =  XWSUBMITCommanddWithMandat  ${A_DAPP_ETHEREUM_ADDRESS_2}  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+
+    # ADD MANDATINGLOGIN to the a random guy => do not work
+    #XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_3}
+    ${workuid} =  XWSUBMITCommanddWithMandat  ${A_DAPP_ETHEREUM_ADDRESS_3}  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+
+ *** blabla ***  
+
+Test Mandat
+    ${container_id} =  XWClientDocker.StartDockerClient
+    ${worker.conf} =  XWClientDocker.XWSENDUSERCommand  worker workerp worker WORKER_USER
+    Log  ${worker.conf}
+    Remove File  ${DIST_XWHEP_PATH}/worker.conf
+    Create File  ${DIST_XWHEP_PATH}/worker.conf  ${worker.conf}
+    ${user1.conf} =  XWClientDocker.XWSENDUSERCommand  user1 user1 user1 STANDARD_USER
+    Log  ${user1.conf}
+    Remove File  ${DIST_XWHEP_PATH}/user1.conf
+    Create File  ${DIST_XWHEP_PATH}/user1.conf  ${user1.conf}
+    ${user2.conf} =  XWClientDocker.XWSENDUSERCommand  user2 user2 user2 STANDARD_USER
+    Log  ${user2.conf}
+    Remove File  ${DIST_XWHEP_PATH}/user2.conf
+    Create File  ${DIST_XWHEP_PATH}/user2.conf  ${user2.conf}
+    ${mandat.conf} =  XWClientDocker.XWSENDUSERCommand  mandat mandat mandat MANDATED_USER
+    Log  ${mandat.conf}
+    Remove File  ${DIST_XWHEP_PATH}/mandat.conf
+    Create File  ${DIST_XWHEP_PATH}/mandat.conf  ${mandat.conf}
+
+    ${app_uid_ls_pub} =  XWClientDocker.XWSENDAPPCommand  ls_pub  DEPLOYABLE  LINUX  AMD64  /bin/ls
+    ${curl_result_ls_pub} =  XWCommonDocker.Curl To Server  get/${app_uid_ls_pub}
+
+    DockerHelper.Copy File To Container  ${container_id}  ${DIST_XWHEP_PATH}/worker.conf  /xwhep/worker.conf
+    DockerHelper.Copy File To Container  ${container_id}  ${DIST_XWHEP_PATH}/user1.conf  /xwhep/user1.conf
+    DockerHelper.Copy File To Container  ${container_id}  ${DIST_XWHEP_PATH}/user2.conf  /xwhep/user2.conf
+    DockerHelper.Copy File To Container  ${container_id}  ${DIST_XWHEP_PATH}/mandat.conf  /xwhep/mandat.conf
+    DockerHelper.Copy File To Container  ${container_id}  /bin/ls  /xwhep/ls
+
+
+    ${app_uid_ls_priv_user1} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  ls_priv_user1 DEPLOYABLE LINUX AMD64 /xwhep/ls --xwconfig /xwhep/user1.conf
+    ${curl_result_ls_priv_user1} =  XWCommonDocker.Curl To Server  get/${app_uid_ls_priv_user1}
+    Log  ${curl_result_ls_priv_user1}
+
+    ${app_uid_ls_priv_stickybit_user1} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  ls_priv_stickybit_user1 DEPLOYABLE LINUX AMD64 /xwhep/ls --xwconfig /xwhep/user1.conf
+    ${curl_result_ls_priv_stickybit_user1} =  XWCommonDocker.Curl To Server  get/${app_uid_ls_priv_stickybit_user1}
+    ${xwapps_result} =  XWClientDocker.XWAPPSCommand  ls_priv_stickybit_user1 --xwformat xml --xwconfig /xwhep/user1.conf | grep '<app>'
+
+    Log  ${xwapps_result}
+    ${xwapps_result_replace} =  Replace String  ${xwapps_result}  0x700  0x1700
+    Log  ${xwapps_result_replace}
+    Remove File  ${DIST_XWHEP_PATH}/ls_priv_stickybit_user1.xml
+    Create File  ${DIST_XWHEP_PATH}/ls_priv_stickybit_user1.xml  ${xwapps_result_replace}
+    DockerHelper.Copy File To Container  ${container_id}  ${DIST_XWHEP_PATH}/ls_priv_stickybit_user1.xml  /xwhep/ls_priv_stickybit_user1.xml
+
+    ${app_uid_ls_priv_stickybit_user1} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  --xwconfig /xwhep/user1.conf --xwxml /xwhep/ls_priv_stickybit_user1.xml
+    ${curl_result_ls_priv_stickybit_user1} =  XWCommonDocker.Curl To Server  get/${app_uid_ls_priv_stickybit_user1}
+
+
+    ${app_uid_ls_priv_user2} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  ls_priv_user2 DEPLOYABLE LINUX AMD64 /bin/ls --xwconfig /xwhep/user2.conf
+    ${curl_result_ls_priv_user2} =  XWCommonDocker.Curl To Server  get/${app_uid_ls_priv_user2}
+    Log  ${curl_result_ls_priv_user2}
+
+
+    ${result} =  XWClientDocker.XWAPPSCommand
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Contain  ${result}  ls_priv_user1
+    Should Contain  ${result}  ls_priv_user2
+
+    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig /xwhep/mandat.conf -DMANDATINGLOGIN=admin
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Contain  ${result}  ls_priv_user1
+    Should Contain  ${result}  ls_priv_user2
+
+
+    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig /xwhep/user1.conf
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Contain  ${result}  ls_priv_user1
+    Should Not Contain  ${result}  ls_priv_user2
+
+    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig /xwhep/mandat.conf -DMANDATINGLOGIN=user1
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Contain  ${result}  ls_priv_user1
+    Should Not Contain  ${result}  ls_priv_user2
+
+
+    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig /xwhep/user2.conf
+    Should Contain  ${result}  ls_pub
+    Should Not Contain  ${result}  ls_priv_stickybit_user1
+    Should Not Contain  ${result}  ls_priv_user1
+    Should Contain  ${result}  ls_priv_user2
+
+    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig /xwhep/mandat.conf -DMANDATINGLOGIN=user2
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Not Contain  ${result}  ls_priv_user1
+    Should Contain  ${result}  ls_priv_user2
+
+    ${result} =  XWClientDocker.XWAPPSCommand  --xwconfig /xwhep/mandat.conf
+    Should Contain  ${result}  ls_pub
+    Should Contain  ${result}  ls_priv_stickybit_user1
+    Should Not Contain  ${result}  ls_priv_user1
+    Should Not Contain  ${result}  ls_priv_user2
+
+
+    # test with Mandat user. a VWorker must be present to take this work
+    ${workuid} =  XWSUBMITCommandOnContainer  ${container_id}  --xwconfig /xwhep/mandat.conf --xwlabel mandat_user_ls_priv_stickybit_user1 -DMANDATINGLOGIN=user1 ls_priv_stickybit_user1
+    LOG  ${workuid}
+    ${curl_submit} =  XWCommonDocker.Curl To Server  get/${workuid}
+    Log  ${curl_submit}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+
+    # test with Admin user. a VWorker must be present to take this work
+    ${workuid} =  XWSUBMITCommandOnContainer  ${container_id}  --xwlabel admin_user_ls_priv_stickybit_user1 -DMANDATINGLOGIN=user1 ls_priv_stickybit_user1
+    LOG  ${workuid}
+    ${curl_submit} =  XWCommonDocker.Curl To Server  get/${workuid}
+    Log  ${curl_submit}
+    Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
+
+
 
 
 #Test 2.2 Soumettre un job avec ligne de commande

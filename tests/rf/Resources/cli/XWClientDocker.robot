@@ -35,9 +35,48 @@ StopDockerClient
 
 XWSENDAPPCommand
     [Documentation]  Usage :  SENDAPP appName appType cpuType osName URI | UID : inserts/updates an application; URI or UID points to binary file ; application name must be the first parameter
-    [Arguments]  ${options}=${EMPTY}    
+    #[Arguments]  ${options}=${EMPTY}
+    [Arguments]   ${appName}  ${appType}  ${osName}  ${cpuType}  ${host_file}  ${options}=''
     ${container_id} =  StartDockerClient
+    ${filename} =  Run Process  basename ${host_file}  shell=yes
+    DockerHelper.Copy File To Container  ${container_id}  ${host_file}  /xwhep/${filename.stdout}
+    ${cmd_result} =  Run Process  docker exec -t ${container_id} ./xwsendapp ${appName} ${appType} ${osName} ${cpuType} /xwhep/${filename.stdout} ${options}  shell=yes
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers  ${cmd_result.rc}  0
+    ${uid} =  Get Substring  ${cmd_result.stdout}  -36
+    StopDockerClient 
+    [Return]  ${uid}
+
+XWSENDAPPCommandOnContainer
+    [Documentation]  Usage :  SENDAPP appName appType cpuType osName URI | UID : inserts/updates an application; URI or UID points to binary file ; application name must be the first parameter
+    [Arguments]  ${container_id}  ${options}=${EMPTY}
+    #[Arguments]   ${appName}  ${appType}  ${osName}  ${cpuType}  ${host_file}  ${options}=''
+
     ${cmd_result} =  Run Process  docker exec -t ${container_id} ./xwsendapp ${options}  shell=yes
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers  ${cmd_result.rc}  0
+    ${uid} =  Get Substring  ${cmd_result.stdout}  -36
+
+    [Return]  ${uid}
+
+Set MANDATINGLOGIN With Docker Client
+    [Arguments]  ${container_id}  ${MANDATED}
+    ${cmd_result} =  Run Process  docker exec -t ${container_id} sed -i \"s/.*MANDATINGLOGIN.*/MANDATINGLOGIN\=${MANDATED}/g\" /xwhep/conf/xtremweb.client.conf  shell=yes
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers  ${cmd_result.rc}  0
+    DockerHelper.Log File Of Container  ${container_id}  /xwhep/conf/xtremweb.client.conf
+
+XWSENDAPPCommandWithMandat
+    [Documentation]  Usage :  SENDAPP appName appType cpuType osName URI | UID : inserts/updates an application; URI or UID points to binary file ; application name must be the first parameter
+    #[Arguments]  ${options}=${EMPTY}
+    [Arguments]   ${MANDATED}  ${appName}  ${appType}  ${osName}  ${cpuType}  ${host_file}  ${options}=''
+    ${container_id} =  StartDockerClient
+
+    Set MANDATINGLOGIN With Docker Client  ${container_id}  ${MANDATED}
+
+    ${filename} =  Run Process  basename ${host_file}  shell=yes
+    DockerHelper.Copy File To Container  ${container_id}  ${host_file}  /xwhep/${filename.stdout}
+    ${cmd_result} =  Run Process  docker exec -t ${container_id} ./xwsendapp ${appName} ${appType} ${osName} ${cpuType} /xwhep/${filename.stdout} ${options}  shell=yes
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers  ${cmd_result.rc}  0
     ${uid} =  Get Substring  ${cmd_result.stdout}  -36
@@ -66,6 +105,31 @@ XWSUBMITCommand
     Should Be Equal As Integers  ${cmd_result.rc}  0
     ${uid} =  Get Substring  ${cmd_result.stdout}  -36
     StopDockerClient 
+    [Return]  ${uid}
+
+XWSUBMITCommanddWithMandat
+    [Documentation]  Usage :  XWSUBMIT appName
+    [Arguments]  ${MANDATED}  ${appName}
+    ${container_id} =  StartDockerClient
+    Set MANDATINGLOGIN With Docker Client  ${container_id}  ${MANDATED}
+    ${cmd_result} =  Run Process  docker exec -t ${container_id} ./xwsubmit ${appName}  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers  ${cmd_result.rc}  0
+    ${uid} =  Get Substring  ${cmd_result.stdout}  -36
+    StopDockerClient 
+    [Return]  ${uid}
+
+XWSUBMITCommandOnContainer
+    [Documentation]  Usage :  XWSUBMIT appName
+    [Arguments]  ${container_id}  ${appName}
+
+    ${cmd_result} =  Run Process  docker exec -t ${container_id} ./xwsubmit ${appName}  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers  ${cmd_result.rc}  0
+    ${uid} =  Get Substring  ${cmd_result.stdout}  -36
+
     [Return]  ${uid}
 
 XWSTATUSCommand
@@ -106,13 +170,15 @@ XWRESULTSCommand
     Should Be Equal As Integers  ${cmd_result.rc}  0
     @{results_file} =  Get Regexp Matches  ${cmd_result.stdout}  INFO : Downloaded to : (?P<file>.*)  file
 
-    ${cat_file_result} =  Run Process  docker exec -t ${container_id} cat @{results_file}[0]  shell=yes
-    Log  ${cat_file_result.stderr}
-    Log  ${cat_file_result.stdout}
-    Should Be Equal As Integers  ${cat_file_result.rc}  0
+    DockerHelper.Copy File From Container  ${container_id}  @{results_file}[0]  ${DIST_XWHEP_PATH}
+
+    ${filename_result} =  Run Process  basename @{results_file}[0]  shell=yes
+    Log  ${filename_result.stderr}
+    Log  ${filename_result.stdout}
+    Should Be Equal As Integers  ${filename_result.rc}  0
 
     StopDockerClient 
-    [Return]  ${cat_file_result.stdout}
+    [Return]  ${DIST_XWHEP_PATH}/${filename_result.stdout}
 
 XWWORKSCommand
     [Documentation]  Usage :  XWWORKS uid
