@@ -181,6 +181,7 @@ Test Sendapp Call By A Provider Create A Private App
     ########################################
     DockerHelper.Remove Container  ${container_id} 
 
+
 Test Sendapp Call By A Provider Create A Private App And Force It To Public
     ${container_id} =  XWClientDocker.StartDockerClient
     XWClientDocker.XWSENDUSERCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_2} nopass2 noemail2
@@ -224,7 +225,7 @@ Test Sendapp Call By A Provider Create A Private App And Force It To Public
 
     # ADD MANDATINGLOGIN to the provider
     XWClientDocker.Set MANDATINGLOGIN OnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_2}
-    ${workuid} =  XWSUBMITCommanddWithMandat  ${A_DAPP_ETHEREUM_ADDRESS_2}  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    ${workuid} =  XWSUBMITCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_2}
     LOG  ${workuid}
     Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
 
