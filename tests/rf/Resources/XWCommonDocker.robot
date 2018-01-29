@@ -26,7 +26,7 @@ ${XW_SERVER_NAME} =  localhost
 
 ## xwconfigure.values
 ${XWCONFIGURE.VALUES.XWUSER} =  root
-${XWCONFIGURE.VALUES.DBVENDOR} =  MySqlDocker
+${XWCONFIGURE.VALUES.DBVENDOR} =  mysql
 ${XWCONFIGURE.VALUES.DBENGINE} =  InnoDB
 ${XWCONFIGURE.VALUES.DBHOST} =  db
 ${XWCONFIGURE.VALUES.DBADMINLOGIN} =  root
@@ -36,11 +36,11 @@ ${XWCONFIGURE.VALUES.DBUSERLOGIN} =  xwuser
 ${XWCONFIGURE.VALUES.DBUSERPASSWORD} =  xwuser
 ${XWCONFIGURE.VALUES.XWADMINLOGIN} =  admin
 ${XWCONFIGURE.VALUES.XWADMINPASSWORD} =  admin
-${XWCONFIGURE.VALUES.XWWorkerDockerLOGIN} =  worker
-${XWCONFIGURE.VALUES.XWWorkerDockerPASSWORD} =  worker
+${XWCONFIGURE.VALUES.XWWORKERLOGIN} =  worker
+${XWCONFIGURE.VALUES.XWWORKERPASSWORD} =  worker
 ${XWCONFIGURE.VALUES.XWVWORKERLOGIN} =  vworker
 ${XWCONFIGURE.VALUES.XWVWORKERPASSWORD} =  vworker
-${XWCONFIGURE.VALUES.XWServerDocker} =  ${XW_SERVER_NAME}
+${XWCONFIGURE.VALUES.XWSERVER} =  ${XW_SERVER_NAME}
 ${XWCONFIGURE.VALUES.CERTCN} =  ${XW_SERVER_NAME}
 ${XWCONFIGURE.VALUES.CERTOU} =  MrRobotFramework
 ${XWCONFIGURE.VALUES.CERTO} =  MrRobotFramework
@@ -52,30 +52,20 @@ ${XWCONFIGURE.VALUES.SSLTRUSTSTOREPASSWORD} =  changeit
 ${XWCONFIGURE.VALUES.X509CERTDIR} =  /tmp/castore
 ${XWCONFIGURE.VALUES.USERCERTDIR} =
 ${XWCONFIGURE.VALUES.XWUPGRADEURL} =  http://${XW_SERVER_NAME}:8080/somewhere/xtremweb.jar
-${XWCONFIGURE.VALUES.HTTPSPORT} =  9443
-
-
+${XWCONFIGURE.VALUES.HTTPSPORT} =  443
 
 
 *** Keywords ***
 
-
 Prepare XWtremWeb Database Server Worker In Docker Compose
     #Run Keyword If  '${XW_FORCE_GIT_CLONE}' == 'true'  Git Clone XWtremWeb
     Compile XWtremWeb With Docker Images
-
-Start XWtremWeb Server And XWtremWeb Worker
-    Ping XWtremWeb Database
-    XWServerDocker.Start XtremWeb Server  ${DIST_XWHEP_PATH}
-    XWWorkerDocker.Start XtremWeb Worker  ${DIST_XWHEP_PATH}
 
 Start XWtremWeb Database Server Worker In Docker Compose
     ${created_process} =  Start Process  cd ${DIST_XWHEP_PATH}/docker && ./docker-compose-start.sh  shell=yes  stderr=STDOUT  stdout=${DIST_XWHEP_PATH}/xwhep.docker.compose.process.log
     Wait Until Keyword Succeeds  120 sec  10 sec  XWWorkerDocker.Check XtremWeb Worker Start From Log  ${DIST_XWHEP_PATH}/xwhep.docker.compose.process.log
     XWClientDocker.SetDockerClientImageName  xtremweb/client:${XTREMWEB_VERSION}
     XWClientDocker.SetDockerClientXtremwebPath  ${DIST_XWHEP_PATH}
-
-    
 
 Stop XWtremWeb Database Server Worker In Docker Compose
     DockerHelper.Stop And Remove All Containers
@@ -88,7 +78,6 @@ Log XtremWeb Worker
 
 Begin XWtremWeb Command Test In Docker Compose
     #Ping XWtremWeb Database
-    #Remove MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}
     Start XWtremWeb Database Server Worker In Docker Compose
 
 End XWtremWeb Command Test In Docker Compose
@@ -113,7 +102,7 @@ Git Clone XWtremWeb
 
 Compile XWtremWeb With Docker Images
     Create XWCONFIGURE.VALUES FILE  ${RESOURCES_PATH}
-    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwbuild.txt
+    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll docker  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwbuild.txt
     Log  ${compile_result.stderr}
     #Should Be Empty    ${compile_result.stderr} some warnings ...
     Log  ${compile_result.stdout}
@@ -128,23 +117,9 @@ Compile XWtremWeb With Docker Images
     Set Xtremweb Version
 
 
-Set MANDATINGLOGIN in Xtremweb Xlient Conf
-    [Arguments]  ${DIST_XWHEP_PATH}  ${MANDATED}
-    Directory Should Exist  ${DIST_XWHEP_PATH}/conf
-    Run  sed -i "s/.*MANDATINGLOGIN.*//g" ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
-    Append To File  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf  MANDATINGLOGIN=${MANDATED}
-    Log file  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
-
-
-Remove MANDATINGLOGIN in Xtremweb Xlient Conf
-    [Arguments]  ${DIST_XWHEP_PATH}
-    Directory Should Exist  ${DIST_XWHEP_PATH}/conf
-    Run  sed -i "s/.*MANDATINGLOGIN.*//g" ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
-    Log file  ${DIST_XWHEP_PATH}/conf/xtremweb.client.conf
-
 Curl To Server
     [Arguments]  ${URL}
-    ${curl_result} =  Run Process  /usr/bin/curl -v --insecure -X GET -G 'https://${XWCONFIGURE.VALUES.XWServerDocker}:${XWCONFIGURE.VALUES.HTTPSPORT}/${URL}' -d XWLOGIN\=${XWCONFIGURE.VALUES.XWADMINLOGIN} -d XWPASSWD\=${XWCONFIGURE.VALUES.XWADMINPASSWORD}  shell=yes
+    ${curl_result} =  Run Process  /usr/bin/curl -v --insecure -X GET -G 'https://${XWCONFIGURE.VALUES.XWSERVER}:${XWCONFIGURE.VALUES.HTTPSPORT}/${URL}' -d XWLOGIN\=${XWCONFIGURE.VALUES.XWADMINLOGIN} -d XWPASSWD\=${XWCONFIGURE.VALUES.XWADMINPASSWORD}  shell=yes
     Log  ${curl_result.stdout}
     Log  ${curl_result.stderr}
     Should Be Equal As Integers  ${curl_result.rc}  0
@@ -174,11 +149,11 @@ Create XWCONFIGURE.VALUES FILE
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  DBUSERPASSWORD='${XWCONFIGURE.VALUES.DBUSERPASSWORD}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWADMINLOGIN='${XWCONFIGURE.VALUES.XWADMINLOGIN}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWADMINPASSWORD='${XWCONFIGURE.VALUES.XWADMINPASSWORD}'\n
-    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWWorkerDockerLOGIN='${XWCONFIGURE.VALUES.XWWorkerDockerLOGIN}'\n
-    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWWorkerDockerPASSWORD='${XWCONFIGURE.VALUES.XWWorkerDockerPASSWORD}'\n
+    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWWORKERLOGIN='${XWCONFIGURE.VALUES.XWWORKERLOGIN}'\n
+    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWWORKERPASSWORD='${XWCONFIGURE.VALUES.XWWORKERPASSWORD}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWVWORKERLOGIN='${XWCONFIGURE.VALUES.XWVWORKERLOGIN}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWVWORKERPASSWORD='${XWCONFIGURE.VALUES.XWVWORKERPASSWORD}'\n
-    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWServerDocker='${XWCONFIGURE.VALUES.XWServerDocker}'\n
+    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  XWSERVER='${XWCONFIGURE.VALUES.XWSERVER}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  CERTCN='${XWCONFIGURE.VALUES.CERTCN}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  CERTOU='${XWCONFIGURE.VALUES.CERTOU}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  CERTO='${XWCONFIGURE.VALUES.CERTO}'\n

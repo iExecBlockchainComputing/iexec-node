@@ -13,7 +13,6 @@ Test Teardown  XWCommonDocker.End XWtremWeb Command Test In Docker Compose
 # pybot -d Results -t "Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary"  ./tests/rf/Tests/xwcommandsSuite.robot
 # Quicker for second launch :
 # pybot --variable XW_FORCE_GIT_CLONE:false -d Results ./tests/rf/Tests/xwcommandsSuite.robot
-#
 
 *** Variables ***
 ${A_DAPP_ETHEREUM_ADDRESS_1} =  0xdapppethereumaddress00000000000000000001
@@ -26,47 +25,23 @@ ${FFMPEG_URI} =  https://raw.githubusercontent.com/iExecBlockchainComputing/iexe
 ${BIN_DIR} =  ${CURDIR}${/}../Resources/bin
 
 
+*** Test Cases *** 
+#*** TODO ***  
 
-*** Test Cases ***  
-
-Test XWSubmit and XWResults Command On LS Binary
-    [Documentation]  Testing XWSubmit and XWResults cmd
+Test XWSenddata Command With LS Binary
+    [Documentation]  Testing XWSenddata cmd
     [Tags]  CommandLine Tests
-    ${uid} =  XWClientDocker.XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
-    XWServerDocker.Count From Apps Where Uid  ${uid}  1
-    ${workuid} =  XWSUBMITCommand  ls
-    LOG  ${workuid}
-    Wait Until Keyword Succeeds  3 min  5 sec  Check XWSTATUS Completed  ${workuid}
-    ${results_file} =  XWRESULTSCommand  ${workuid}
-    ${results_file_content} =  GET FILE  ${results_file}
-    ${results_file_content_lines_count} =  Get Line Count  ${results_file_content}
-    Should Be Equal As Integers  ${results_file_content_lines_count}  2
-    @{results_file_lines} =  Split To Lines  ${results_file_content}
-    Should Be Equal As Strings  @{results_file_lines}[0]  stderr.txt
-    Should Be Equal As Strings  @{results_file_lines}[1]  stdout.txt
-
-Test XWSubmit and XWResults Command On LS Binary With Param
-    [Documentation]  Testing XWSubmit and XWResults cmd with param
-    [Tags]  CommandLine Tests
-    ${uid} =  XWClientDocker.XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
-    XWServerDocker.Count From Apps Where Uid  ${uid}  1
-    ${workuid} =  XWSUBMITCommand  ls -atr
-    LOG  ${workuid}
-    Wait Until Keyword Succeeds  3 min  5 sec  XWClientDocker.Check XWSTATUS Completed  ${workuid}
-    ${results_file} =  XWRESULTSCommand  ${workuid}
-    ${results_file_content} =  GET FILE  ${results_file}
-    ${results_file_content_lines_count} =  Get Line Count  ${results_file_content}
-    Should Be Equal As Integers  ${results_file_content_lines_count}  4
-    @{results_file_lines} =  Split To Lines  ${results_file_content}
-    Should Be Equal As Strings  @{results_file_lines}[0]  ..
-    Should Be Equal As Strings  @{results_file_lines}[1]  stdout.txt
-    Should Be Equal As Strings  @{results_file_lines}[2]  stderr.txt
-    Should Be Equal As Strings  @{results_file_lines}[3]  .
+    ${container_id} =  XWClientDocker.StartDockerClient
+    ${uid} =  XWClientDocker.XWSENDDATACommandOnContainer  ${container_id}  ls DEPLOYABLE LINUX AMD64 /bin/ls
+    XWServerDocker.Count From Datas Where Uid  ${uid}  1
+    # TODO check also values : ls  macosx  x86_64  binary  /bin/ls in datas table
+    DockerHelper.Remove Container  ${container_id}
 
 Test XWSendapp Command With LS Binary
     [Documentation]  Testing XWSendapp cmd
     [Tags]  CommandLine Tests
-    ${uid} =  XWClientDocker.XWSENDAPPCommand  ls  DEPLOYABLE  LINUX  AMD64  /bin/ls
+    ${container_id} =  XWClientDocker.StartDockerClient
+    ${uid} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  ls DEPLOYABLE LINUX AMD64 /bin/ls
     XWServerDocker.Count From Apps Where Uid  ${uid}  1
     ${stdout_datas} =  XWClientDocker.XWDATASCommand
     #Log  ${stdout_datas}
@@ -79,52 +54,63 @@ Test XWSendapp Command With LS Binary
     @{uid} =  Get Regexp Matches  ${stdout_apps}  UID='(?P<uid>.*)', NAME=  uid
     ${app_curl_result} =  XWCommonDocker.Curl To Server  get/@{uid}[0]
     Log  ${app_curl_result}
+    DockerHelper.Remove Container  ${container_id}
 
-Test XWSenddata Command With LS Binary
-    [Documentation]  Testing XWSenddata cmd
+Test XWSubmit and XWResults Command On LS Binary
+    [Documentation]  Testing XWSubmit and XWResults cmd
     [Tags]  CommandLine Tests
-    ${uid} =  XWClientDocker.XWSENDDATACommand  ls DEPLOYABLE LINUX AMD64 /bin/ls
-    XWServerDocker.Count From Datas Where Uid  ${uid}  1
-    # TODO check also values : ls  macosx  x86_64  binary  /bin/ls in datas table
-
-Test XWSENDUSER and XWUSERS Command
-    [Documentation]  Testing Test XWSENDUSER and XWUSERS Command
-    [Tags]  CommandLine Tests
-    XWClientDocker.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1} nopass1 noemail1
-    ${stdout} =  XWUSERSCommand
-    Log  ${stdout}
-    Should Contain  ${stdout}   LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'
-
-Test Sendapp Call By A Admin Create A Public App
-    [Documentation]  Test Sendapp Call By A Admin Create A Public App
-    [Tags]  CommandLine Tests
-    # deployed DAPP in the name of DAPP PROVIDER
-    ${app_uid} =  XWClientDocker.XWSENDAPPCommand  ${A_DAPP_ETHEREUM_ADDRESS_1}  DEPLOYABLE  LINUX  AMD64  /bin/echo
-    ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
-
-    ################## Public ##################
-    Should Contain  ${curl_result}  0x755
-    ########################################
-
-    ${workuid} =  XWSUBMITCommand  ${A_DAPP_ETHEREUM_ADDRESS_1}
+    ${container_id} =  XWClientDocker.StartDockerClient
+    ${uid} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  ls DEPLOYABLE LINUX AMD64 /bin/ls
+    XWServerDocker.Count From Apps Where Uid  ${uid}  1
+    ${workuid} =  XWSUBMITCommandOnContainer  ${container_id}  ls
     LOG  ${workuid}
     Wait Until Keyword Succeeds  3 min  5 sec  Check XWSTATUS Completed  ${workuid}
+    ${results_file} =  XWRESULTSCommand  ${workuid}
+    ${results_file_content} =  GET FILE  ${results_file}
+    ${results_file_content_lines_count} =  Get Line Count  ${results_file_content}
+    Should Be Equal As Integers  ${results_file_content_lines_count}  2
+    @{results_file_lines} =  Split To Lines  ${results_file_content}
+    Should Be Equal As Strings  @{results_file_lines}[0]  stderr.txt
+    Should Be Equal As Strings  @{results_file_lines}[1]  stdout.txt
+    DockerHelper.Remove Container  ${container_id}
 
+Test XWSubmit and XWResults Command On LS Binary With Param
+    [Documentation]  Testing XWSubmit and XWResults cmd with param
+    [Tags]  CommandLine Tests
+    ${container_id} =  XWClientDocker.StartDockerClient
+    ${uid} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  ls DEPLOYABLE LINUX AMD64 /bin/ls
+    XWServerDocker.Count From Apps Where Uid  ${uid}  1
+    ${workuid} =  XWSUBMITCommandOnContainer  ${container_id}  ls -atr
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min  5 sec  XWClientDocker.Check XWSTATUS Completed  ${workuid}
+    ${results_file} =  XWRESULTSCommand  ${workuid}
+    ${results_file_content} =  GET FILE  ${results_file}
+    ${results_file_content_lines_count} =  Get Line Count  ${results_file_content}
+    Should Be Equal As Integers  ${results_file_content_lines_count}  4
+    @{results_file_lines} =  Split To Lines  ${results_file_content}
+    Should Be Equal As Strings  @{results_file_lines}[0]  ..
+    Should Be Equal As Strings  @{results_file_lines}[1]  stdout.txt
+    Should Be Equal As Strings  @{results_file_lines}[2]  stderr.txt
+    Should Be Equal As Strings  @{results_file_lines}[3]  .
+    DockerHelper.Remove Container  ${container_id}
 
 Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     [Documentation]  Testing XWSubmit and XWResults cmd
     [Tags]  CommandLine Tests
+    ${container_id} =  XWClientDocker.StartDockerClient
     ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yes #rm old ffmpeg binary
     ${wget_cmd_result} =  Run Process  curl ${FFMPEG_URI} -o ${BIN_DIR}/ffmpeg  shell=yes
     Log  ${wget_cmd_result.stdout}
     Should Be Equal As Integers  ${wget_cmd_result.rc}  0
-    ${uid} =  XWClientDocker.XWSENDAPPCommand  ffmpeg  DEPLOYABLE  LINUX  AMD64  ${BIN_DIR}${/}ffmpeg
+    DockerHelper.Copy File To Container  ${container_id}  ${BIN_DIR}/ffmpeg  /xwhep/ffmpeg
+
+    ${uid} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  ffmpeg DEPLOYABLE LINUX AMD64 /xwhep/ffmpeg
     XWServerDocker.Count From Apps Where Uid  ${uid}  1
     ${rm_cmd_result} =  Run Process  rm ${BIN_DIR}${/}ffmpeg  shell=yescd
     Should Be Equal As Integers  ${rm_cmd_result.rc}  0
     ${data_curl_result} =  XWCommonDocker.Curl To Server  get/${uid}
     Log  ${data_curl_result}
-    ${workuid} =  XWSUBMITCommand  ffmpeg -i small.mp4 small.avi --xwenv http://techslides.com/demos/sample-videos/small.mp4
+    ${workuid} =  XWSUBMITCommandOnContainer  ${container_id}  ffmpeg -i small.mp4 small.avi --xwenv http://techslides.com/demos/sample-videos/small.mp4
     LOG  ${workuid}
     Wait Until Keyword Succeeds  3 min  5 sec  Check XWSTATUS Completed  ${workuid}
     ${zip_file} =  XWRESULTSCommand  ${workuid}
@@ -142,47 +128,75 @@ Test XWSendapp and XWSubmit and XWResults Ffmpeg Binary
     LOG  ${stderr}
 
     File Should Exist  small.avi
+    DockerHelper.Remove Container  ${container_id}
 
+
+Test XWSENDUSER and XWUSERS Command
+    [Documentation]  Testing Test XWSENDUSER and XWUSERS Command
+    [Tags]  CommandLine Tests
+    ${container_id} =  XWClientDocker.StartDockerClient
+    XWClientDocker.XWSENDUSERCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_1} nopass1 noemail1
+    ${stdout} =  XWUSERSCommand
+    Log  ${stdout}
+    Should Contain  ${stdout}   LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'
+    DockerHelper.Remove Container  ${container_id}
+
+Test Sendapp Call By A Admin Create A Public App
+    [Documentation]  Test Sendapp Call By A Admin Create A Public App
+    [Tags]  CommandLine Tests
+    ${container_id} =  XWClientDocker.StartDockerClient
+    # deployed DAPP in the name of DAPP PROVIDER
+    ${app_uid} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_1} DEPLOYABLE LINUX AMD64 /bin/echo
+    ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
+
+    ################## Public ##################
+    Should Contain  ${curl_result}  0x755
+    ########################################
+
+    ${workuid} =  XWSUBMITCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_1}
+    LOG  ${workuid}
+    Wait Until Keyword Succeeds  3 min  5 sec  Check XWSTATUS Completed  ${workuid}
+    DockerHelper.Remove Container  ${container_id}
 
 Test Sendapp Call By A Provider Create A Private App
     [Documentation]  Test Sendapp Call By A Provider Create A Private App
     [Tags]  CommandLine Tests
-    XWClientDocker.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_1} nopass1 noemail1
+    ${container_id} =  XWClientDocker.StartDockerClient
+    XWClientDocker.XWSENDUSERCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_1} nopass1 noemail1
     ${xwusers} =  XWUSERSCommand
-    Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'
+    Should Contain  ${xwusers}  LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'
     @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS_1}'  useruid
 
     # ADD MANDATINGLOGIN to the DAPP PROVIDER
-    #XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_1}
+    XWClientDocker.Set MANDATINGLOGIN OnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_1}
 
     # deployed DAPP in the name of DAPP PROVIDER
-    ${app_uid} =  XWClientDocker.XWSENDAPPCommandWithMandat  ${A_DAPP_ETHEREUM_ADDRESS_1}  ${A_DAPP_ETHEREUM_ADDRESS_1}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${app_uid} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_1} DEPLOYABLE LINUX AMD64 /bin/echo
     ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
     # we find dapp_provider as owner in the dapo description
-    Should Contain	${curl_result}  @{dapp_provider_uid}[0]
+    Should Contain  ${curl_result}  @{dapp_provider_uid}[0]
 
     ################## A PRIVATE APP ##################
-    Should Contain	${curl_result}  0x700
+    Should Contain  ${curl_result}  0x700
     ########################################
-
-
- 
+    DockerHelper.Remove Container  ${container_id} 
 
 Test Sendapp Call By A Provider Create A Private App And Force It To Public
-    XWClientDocker.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_2} nopass2 noemail2
+    ${container_id} =  XWClientDocker.StartDockerClient
+    XWClientDocker.XWSENDUSERCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_2} nopass2 noemail2
     ${xwusers} =  XWUSERSCommand
     Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_2}'
     @{dapp_provider_uid} =  Get Regexp Matches  ${xwusers}  UID='(?P<useruid>.*)', LOGIN='${A_DAPP_ETHEREUM_ADDRESS_2}'  useruid
 
-    XWClientDocker.XWSENDUSERCommand  ${A_DAPP_ETHEREUM_ADDRESS_3} nopass3 noemail3
+    XWClientDocker.XWSENDUSERCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_3} nopass3 noemail3
     ${xwusers} =  XWUSERSCommand
     Should Contain	${xwusers}	LOGIN='${A_DAPP_ETHEREUM_ADDRESS_3}'
 
     # ADD MANDATINGLOGIN to the DAPP PROVIDER
-    #XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    XWClientDocker.Set MANDATINGLOGIN OnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_2}
 
     # deployed DAPP in the name of DAPP PROVIDER
-    ${app_uid} =  XWClientDocker.XWSENDAPPCommandWithMandat  ${A_DAPP_ETHEREUM_ADDRESS_2}  ${A_DAPP_ETHEREUM_ADDRESS_2}  DEPLOYABLE  LINUX  AMD64  /bin/echo
+    ${app_uid} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_2} DEPLOYABLE LINUX AMD64 /bin/echo
     ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
     # we find dapp_provider as owner in the dapo description
     Should Contain	${curl_result}  @{dapp_provider_uid}[0]
@@ -192,7 +206,7 @@ Test Sendapp Call By A Provider Create A Private App And Force It To Public
     ########################################
 
     # UPDATE DAPP to 0x755 rights
-    #XWCommonDocker.Remove MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}
+    XWClientDocker.Remove MANDATINGLOGIN OnContainer  ${container_id}
     XWClientDocker.XWCMODCommand  0x755  ${app_uid}
 
     ${curl_result} =  XWCommonDocker.Curl To Server  get/${app_uid}
@@ -204,44 +218,45 @@ Test Sendapp Call By A Provider Create A Private App And Force It To Public
     ########################################
 
     # User  and worker are now happyly using this public app from Mr Provider
-    ${workuid} =  XWSUBMITCommand  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    ${workuid} =  XWSUBMITCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_2}
     LOG  ${workuid}
     Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
 
     # ADD MANDATINGLOGIN to the provider
-    #XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    XWClientDocker.Set MANDATINGLOGIN OnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_2}
     ${workuid} =  XWSUBMITCommanddWithMandat  ${A_DAPP_ETHEREUM_ADDRESS_2}  ${A_DAPP_ETHEREUM_ADDRESS_2}
     LOG  ${workuid}
     Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
 
     # ADD MANDATINGLOGIN to the a random guy => do not work
-    #XWCommonDocker.Set MANDATINGLOGIN in Xtremweb Xlient Conf  ${DIST_XWHEP_PATH}  ${A_DAPP_ETHEREUM_ADDRESS_3}
-    ${workuid} =  XWSUBMITCommanddWithMandat  ${A_DAPP_ETHEREUM_ADDRESS_3}  ${A_DAPP_ETHEREUM_ADDRESS_2}
+    XWClientDocker.Set MANDATINGLOGIN OnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_3}
+    ${workuid} =  XWSUBMITCommandOnContainer  ${container_id}  ${A_DAPP_ETHEREUM_ADDRESS_2}
     LOG  ${workuid}
     Wait Until Keyword Succeeds  3 min	5 sec  Check XWSTATUS Completed  ${workuid}
-
- *** blabla ***  
+ 
+*** TODO ***  
+#*** Test Cases *** 
 
 Test Mandat
     ${container_id} =  XWClientDocker.StartDockerClient
-    ${worker.conf} =  XWClientDocker.XWSENDUSERCommand  worker workerp worker WORKER_USER
+    ${worker.conf} =  XWClientDocker.XWSENDUSERCommandOnContainer  ${container_id}  worker workerp worker WORKER_USER
     Log  ${worker.conf}
     Remove File  ${DIST_XWHEP_PATH}/worker.conf
     Create File  ${DIST_XWHEP_PATH}/worker.conf  ${worker.conf}
-    ${user1.conf} =  XWClientDocker.XWSENDUSERCommand  user1 user1 user1 STANDARD_USER
+    ${user1.conf} =  XWClientDocker.XWSENDUSERCommandOnContainer  ${container_id}  user1 user1 user1 STANDARD_USER
     Log  ${user1.conf}
     Remove File  ${DIST_XWHEP_PATH}/user1.conf
     Create File  ${DIST_XWHEP_PATH}/user1.conf  ${user1.conf}
-    ${user2.conf} =  XWClientDocker.XWSENDUSERCommand  user2 user2 user2 STANDARD_USER
+    ${user2.conf} =  XWClientDocker.XWSENDUSERCommandOnContainer  ${container_id}  user2 user2 user2 STANDARD_USER
     Log  ${user2.conf}
     Remove File  ${DIST_XWHEP_PATH}/user2.conf
     Create File  ${DIST_XWHEP_PATH}/user2.conf  ${user2.conf}
-    ${mandat.conf} =  XWClientDocker.XWSENDUSERCommand  mandat mandat mandat MANDATED_USER
+    ${mandat.conf} =  XWClientDocker.XWSENDUSERCommandOnContainer  ${container_id}  mandat mandat mandat MANDATED_USER
     Log  ${mandat.conf}
     Remove File  ${DIST_XWHEP_PATH}/mandat.conf
     Create File  ${DIST_XWHEP_PATH}/mandat.conf  ${mandat.conf}
 
-    ${app_uid_ls_pub} =  XWClientDocker.XWSENDAPPCommand  ls_pub  DEPLOYABLE  LINUX  AMD64  /bin/ls
+    ${app_uid_ls_pub} =  XWClientDocker.XWSENDAPPCommandOnContainer  ${container_id}  ls_pub DEPLOYABLE LINUX AMD64 /bin/ls
     ${curl_result_ls_pub} =  XWCommonDocker.Curl To Server  get/${app_uid_ls_pub}
 
     DockerHelper.Copy File To Container  ${container_id}  ${DIST_XWHEP_PATH}/worker.conf  /xwhep/worker.conf

@@ -66,22 +66,21 @@ Set MANDATINGLOGIN With Docker Client
     Should Be Equal As Integers  ${cmd_result.rc}  0
     DockerHelper.Log File Of Container  ${container_id}  /xwhep/conf/xtremweb.client.conf
 
-XWSENDAPPCommandWithMandat
-    [Documentation]  Usage :  SENDAPP appName appType cpuType osName URI | UID : inserts/updates an application; URI or UID points to binary file ; application name must be the first parameter
-    #[Arguments]  ${options}=${EMPTY}
-    [Arguments]   ${MANDATED}  ${appName}  ${appType}  ${osName}  ${cpuType}  ${host_file}  ${options}=''
-    ${container_id} =  StartDockerClient
-
-    Set MANDATINGLOGIN With Docker Client  ${container_id}  ${MANDATED}
-
-    ${filename} =  Run Process  basename ${host_file}  shell=yes
-    DockerHelper.Copy File To Container  ${container_id}  ${host_file}  /xwhep/${filename.stdout}
-    ${cmd_result} =  Run Process  docker exec -t ${container_id} ./xwsendapp ${appName} ${appType} ${osName} ${cpuType} /xwhep/${filename.stdout} ${options}  shell=yes
+Set MANDATINGLOGIN OnContainer
+    [Arguments]  ${container_id}  ${MANDATED}
+    ${cmd_result} =  Run Process  docker exec -t ${container_id} sed -i \"s/.*MANDATINGLOGIN.*/MANDATINGLOGIN\=${MANDATED}/g\" /xwhep/conf/xtremweb.client.conf  shell=yes
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers  ${cmd_result.rc}  0
-    ${uid} =  Get Substring  ${cmd_result.stdout}  -36
-    StopDockerClient 
-    [Return]  ${uid}
+    DockerHelper.Log File Of Container  ${container_id}  /xwhep/conf/xtremweb.client.conf
+
+
+Remove MANDATINGLOGIN OnContainer
+    [Arguments]  ${container_id}
+    ${cmd_result} =  Run Process  docker exec -t ${container_id} sed -i \"s/.*MANDATINGLOGIN.*//g\" /xwhep/conf/xtremweb.client.conf  shell=yes
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers  ${cmd_result.rc}  0
+    DockerHelper.Log File Of Container  ${container_id}  /xwhep/conf/xtremweb.client.conf
+
 
 XWSENDDATACommand
     [Documentation]  Usage :  SENDDATA dataName [cpuType] [osName] [dataType] [accessRigths] [dataFile | dataURI | dataUID] : sends data and uploads data if dataFile provided
@@ -95,23 +94,22 @@ XWSENDDATACommand
     StopDockerClient 
     [Return]  ${uid}
 
-XWSUBMITCommand
-    [Documentation]  Usage :  XWSUBMIT appName
-    [Arguments]  ${appName}
-    ${container_id} =  StartDockerClient
-    ${cmd_result} =  Run Process  docker exec -t ${container_id} ./xwsubmit ${appName}  shell=yes
+XWSENDDATACommandOnContainer
+    [Documentation]  Usage :  SENDDATA dataName [cpuType] [osName] [dataType] [accessRigths] [dataFile | dataURI | dataUID] : sends data and uploads data if dataFile provided
+    [Arguments]  ${container_id}  ${options}=${EMPTY}
+
+    ${cmd_result} =  Run Process  docker exec -t ${container_id} ./xwsenddata ${options}  shell=yes
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
     Should Be Equal As Integers  ${cmd_result.rc}  0
     ${uid} =  Get Substring  ${cmd_result.stdout}  -36
-    StopDockerClient 
+
     [Return]  ${uid}
 
-XWSUBMITCommanddWithMandat
+XWSUBMITCommand
     [Documentation]  Usage :  XWSUBMIT appName
-    [Arguments]  ${MANDATED}  ${appName}
+    [Arguments]  ${appName}
     ${container_id} =  StartDockerClient
-    Set MANDATINGLOGIN With Docker Client  ${container_id}  ${MANDATED}
     ${cmd_result} =  Run Process  docker exec -t ${container_id} ./xwsubmit ${appName}  shell=yes
     Log  ${cmd_result.stderr}
     Log  ${cmd_result.stdout}
@@ -222,6 +220,18 @@ XWSENDUSERCommand
     Should Be Equal As Integers  ${cmd_result.rc}  0
     StopDockerClient
     [Return]  ${cmd_result.stdout}
+
+XWSENDUSERCommandOnContainer
+    [Documentation]  Usage :  XWSENDUSERCommand SENDUSER login password email rights [<a user group UID | URI> ] : sends/updates a useruid
+    [Arguments]  ${container_id}  ${options}=${EMPTY}
+
+    ${cmd_result} =  Run Process  docker exec -t ${container_id} ./xwsenduser ${options}  shell=yes
+    Log  ${cmd_result.stderr}
+    Log  ${cmd_result.stdout}
+    Should Be Equal As Integers  ${cmd_result.rc}  0
+
+    [Return]  ${cmd_result.stdout}
+
 
 XWUSERSCommand
     [Documentation]  Usage :  XWUSERS

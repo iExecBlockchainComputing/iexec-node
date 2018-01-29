@@ -5,8 +5,11 @@ Resource  ./DB/MySqlDocker.robot
 
 *** Variables ***
 
-${XWCONFIGURE.VALUES.HTTPSPORT} =  9443
+${XWCONFIGURE.VALUES.HTTPSPORT} =  443
 ${SERVER_PROCESS}
+
+
+#TODO
 
 
 *** Keywords ***
