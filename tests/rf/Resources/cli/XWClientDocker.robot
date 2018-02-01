@@ -21,7 +21,7 @@ SetDockerClientXtremwebPath
 
 
 StartDockerClient
-    ${created_process} =  Start Process  docker run -t --env XWSERVERADDR\="scheduler" --env XWSERVERNAME\="xwscheduler" -v ${DIST_XWHEP_PATH}/keystore/xwhepcert.pem:/xwhep/certificate/xwhepcert.pem --network\=docker_xtremweb-net ${DOCKER_CLIENT_IMAGE_NAME}  shell=yes  stderr=STDOUT  stdout=./xwhep.client.docker.process.log
+    ${created_process} =  Start Process  docker run -t --env XWSERVERADDR\="scheduler" --env XWSERVERNAME\="xwscheduler" -v ${DIST_XWHEP_PATH}/docker/xwscheduler.pem:/xwhep/certificate/xwscheduler.pem --network\=docker_xtremweb-net ${DOCKER_CLIENT_IMAGE_NAME}  shell=yes  stderr=STDOUT  stdout=./xwhep.client.docker.process.log
 
     ${container_id} =  Wait Until Keyword Succeeds  5 sec   1 sec  DockerHelper.Get Docker Container Id From Image  ${DOCKER_CLIENT_IMAGE_NAME}
     Log  ${container_id}

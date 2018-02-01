@@ -3,8 +3,11 @@ Documentation    All XtremWeb commands line  tests
 Resource  ../Resources/XWCommonDocker.robot
 Resource  ../Resources/XWServerDocker.robot
 Resource  ../Resources/cli/XWClientDocker.robot
-Suite Setup  XWCommonDocker.Prepare XWtremWeb Database Server Worker In Docker Compose
-Test Setup  XWCommonDocker.Begin XWtremWeb Command Test In Docker Compose
+#Suite Setup  XWCommonDocker.Prepare XWtremWeb Database Server Worker In Docker Compose
+Suite Setup  XWCommonDocker.Compile XWtremWeb
+
+#Test Setup  XWCommonDocker.Begin XWtremWeb Command Test In Docker Compose
+Test Setup  XWCommonDocker.Start XWtremWeb In Docker Compose
 Test Teardown  XWCommonDocker.End XWtremWeb Command Test In Docker Compose
 
 
@@ -25,8 +28,8 @@ ${FFMPEG_URI} =  https://raw.githubusercontent.com/iExecBlockchainComputing/iexe
 ${BIN_DIR} =  ${CURDIR}${/}../Resources/bin
 
 
+*** TODO ***  
 *** Test Cases *** 
-#*** TODO ***  
 
 Test XWSenddata Command With LS Binary
     [Documentation]  Testing XWSenddata cmd
@@ -36,6 +39,7 @@ Test XWSenddata Command With LS Binary
     XWServerDocker.Count From Datas Where Uid  ${uid}  1
     # TODO check also values : ls  macosx  x86_64  binary  /bin/ls in datas table
     DockerHelper.Remove Container  ${container_id}
+
 
 Test XWSendapp Command With LS Binary
     [Documentation]  Testing XWSendapp cmd

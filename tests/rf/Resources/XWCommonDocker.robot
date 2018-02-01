@@ -23,17 +23,19 @@ ${XW_CACHE_DIR} =  /tmp
 ${XW_SERVER_NAME} =  localhost
 #vagrant-ubuntu-trusty-64
 
+${XTREMWEB_COMMIT_TO_TEST} =  712a242d
+
 
 ## xwconfigure.values
 ${XWCONFIGURE.VALUES.XWUSER} =  root
 ${XWCONFIGURE.VALUES.DBVENDOR} =  mysql
 ${XWCONFIGURE.VALUES.DBENGINE} =  InnoDB
-${XWCONFIGURE.VALUES.DBHOST} =  db
+${XWCONFIGURE.VALUES.DBHOST} =  localhost
 ${XWCONFIGURE.VALUES.DBADMINLOGIN} =  root
 ${XWCONFIGURE.VALUES.DBADMINPASSWORD} =  root
-${XWCONFIGURE.VALUES.DBNAME} =  xtremweb
+${XWCONFIGURE.VALUES.DBNAME} =  xtremweb12
 ${XWCONFIGURE.VALUES.DBUSERLOGIN} =  xwuser
-${XWCONFIGURE.VALUES.DBUSERPASSWORD} =  xwuser
+${XWCONFIGURE.VALUES.DBUSERPASSWORD} =  xwuserp
 ${XWCONFIGURE.VALUES.XWADMINLOGIN} =  admin
 ${XWCONFIGURE.VALUES.XWADMINPASSWORD} =  admin
 ${XWCONFIGURE.VALUES.XWWORKERLOGIN} =  worker
@@ -65,6 +67,27 @@ Start XWtremWeb Database Server Worker In Docker Compose
     ${created_process} =  Start Process  cd ${DIST_XWHEP_PATH}/docker && ./docker-compose-start.sh  shell=yes  stderr=STDOUT  stdout=${DIST_XWHEP_PATH}/xwhep.docker.compose.process.log
     Wait Until Keyword Succeeds  120 sec  10 sec  XWWorkerDocker.Check XtremWeb Worker Start From Log  ${DIST_XWHEP_PATH}/xwhep.docker.compose.process.log
     XWClientDocker.SetDockerClientImageName  xtremweb/client:${XTREMWEB_VERSION}
+    XWClientDocker.SetDockerClientXtremwebPath  ${DIST_XWHEP_PATH}
+
+Start XWtremWeb In Docker Compose
+    Run Process  cd ${DIST_XWHEP_PATH}/docker && sed -i 's/XTREMWEB_SERVER_VERSION\=.*/XTREMWEB_SERVER_VERSION\=${XTREMWEB_VERSION}-${XTREMWEB_COMMIT_TO_TEST}/g' .env  shell=yes
+    Run Process  cd ${DIST_XWHEP_PATH}/docker && sed -i 's/XTREMWEB_WORKER_VERSION\=.*/XTREMWEB_WORKER_VERSION\=${XTREMWEB_VERSION}-${XTREMWEB_COMMIT_TO_TEST}/g' .env  shell=yes
+
+    ${server_process} =  Run Process  docker pull iexechub/server:${XTREMWEB_VERSION}-${XTREMWEB_COMMIT_TO_TEST}  shell=yes  stderr=STDOUT  stdout=stdoutxwbuild.txt
+    Log  ${server_process.stdout}
+    Should Be Equal As Integers  ${server_process.rc}  0
+    ${worker_process} =  Run Process  docker pull iexechub/worker:${XTREMWEB_VERSION}-${XTREMWEB_COMMIT_TO_TEST}  shell=yes  stderr=STDOUT  stdout=stdoutxwbuild.txt
+    Log  ${worker_process.stdout}
+    Should Be Equal As Integers  ${worker_process.rc}  0
+    ${client_process} =  Run Process  docker pull iexechub/client:${XTREMWEB_VERSION}-${XTREMWEB_COMMIT_TO_TEST}  shell=yes  stderr=STDOUT  stdout=stdoutxwbuild.txt
+    Log  ${client_process.stdout}
+    Should Be Equal As Integers  ${client_process.rc}  0
+
+    ${created_process} =  Start Process  cd ${DIST_XWHEP_PATH}/docker && ./docker-compose-start.sh  shell=yes  stderr=STDOUT  stdout=${DIST_XWHEP_PATH}/xwhep.docker.compose.process.log
+    Wait Until Keyword Succeeds  120 sec  10 sec  XWWorkerDocker.Check XtremWeb Worker Start From Log  ${DIST_XWHEP_PATH}/xwhep.docker.compose.process.log
+
+    XWClientDocker.SetDockerClientImageName  iexechub/client:${XTREMWEB_VERSION}-${XTREMWEB_COMMIT_TO_TEST}
+    #XWDockerCompose.SetDockerClientImageName  iexechub/client:${XTREMWEB_VERSION}-${XTREMWEB_COMMIT_TO_TEST}
     XWClientDocker.SetDockerClientXtremwebPath  ${DIST_XWHEP_PATH}
 
 Stop XWtremWeb Database Server Worker In Docker Compose
@@ -102,9 +125,24 @@ Git Clone XWtremWeb
 
 Compile XWtremWeb With Docker Images
     Create XWCONFIGURE.VALUES FILE  ${RESOURCES_PATH}
-    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll docker  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwbuild.txt
+    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew  buildAll docker  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwbuild.txt
     Log  ${compile_result.stderr}
     #Should Be Empty    ${compile_result.stderr} some warnings ...
+    Log  ${compile_result.stdout}
+    Should Be Equal As Integers  ${compile_result.rc}  0
+    ${extract_build_successful} =  Get Lines Containing String  ${compile_result.stdout}  BUILD SUCCESSFUL
+    ${line_count_build_successful} =  Get Line Count  ${extract_build_successful}
+    Should Be Equal As Integers  ${line_count_build_successful}  1
+    @{list_directories_dist_path} =  List Directories In Directory  ${DIST_PATH}  xtremweb-*  absolute
+    Log  @{list_directories_dist_path}[0]
+    Set Suite Variable  ${DIST_XWHEP_PATH}  @{list_directories_dist_path}[0]
+    Directory Should Exist  ${DIST_XWHEP_PATH}
+    Set Xtremweb Version
+
+Compile XWtremWeb
+    Create XWCONFIGURE.VALUES FILE  ${RESOURCES_PATH}
+    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll  shell=yes  stderr=STDOUT  timeout=30s  stdout=stdoutxwbuild.txt
+    Log  ${compile_result.stderr}
     Log  ${compile_result.stdout}
     Should Be Equal As Integers  ${compile_result.rc}  0
     ${extract_build_successful} =  Get Lines Containing String  ${compile_result.stdout}  BUILD SUCCESSFUL
