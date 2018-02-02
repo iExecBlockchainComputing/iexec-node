@@ -22,6 +22,7 @@ ${XTREMWEB_VERSION}
 ${XW_CACHE_DIR} =  /tmp
 ${XW_SERVER_NAME} =  localhost
 #vagrant-ubuntu-trusty-64
+#localhost
 
 ${XTREMWEB_COMMIT_TO_TEST} =  712a242d
 

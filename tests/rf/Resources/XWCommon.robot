@@ -18,15 +18,16 @@ ${RESOURCES_PATH} =  ${XW_PATH}/src/main/resources
 ${DIST_PATH} =  ${BUILD_PATH}/dist
 ${DIST_XWHEP_PATH}
 ${XW_CACHE_DIR} =  /tmp
-${XW_SERVER_NAME} =  localhost
+${XW_SERVER_NAME} =  vagrant-ubuntu-trusty-64
 #vagrant-ubuntu-trusty-64
+#localhost
 
 
 ## xwconfigure.values
 ${XWCONFIGURE.VALUES.XWUSER} =  root
 ${XWCONFIGURE.VALUES.DBVENDOR} =  mysql
 ${XWCONFIGURE.VALUES.DBENGINE} =  InnoDB
-${XWCONFIGURE.VALUES.DBHOST} =  ${XW_SERVER_NAME}
+${XWCONFIGURE.VALUES.DBHOST} =  db
 ${XWCONFIGURE.VALUES.DBADMINLOGIN} =  root
 ${XWCONFIGURE.VALUES.DBADMINPASSWORD} =  root
 ${XWCONFIGURE.VALUES.DBNAME} =  xtremweb
@@ -45,6 +46,7 @@ ${XWCONFIGURE.VALUES.CERTO} =  MrRobotFramework
 ${XWCONFIGURE.VALUES.CERTL} =  MrRobotFramework
 ${XWCONFIGURE.VALUES.CERTC} =  fr
 ${XWCONFIGURE.VALUES.SSLKEYPASSPHRASE} =  MrRobotFramework
+${XWCONFIGURE.VALUES.SSLKEYSERVERPASSWORD} =  MrRobotFramework
 ${XWCONFIGURE.VALUES.SSLTRUSTSTOREPASSWORD} =  changeit
 ${XWCONFIGURE.VALUES.X509CERTDIR} =  /tmp/castore
 ${XWCONFIGURE.VALUES.USERCERTDIR} =
@@ -69,13 +71,12 @@ Prepare XWtremWeb Server And XWtremWeb Worker
 Start XWtremWeb Server And XWtremWeb Worker
     Ping XWtremWeb Database
     XWServer.Start XtremWeb Server  ${DIST_XWHEP_PATH}
-    XWWorker.Start XtremWeb Worker In Docker  ${DIST_XWHEP_PATH}
-
+    XWWorker.Start XtremWeb Worker  ${DIST_XWHEP_PATH}
 
 Stop XWtremWeb Server And XWtremWeb Worker
     XWServer.Stop XtremWeb Server
     Log XtremWeb Server
-    XWWorker.Stop XtremWeb Worker In Docker
+    XWWorker.Stop XtremWeb Worker
     #Log XtremWeb Worker
 
 Log XtremWeb Server
@@ -94,14 +95,13 @@ End XWtremWeb Command Test
     Stop XWtremWeb Server And XWtremWeb Worker
     MySql.Delete Fonctionnal Xtremweb Tables
 
-
 Clear XWtremWeb Cache
     ${rm_result} =  Run Process  rm -rf ${XW_CACHE_DIR}/XW*  shell=yes
-    Should Be Empty	${rm_result.stderr}
-    Should Be Equal As Integers	${rm_result.rc}	0
+    Should Be Empty  ${rm_result.stderr}
+    Should Be Equal As Integers  ${rm_result.rc}  0
     ${rm_result} =  Run Process  rm -rf ${XW_CACHE_DIR}/xw*  shell=yes
-    Should Be Empty	${rm_result.stderr}
-    Should Be Equal As Integers	${rm_result.rc}	0
+    Should Be Empty  ${rm_result.stderr}
+    Should Be Equal As Integers  ${rm_result.rc}  0
 
 
 Git Clone XWtremWeb
@@ -109,18 +109,18 @@ Git Clone XWtremWeb
     ${git_result} =  Run Process  git clone -b ${XW_GIT_BRANCH} ${XW_GIT_URL}  shell=yes
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
-    Should Be Equal As Integers	${git_result.rc}	0
+    Should Be Equal As Integers  ${git_result.rc}  0
 
 Compile XWtremWeb
     Create XWCONFIGURE.VALUES FILE  ${RESOURCES_PATH}
-    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll generateKeys buildImages  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwbuild.txt
+    ${compile_result} =  Run Process  cd ${XW_PATH} && ./gradlew buildAll  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwbuild.txt
     Log  ${compile_result.stderr}
-    #Should Be Empty	${compile_result.stderr} some warnings ...
+    #Should Be Empty  ${compile_result.stderr} some warnings ...
     Log  ${compile_result.stdout}
-    Should Be Equal As Integers	${compile_result.rc}	0
+    Should Be Equal As Integers  ${compile_result.rc}  0
     ${extract_build_successful} =  Get Lines Containing String  ${compile_result.stdout}  BUILD SUCCESSFUL
     ${line_count_build_successful} =  Get Line Count  ${extract_build_successful}
-    Should Be Equal As Integers	${line_count_build_successful}	1
+    Should Be Equal As Integers  ${line_count_build_successful}  1
 
 Install XWtremWeb
     @{list_directories_dist_path} =  List Directories In Directory  ${DIST_PATH}  xtremweb-*  absolute
@@ -134,12 +134,12 @@ Install XWtremWeb
     Should Be Equal As Integers  ${line_database_result_successful}  1
 
     #${install_result} =  Run Process  cd ${DIST_XWHEP_PATH} && ./bin/xwconfigure --yes --nopkg  shell=yes  stderr=STDOUT  timeout=15s  stdout=stdoutxwconfigure.txt
-    #Should Be Empty	${install_result.stderr} some errors
+    #Should Be Empty  ${install_result.stderr} some errors
     #Log  ${install_result.stdout}
-    #Should Be Equal As Integers	${install_result.rc}	0
+    #Should Be Equal As Integers  ${install_result.rc}  0
     #${install_result_successful} =  Get Lines Containing String  ${install_result.stdout}  That's all folks
     #${line_install_result_successful} =  Get Line Count  ${install_result_successful}
-    #Should Be Equal As Integers	${line_install_result_successful}	1
+    #Should Be Equal As Integers  ${line_install_result_successful}  1
 
 
 
@@ -162,7 +162,7 @@ Curl To Server
     ${curl_result} =  Run Process  /usr/bin/curl -v --insecure -X GET -G 'https://${XWCONFIGURE.VALUES.XWSERVER}:${XWCONFIGURE.VALUES.HTTPSPORT}/${URL}' -d XWLOGIN\=${XWCONFIGURE.VALUES.XWADMINLOGIN} -d XWPASSWD\=${XWCONFIGURE.VALUES.XWADMINPASSWORD}  shell=yes
     Log  ${curl_result.stdout}
     Log  ${curl_result.stderr}
-    Should Be Equal As Integers	${curl_result.rc}	0
+    Should Be Equal As Integers  ${curl_result.rc}  0
     [Return]  ${curl_result.stdout}
 
 Check Work Completed By SubmitTxHash
@@ -171,7 +171,7 @@ Check Work Completed By SubmitTxHash
     Log  ${app_curl_result}
     ${lines} =  Get Lines Containing String  ${app_curl_result}  COMPLETED
     ${lines_count} =  Get Line Count  ${lines}
-    Should Be Equal As Integers	${lines_count}	1
+    Should Be Equal As Integers  ${lines_count}  1
 
 Create XWCONFIGURE.VALUES FILE
     [Arguments]  ${DIST_XWHEP_PATH}
@@ -199,8 +199,8 @@ Create XWCONFIGURE.VALUES FILE
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  CERTO='${XWCONFIGURE.VALUES.CERTO}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  CERTL='${XWCONFIGURE.VALUES.CERTL}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  CERTC='${XWCONFIGURE.VALUES.CERTC}'\n
-    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  CERTC='${XWCONFIGURE.VALUES.CERTC}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  SSLKEYPASSPHRASE='${XWCONFIGURE.VALUES.SSLKEYPASSPHRASE}'\n
+    Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  SSLKEYSERVERPASSWORD='${XWCONFIGURE.VALUES.SSLKEYSERVERPASSWORD}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  SSLTRUSTSTOREPASSWORD='${XWCONFIGURE.VALUES.SSLTRUSTSTOREPASSWORD}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  X509CERTDIR='${XWCONFIGURE.VALUES.X509CERTDIR}'\n
     Append To File  ${DIST_XWHEP_PATH}/conf/xwconfigure.values  USERCERTDIR='${XWCONFIGURE.VALUES.USERCERTDIR}'\n
