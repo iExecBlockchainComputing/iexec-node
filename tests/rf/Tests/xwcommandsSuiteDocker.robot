@@ -3,8 +3,8 @@ Documentation    All XtremWeb commands line  tests
 Resource  ../Resources/XWCommonDocker.robot
 Resource  ../Resources/XWServerDocker.robot
 Resource  ../Resources/cli/XWClientDocker.robot
-#Suite Setup  XWCommonDocker.Prepare XWtremWeb Database Server Worker In Docker Compose
-Suite Setup  XWCommonDocker.Compile XWtremWeb
+Suite Setup  XWCommonDocker.Prepare XWtremWeb Database Server Worker In Docker Compose
+#Suite Setup  XWCommonDocker.Compile XWtremWeb
 
 #Test Setup  XWCommonDocker.Begin XWtremWeb Command Test In Docker Compose
 Test Setup  XWCommonDocker.Start XWtremWeb In Docker Compose

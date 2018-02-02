@@ -12,7 +12,7 @@ Resource  ./DockerHelper.robot
 ${RF_RESULT_PATH} =  ../Results
 ${XW_GIT_URL} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
 ${XW_GIT_BRANCH} =  master
-${XW_FORCE_GIT_CLONE} =  false
+${XW_FORCE_GIT_CLONE} =  true
 ${XW_PATH} =  ./xtremweb-hep/
 ${BUILD_PATH} =  ${XW_PATH}/build
 ${RESOURCES_PATH} =  ${XW_PATH}/src/main/resources
@@ -60,8 +60,9 @@ ${XWCONFIGURE.VALUES.HTTPSPORT} =  443
 *** Keywords ***
 
 Prepare XWtremWeb Database Server Worker In Docker Compose
-    #Run Keyword If  '${XW_FORCE_GIT_CLONE}' == 'true'  Git Clone XWtremWeb
-    Compile XWtremWeb With Docker Images
+    Run Keyword If  '${XW_FORCE_GIT_CLONE}' == 'true'  Git Clone XWtremWeb
+    #Compile XWtremWeb With Docker Images
+    Compile XWtremWeb
 
 Start XWtremWeb Database Server Worker In Docker Compose
     ${created_process} =  Start Process  cd ${DIST_XWHEP_PATH}/docker && ./docker-compose-start.sh  shell=yes  stderr=STDOUT  stdout=${DIST_XWHEP_PATH}/xwhep.docker.compose.process.log
