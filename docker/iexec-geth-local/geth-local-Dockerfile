@@ -17,10 +17,11 @@ RUN echo "whatever" > password.txt
 
 COPY geth-local-genesis.json geth-local-genesis.json
 COPY startupGeth.sh startupGeth.sh
+COPY startupDev.sh startupDev.sh
 COPY extractPrivateKey.js extractPrivateKey.js
 
 RUN chmod 755 startupGeth.sh
-
+RUN chmod 755 startupDev.sh
 
 RUN rm -rf ~/.ethereum
 RUN geth --networkid 1337  --datadir ~/.ethereum/net1337 init geth-local-genesis.json

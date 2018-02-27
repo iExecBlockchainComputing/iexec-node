@@ -129,3 +129,7 @@ su - vagrant -c "sudo cp -f ~/terraform/terraform /usr/local/bin/ && rm -rf ~/te
 cp -f /etc/hosts /etc/hosts.ori
 sed '1d' /etc/hosts.ori > /etc/hosts
 sed -i '1s/^/127.0.0.1 localhost vagrant-ubuntu-trusty-64/' /etc/hosts
+
+# to fix Error - trustAnchors parameter must be non-empty
+/var/lib/dpkg/info/ca-certificates-java.postinst configure
+
