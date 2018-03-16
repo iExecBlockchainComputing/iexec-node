@@ -14,7 +14,7 @@ ${PKEY}
 *** Test Cases ***
 
 
-Test Katacoda Hello World Scenario On Kovan
+Test Deploy And Submit Katacoda Factorial Scenario On Kovan
     [Documentation]  Test Katacoda Hello World Scenario On Kovan
     [Tags]  Katacoda
     Prepare Iexec Factorial
@@ -26,7 +26,7 @@ Test Katacoda Hello World Scenario On Kovan
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  5 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network kovan
 
-Test Katacoda Hello World Scenario On Ropsten
+Test Deploy And Submit Katacoda Factorial Scenario On Ropsten
     [Documentation]  Test Katacoda Hello World Scenario On Ropsten
     [Tags]  Katacoda
     Prepare Iexec Factorial
@@ -38,7 +38,7 @@ Test Katacoda Hello World Scenario On Ropsten
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network ropsten
 
-Test Katacoda Hello World Scenario On Rinkeby
+Test Deploy And Submit Katacoda Factorial Scenario On Rinkeby
     [Documentation]  Test Katacoda Hello World Scenario On Rinkeby
     [Tags]  Katacoda
     Prepare Iexec Factorial
@@ -47,7 +47,7 @@ Test Katacoda Hello World Scenario On Rinkeby
     IexecSdk.Iexec An App  iexec-factorial  account login --network rinkeby
     IexecSdk.Iexec An App  iexec-factorial  deploy --network rinkeby
     ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network rinkeby
-    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  ℹ View on etherscan: https://rinkeby.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network rinkeby
 
 *** Keywords ***
