@@ -101,6 +101,7 @@ su - vagrant -c "npm install iexec -g"
 pip install robotframework
 pip install robotframework-selenium2library
 pip install robotframework-databaselibrary
+pip install robotframework-archivelibrary
 pip install pymysql
 
 #aws
