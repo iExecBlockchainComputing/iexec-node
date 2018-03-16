@@ -26,6 +26,19 @@ Test Deploy And Submit Katacoda Factorial Scenario On Kovan
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  5 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network kovan
 
+
+Test Submit Katacoda Factorial Scenario On Kovan
+    [Documentation]  Test Katacoda Hello World Scenario On Kovan
+    [Tags]  Katacoda
+    Prepare Iexec Factorial
+    IexecSdk.Iexec An App  iexec-factorial  account allow 1 --network kovan
+    IexecSdk.Iexec An App  iexec-factorial  wallet getRLC --network kovan
+    IexecSdk.Iexec An App  iexec-factorial  account login --network kovan
+    ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network kovan
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
+    Wait Until Keyword Succeeds  5 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network kovan
+
+
 Test Deploy And Submit Katacoda Factorial Scenario On Ropsten
     [Documentation]  Test Katacoda Hello World Scenario On Ropsten
     [Tags]  Katacoda
@@ -38,6 +51,18 @@ Test Deploy And Submit Katacoda Factorial Scenario On Ropsten
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network ropsten
 
+Test Submit Katacoda Factorial Scenario On Ropsten
+    [Documentation]  Test Katacoda Hello World Scenario On Ropsten
+    [Tags]  Katacoda
+    Prepare Iexec Factorial
+    IexecSdk.Iexec An App  iexec-factorial  account allow 1
+    IexecSdk.Iexec An App  iexec-factorial  wallet getRLC
+    IexecSdk.Iexec An App  iexec-factorial  account login
+    ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
+    Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network ropsten
+
+
 Test Deploy And Submit Katacoda Factorial Scenario On Rinkeby
     [Documentation]  Test Katacoda Hello World Scenario On Rinkeby
     [Tags]  Katacoda
@@ -49,6 +74,18 @@ Test Deploy And Submit Katacoda Factorial Scenario On Rinkeby
     ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network rinkeby
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network rinkeby
+
+Test Submit Katacoda Factorial Scenario On Rinkeby
+    [Documentation]  Test Katacoda Hello World Scenario On Rinkeby
+    [Tags]  Katacoda
+    Prepare Iexec Factorial
+    IexecSdk.Iexec An App  iexec-factorial  account allow 1 --network rinkeby
+    IexecSdk.Iexec An App  iexec-factorial  wallet getRLC --network rinkeby
+    IexecSdk.Iexec An App  iexec-factorial  account login --network rinkeby
+    ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network rinkeby
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
+    Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network rinkeby
+
 
 *** Keywords ***
 
