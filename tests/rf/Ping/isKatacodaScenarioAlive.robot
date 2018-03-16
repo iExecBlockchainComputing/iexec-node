@@ -35,7 +35,7 @@ Test Katacoda Hello World Scenario On Ropsten
     IexecSdk.Iexec An App  iexec-factorial  account login
     IexecSdk.Iexec An App  iexec-factorial  deploy
     ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10
-    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  ℹ View on etherscan: https://ropsten.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network ropsten
 
 Test Katacoda Hello World Scenario On Rinkeby
