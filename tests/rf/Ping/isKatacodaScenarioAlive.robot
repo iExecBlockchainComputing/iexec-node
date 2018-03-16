@@ -24,7 +24,7 @@ Test Katacoda Hello World Scenario On Kovan
     IexecSdk.Iexec An App  iexec-factorial  deploy --network kovan
     ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network kovan
     @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  ℹ View on etherscan: https://kovan.etherscan.io/tx/(?P<transactionHash>.*)  transactionHash
-    Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network kovan
+    Wait Until Keyword Succeeds  5 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network kovan
 
 Test Katacoda Hello World Scenario On Ropsten
     [Documentation]  Test Katacoda Hello World Scenario On Ropsten
