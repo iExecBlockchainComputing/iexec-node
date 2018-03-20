@@ -129,7 +129,7 @@ Ffmpeg
     Log  ${iexec_result.stderr}
     @{workUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
     Log  @{workUID}[0]
-    Wait Until Keyword Succeeds  2 min	30 sec  Check Ffmpeg Result  @{workUID}[0]
+    Wait Until Keyword Succeeds  5 min	30 sec  Check Ffmpeg Result  @{workUID}[0]
 
 
 
@@ -166,7 +166,7 @@ DockerWithScript
     Log  ${iexec_result.stderr}
     @{workUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
     Log  @{workUID}[0]
-    Wait Until Keyword Succeeds  2 min	30 sec  Check DockerWithScript Result  @{workUID}[0]
+    Wait Until Keyword Succeeds  5 min	30 sec  Check DockerWithScript Result  @{workUID}[0]
 
 Prepare Iexec DockerWithScript
     ${rm_result} =  Run Process  rm -rf iexec-docker-with-script  shell=yes
