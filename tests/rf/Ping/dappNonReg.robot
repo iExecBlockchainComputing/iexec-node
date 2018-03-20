@@ -25,11 +25,56 @@ Test Ffmpeg
 Test DockerWithScript
     DockerWithScript
 
+Test Echo In Docker
+    Echo In Docker
+
 *** Keywords ***
 
 Init Test
     IexecSdk.Init Sdk
 
+
+Echo In Docker
+    [Documentation]  Test Factorial
+    [Tags]  dappNonReg
+    Prepare Iexec Echo In Docker
+    Log  ${DAPPNAME}
+    IexecSdk.Iexec An App  iexec-tta-step1  account login
+    ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-tta-step1  server deploy
+    @{appUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client appUID (?P<appUID>.*)  appUID
+    Log  @{appUID}[0]
+    ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-tta-step1  server submit --app @{appUID}[0]
+    Log  ${iexec_result.stderr}
+    @{workUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
+    Log  @{workUID}[0]
+    Wait Until Keyword Succeeds  5 min	30 sec  Check Echo In Docker Result  @{workUID}[0]
+
+
+
+
+Prepare Iexec Echo In Docker
+    ${rm_result} =  Run Process  rm -rf iexec-tta-step1  shell=yes
+    Should Be Empty	${rm_result.stderr}
+    Should Be Equal As Integers	${rm_result.rc}	0
+    IexecSdk.Iexec Init An App  tta-step1
+    IexecSdk.Iexec An App  iexec-tta-step1  wallet create
+    Run  sed -i "s/testxw.iex.ec/${XW_HOST}/g" iexec-tta-step1/truffle.js
+    # change the name adress of tta-step1
+    ${wallet} =  Get File  iexec-tta-step1/wallet.json
+    @{address} =  Get Regexp Matches  ${wallet}  "address": "(?P<address>.*)"  address
+    ${dappName} =  Catenate  SEPARATOR=  0x  @{address}[0]
+    Set Test Variable	${DAPPNAME}	 ${dappName}
+    #replace 0xd98f5f5c79254656d080159bb147b7c3b616ac5a by DAPPNAME
+    Run  sed -i "s/0xd98f5f5c79254656d080159bb147b7c3b616ac5a/${dappName}/g" iexec-tta-step1/build/contracts/TTA.json
+
+
+Check Echo In Docker Result
+    [Arguments]  ${workUID}
+    IexecSdk.Iexec An App  iexec-tta-step1  server result ${workUID} --save
+    ${result} =  Get File  iexec-tta-step1/${workUID}.text
+    ${lines} =  Get Lines Containing String  ${result}  IamAWorker
+    ${lines_count} =  Get Line Count  ${lines}
+    Should Be Equal As Integers	${lines_count}	1
 
 Factorial
     [Documentation]  Test Factorial
