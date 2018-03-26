@@ -115,17 +115,19 @@ Check Factorial Result
     ${count_txt} =  Count Files In Directory  iexec-factorial  *.text
     ${sum}=  Evaluate  int(${count_zip}) + int(${count_txt})
     Should Be True  ${sum} > 0
-    Run Keyword If  ${count_zip} > 0  Check Factorial ZIP
-    Run Keyword If  ${count_txt} > 0  Check Factorial TXT
+    Run Keyword If  ${count_zip} > 0  Check Factorial ZIP  ${workUID}
+    Run Keyword If  ${count_txt} > 0  Check Factorial TXT  ${workUID}
 
 
 Check Factorial TXT
+    [Arguments]  ${workUID}
     ${result} =  Get File  iexec-factorial/${workUID}.text
     ${lines} =  Get Lines Containing String  ${result}  3628800
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 
 Check Factorial ZIP
+    [Arguments]  ${workUID}
     Extract Zip File  iexec-factorial/${workUID}.zip  iexec-factorial/zipout
     ${result} =  Get File  iexec-factorial/zipout/stdout.txt
     ${lines} =  Get Lines Containing String  ${result}  3628800
