@@ -111,12 +111,25 @@ Prepare Iexec Factorial
 Check Factorial Result
     [Arguments]  ${workUID}
     IexecSdkFromGithub.Iexec An App  iexec-factorial  server result ${workUID} --save
+    Run Keyword And Ignore Error  Unzip Factorial
+    ${result_size} =  Get File Size  iexec-factorial/zipout/stdout.txt
+    Run Keyword If  '${result_size}' > '0'  Check Factorial ZIP
+    Run Keyword If  '${result_size}' == '0'  Check Factorial TXT
+
+Unzip Factorial
     Extract Zip File  iexec-factorial/${workUID}.zip  iexec-factorial/zipout
-    ${result} =  Get File  iexec-factorial/zipout/stdout.txt
+
+Check Factorial TXT
+    ${result} =  Get File  iexec-factorial/${workUID}.txt
     ${lines} =  Get Lines Containing String  ${result}  3628800
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 
+Check Factorial ZIP
+    ${result} =  Get File  iexec-factorial/zipout/stdout.txt
+    ${lines} =  Get Lines Containing String  ${result}  3628800
+    ${lines_count} =  Get Line Count  ${lines}
+    Should Be Equal As Integers	${lines_count}	1
 
 Ffmpeg
     [Documentation]  Test Ffmpeg
