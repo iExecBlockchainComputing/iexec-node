@@ -115,8 +115,8 @@ Check Factorial Result
     ${count_txt} =  Count Files In Directory  iexec-factorial  *.text
     ${sum}=  Evaluate  int(${count_zip}) + int(${count_txt})
     Should Be True  ${sum} > 0
-    Run Keyword If  ${result_zip_size} > 0  Check Factorial ZIP
-    Run Keyword If  ${result_txt_size} > 0  Check Factorial TXT
+    Run Keyword If  ${count_zip} > 0  Check Factorial ZIP
+    Run Keyword If  ${count_txt} > 0  Check Factorial TXT
 
 
 Check Factorial TXT
