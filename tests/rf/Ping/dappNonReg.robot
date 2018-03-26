@@ -111,13 +111,13 @@ Prepare Iexec Factorial
 Check Factorial Result
     [Arguments]  ${workUID}
     IexecSdkFromGithub.Iexec An App  iexec-factorial  server result ${workUID} --save
-    Run Keyword And Ignore Error  Unzip Factorial
-    ${result_size} =  Get File Size  iexec-factorial/zipout/stdout.txt
-    Run Keyword If  '${result_size}' > '0'  Check Factorial ZIP
-    Run Keyword If  '${result_size}' == '0'  Check Factorial TXT
+    ${result_zip_size} =  Get File Size  iexec-factorial/${workUID}.zip
+    ${result_txt_size} =  Get File Size  iexec-factorial/${workUID}.txt
+    ${sum}=  Evaluate  int(${result_zip_size}) + int(${result_txt_size})
+    Should Be True  ${sum} > 0
+    Run Keyword If  ${result_zip_size} > 0  Check Factorial ZIP
+    Run Keyword If  ${result_txt_size} > 0  Check Factorial TXT
 
-Unzip Factorial
-    Extract Zip File  iexec-factorial/${workUID}.zip  iexec-factorial/zipout
 
 Check Factorial TXT
     ${result} =  Get File  iexec-factorial/${workUID}.txt
@@ -126,6 +126,7 @@ Check Factorial TXT
     Should Be Equal As Integers	${lines_count}	1
 
 Check Factorial ZIP
+    Extract Zip File  iexec-factorial/${workUID}.zip  iexec-factorial/zipout
     ${result} =  Get File  iexec-factorial/zipout/stdout.txt
     ${lines} =  Get Lines Containing String  ${result}  3628800
     ${lines_count} =  Get Line Count  ${lines}
