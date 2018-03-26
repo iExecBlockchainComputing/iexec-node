@@ -112,7 +112,7 @@ Check Factorial Result
     [Arguments]  ${workUID}
     IexecSdkFromGithub.Iexec An App  iexec-factorial  server result ${workUID} --save
     ${result_zip_size} =  Get File Size  iexec-factorial/${workUID}.zip
-    ${result_txt_size} =  Get File Size  iexec-factorial/${workUID}.txt
+    ${result_txt_size} =  Get File Size  iexec-factorial/${workUID}.text
     ${sum}=  Evaluate  int(${result_zip_size}) + int(${result_txt_size})
     Should Be True  ${sum} > 0
     Run Keyword If  ${result_zip_size} > 0  Check Factorial ZIP
@@ -149,20 +149,20 @@ Ffmpeg
 
 
 
- Prepare Iexec Ffmpeg
-     ${rm_result} =  Run Process  rm -rf iexec-ffmpeg  shell=yes
-     Should Be Empty	${rm_result.stderr}
-     Should Be Equal As Integers	${rm_result.rc}	0
-     IexecSdkFromGithub.Iexec Init An App  ffmpeg
-     IexecSdkFromGithub.Iexec An App  iexec-ffmpeg   wallet create
-     Run  sed -i "s/testxw.iex.ec/${XW_HOST}/g" iexec-ffmpeg/truffle.js
-     # change the name adress of ffmpeg
-     ${wallet} =  Get File  iexec-ffmpeg/wallet.json
-      @{address} =  Get Regexp Matches  ${wallet}  "address": "(?P<address>.*)"  address
-      ${dappName} =  Catenate  SEPARATOR=  0x  @{address}[0]
-      Set Test Variable	${DAPPNAME}	 ${dappName}
-      #replace 0x48db8e153710a865526d1c601bdf393bb68e41fa by DAPPNAME
-      Run  sed -i "s/0x48db8e153710a865526d1c601bdf393bb68e41fa/${dappName}/g" iexec-ffmpeg/build/contracts/Ffmpeg.json
+Prepare Iexec Ffmpeg
+   ${rm_result} =  Run Process  rm -rf iexec-ffmpeg  shell=yes
+   Should Be Empty	${rm_result.stderr}
+   Should Be Equal As Integers	${rm_result.rc}	0
+   IexecSdkFromGithub.Iexec Init An App  ffmpeg
+   IexecSdkFromGithub.Iexec An App  iexec-ffmpeg   wallet create
+   Run  sed -i "s/testxw.iex.ec/${XW_HOST}/g" iexec-ffmpeg/truffle.js
+   # change the name adress of ffmpeg
+   ${wallet} =  Get File  iexec-ffmpeg/wallet.json
+    @{address} =  Get Regexp Matches  ${wallet}  "address": "(?P<address>.*)"  address
+    ${dappName} =  Catenate  SEPARATOR=  0x  @{address}[0]
+    Set Test Variable	${DAPPNAME}	 ${dappName}
+    #replace 0x48db8e153710a865526d1c601bdf393bb68e41fa by DAPPNAME
+    Run  sed -i "s/0x48db8e153710a865526d1c601bdf393bb68e41fa/${dappName}/g" iexec-ffmpeg/build/contracts/Ffmpeg.json
 
 Check Ffmpeg Result
     [Arguments]  ${workUID}
