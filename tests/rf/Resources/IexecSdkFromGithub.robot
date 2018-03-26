@@ -14,7 +14,6 @@ ${IEXEC_SDK_DISTRIB}
 
 Init Sdk
     Run Keyword If  '${IEXEC_SDK_FORCE_GIT_CLONE}' == 'true'  Git Clone Iexec Sdk
-    Run  sed -i "s/xw.iex.ec/xwdev.iex.ec/g" iexec-sdk/src/iexec-init.js
     Npm Install Iexec Sdk
 
 
@@ -27,6 +26,10 @@ Git Clone Iexec Sdk
 
 Npm Install Iexec Sdk
     ${npm_result} =  Run Process  cd iexec-sdk && npm install  shell=yes
+    Log  ${npm_result.stderr}
+    Log  ${npm_result.stdout}
+    Should Be Equal As Integers	${npm_result.rc}	0
+    ${npm_result} =  Run Process  cd iexec-sdk && npm run build  shell=yes
     Log  ${npm_result.stderr}
     Log  ${npm_result.stdout}
     Should Be Equal As Integers	${npm_result.rc}	0
@@ -46,7 +49,7 @@ Iexec
 
 Iexec An app
     [Arguments]  ${directory}  ${args}
-    ${iexec_result} =  Run Process  cd ${directory} && ../${IEXEC_SDK_DISTRIB} ${args}  shell=yes
+    ${iexec_result} =  Run Process  cd ${directory} && DEBUG\=* ../${IEXEC_SDK_DISTRIB} ${args}  shell=yes
     Log  ${iexec_result.stderr}
     Log  ${iexec_result.stdout}
     Should Be Equal As Integers	${iexec_result.rc}	0
