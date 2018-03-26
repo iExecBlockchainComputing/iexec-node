@@ -111,9 +111,9 @@ Prepare Iexec Factorial
 Check Factorial Result
     [Arguments]  ${workUID}
     IexecSdkFromGithub.Iexec An App  iexec-factorial  server result ${workUID} --save
-    ${result_zip_size} =  Get File Size  iexec-factorial/${workUID}.zip
-    ${result_txt_size} =  Get File Size  iexec-factorial/${workUID}.text
-    ${sum}=  Evaluate  int(${result_zip_size}) + int(${result_txt_size})
+    ${count_zip} =	Count Files In Directory  iexec-factorial  *.zip
+    ${count_txt} =  Count Files In Directory  iexec-factorial  *.text
+    ${sum}=  Evaluate  int(${count_zip}) + int(${count_txt})
     Should Be True  ${sum} > 0
     Run Keyword If  ${result_zip_size} > 0  Check Factorial ZIP
     Run Keyword If  ${result_txt_size} > 0  Check Factorial TXT
