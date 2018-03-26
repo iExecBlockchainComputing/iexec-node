@@ -120,7 +120,7 @@ Check Factorial Result
 
 
 Check Factorial TXT
-    ${result} =  Get File  iexec-factorial/${workUID}.txt
+    ${result} =  Get File  iexec-factorial/${workUID}.text
     ${lines} =  Get Lines Containing String  ${result}  3628800
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
