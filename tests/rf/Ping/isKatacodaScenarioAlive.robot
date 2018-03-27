@@ -1,6 +1,8 @@
 *** Settings ***
 Documentation    Launch katacoda scenario on ropsten, kovan and rinkeby. to check all test chain ok
 Resource  ../Resources/IexecSdk.robot
+Library           OperatingSystem
+Library           ArchiveLibrary
 Suite Setup  Init Ping Katacoda
 
 
@@ -103,8 +105,26 @@ Prepare Iexec Factorial
 
 Check Factorial 10 In Result
     [Arguments]  ${transactionHash}  ${network}
-    ${stdout} =  IexecSdk.Iexec An App  iexec-factorial  result ${transactionHash} ${network}
-    ${lines} =  Get Lines Containing String  ${stdout}  3628800
+    ${stdout} =  IexecSdk.Iexec An App  iexec-factorial  result ${transactionHash} ${network} --save
+    ${count_zip} =	Count Files In Directory  iexec-factorial  *.zip
+    ${count_txt} =  Count Files In Directory  iexec-factorial  *.text
+    ${sum}=  Evaluate  int(${count_zip}) + int(${count_txt})
+    Should Be True  ${sum} > 0
+    Run Keyword If  ${count_zip} > 0  Check Factorial ZIP  ${transactionHash}
+    Run Keyword If  ${count_txt} > 0  Check Factorial TXT  ${transactionHash}
+
+
+Check Factorial TXT
+    [Arguments]  ${transactionHash}
+    ${result} =  Get File  iexec-factorial/${transactionHash}.text
+    ${lines} =  Get Lines Containing String  ${result}  3628800
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 
+Check Factorial ZIP
+    [Arguments]  ${transactionHash}
+    Extract Zip File  iexec-factorial/${transactionHash}.zip  iexec-factorial/zipout
+    ${result} =  Get File  iexec-factorial/zipout/stdout.txt
+    ${lines} =  Get Lines Containing String  ${result}  3628800
+    ${lines_count} =  Get Line Count  ${lines}
+    Should Be Equal As Integers	${lines_count}	1
