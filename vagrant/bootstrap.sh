@@ -92,7 +92,7 @@ apt-get install -y ethereum
 bash <(curl https://get.parity.io -kL)
 
 # truffle, testrpc pm2
-su - vagrant -c "npm install -g truffle@4.0.4"
+su - vagrant -c "npm install -g truffle@4.1.5"
 su - vagrant -c "npm install -g ethereumjs-testrpc@6.0.3"
 su - vagrant -c "npm install pm2 -g"
 su - vagrant -c "npm install iexec -g"
