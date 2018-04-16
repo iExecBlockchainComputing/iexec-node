@@ -134,3 +134,9 @@ sed -i '1s/^/127.0.0.1 localhost vagrant-ubuntu-trusty-64/' /etc/hosts
 # to fix Error - trustAnchors parameter must be non-empty
 /var/lib/dpkg/info/ca-certificates-java.postinst configure
 
+# install gradle
+su - vagrant -c "curl -s 'https://get.sdkman.io' | bash"
+su - vagrant -c "echo 'source '~/.sdkman/bin/sdkman-init.sh'' >> .bash_profile"
+su - vagrant -c "sdk install gradle 4.6"
+
+
