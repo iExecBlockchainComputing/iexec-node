@@ -215,6 +215,16 @@ Check DockerWithScript Result
      ${lines} =  Get Lines Containing String  ${stdout}  ShowMethisText
      ${lines_count} =  Get Line Count  ${lines}
      Should Be Equal As Integers	${lines_count}	1
-     ${lines} =  Get Lines Containing String  ${stdout}  i am MyFileIniExecDir.txt content
+     ${lines} =  Get Lines Containing String  ${stdout}  i am MyFileInAppDir.txt content
      ${lines_count} =  Get Line Count  ${lines}
      Should Be Equal As Integers	${lines_count}	1
+     ${lines} =  Get Lines Containing String  ${stdout}  This is my scriptAtRoot.sh in docker
+     ${lines_count} =  Get Line Count  ${lines}
+     Should Be Equal As Integers	${lines_count}	1
+     ${lines} =  Get Lines Containing String  ${stdout}  i am fileAtRoot.txt content
+     ${lines_count} =  Get Line Count  ${lines}
+     Should Be Equal As Integers	${lines_count}	1
+
+
+
+
