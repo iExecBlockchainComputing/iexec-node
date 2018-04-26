@@ -64,9 +64,9 @@ Prepare Iexec Echo In Docker
     ${wallet} =  Get File  iexec-tta-step1/wallet.json
     @{address} =  Get Regexp Matches  ${wallet}  "address": "(?P<address>.*)"  address
     ${dappName} =  Catenate  SEPARATOR=  0x  @{address}[0]
-    Set Test Variable	${DAPPNAME}	 ${dappName}
+    Set Test Variable	${DAPPNAME}	 ${dappName}_name
     #replace 0xd98f5f5c79254656d080159bb147b7c3b616ac5a by DAPPNAME
-    Run  sed -i "s/0xd98f5f5c79254656d080159bb147b7c3b616ac5a/${dappName}/g" iexec-tta-step1/build/contracts/TTA.json
+    Run  sed -i "s/0xd98f5f5c79254656d080159bb147b7c3b616ac5a/${DAPPNAME}/g" iexec-tta-step1/build/contracts/TTA.json
 
 
 Check Echo In Docker Result
@@ -103,9 +103,9 @@ Prepare Iexec Factorial
     ${wallet} =  Get File  iexec-factorial/wallet.json
     @{address} =  Get Regexp Matches  ${wallet}  "address": "(?P<address>.*)"  address
     ${dappName} =  Catenate  SEPARATOR=  0x  @{address}[0]
-    Set Test Variable	${DAPPNAME}	 ${dappName}
+    Set Test Variable	${DAPPNAME}	 ${dappName}_name
     #replace 0xd2b9d3ecc76b6d43277fd986afdb8b79685d4d1a by DAPPNAME
-    Run  sed -i "s/0xd2b9d3ecc76b6d43277fd986afdb8b79685d4d1a/${dappName}/g" iexec-factorial/build/contracts/Factorial.json
+    Run  sed -i "s/0xd2b9d3ecc76b6d43277fd986afdb8b79685d4d1a/${DAPPNAME}/g" iexec-factorial/build/contracts/Factorial.json
 
 
 Check Factorial Result
@@ -162,9 +162,9 @@ Prepare Iexec Ffmpeg
    ${wallet} =  Get File  iexec-ffmpeg/wallet.json
     @{address} =  Get Regexp Matches  ${wallet}  "address": "(?P<address>.*)"  address
     ${dappName} =  Catenate  SEPARATOR=  0x  @{address}[0]
-    Set Test Variable	${DAPPNAME}	 ${dappName}
+    Set Test Variable	${DAPPNAME}	 ${dappName}_name
     #replace 0x48db8e153710a865526d1c601bdf393bb68e41fa by DAPPNAME
-    Run  sed -i "s/0x48db8e153710a865526d1c601bdf393bb68e41fa/${dappName}/g" iexec-ffmpeg/build/contracts/Ffmpeg.json
+    Run  sed -i "s/0x48db8e153710a865526d1c601bdf393bb68e41fa/${DAPPNAME}/g" iexec-ffmpeg/build/contracts/Ffmpeg.json
 
 Check Ffmpeg Result
     [Arguments]  ${workUID}
@@ -199,7 +199,7 @@ Prepare Iexec DockerWithScript
      ${dappName} =  Catenate  SEPARATOR=  0x  @{address}[0]
      Set Test Variable	${DAPPNAME}	 ${dappName}
      #replace 0xa53b2a36b8df7b63c83f76ee6519a62712bcbf4a by DAPPNAME
-     Run  sed -i "s/0xa53b2a36b8df7b63c83f76ee6519a62712bcbf4a/${dappName}/g" iexec-docker-with-script/build/contracts/DockerWithScript.json
+     Run  sed -i "s/0xa53b2a36b8df7b63c83f76ee6519a62712bcbf4a/${DAPPNAME}/g" iexec-docker-with-script/build/contracts/DockerWithScript.json
 
 
 
