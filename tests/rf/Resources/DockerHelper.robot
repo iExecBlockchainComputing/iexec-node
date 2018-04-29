@@ -1,6 +1,9 @@
 *** Settings ***
+Library  OperatingSystem
 
 *** Variables ***
+
+${DOCKER_HOST}
 
 *** Keywords ***
 
@@ -45,6 +48,12 @@ Stop And Remove All Containers
 Remove All Images
     Stop And Remove All Containers
     Run Process  docker rmi $(docker images -q)  shell=yes
+
+
+Stop Container
+    [Arguments]  ${container_id}
+    Log  ${container_id}
+    Run Process  docker stop ${container_id}  shell=yes
 
 Remove Container
     [Arguments]  ${container_id}
