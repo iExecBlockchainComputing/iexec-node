@@ -2,38 +2,15 @@
 Documentation    dappNonReg
 Library           OperatingSystem
 Library           ArchiveLibrary
-Resource  ../Resources/IexecSdkFromGithub.robot
-Suite Setup  Init Test
 
-
-# to launch tests :
-# pybot -d Results ./tests/rf/Ping/dappNonReg.robot
+Resource   ./IexecSdkFromGithub.robot
 
 *** Variables ***
 ${DAPPNAME}
-${XW_HOST} =  devxw.iex.ec
-
-
-*** Test Cases ***
-
-Test Factorial
-    Factorial
-
-Test Ffmpeg
-    Ffmpeg
-
-Test DockerWithScript
-    DockerWithScript
-
-Test Echo In Docker
-    Echo In Docker
+${XW_HOST}
 
 
 *** Keywords ***
-
-Init Test
-    IexecSdkFromGithub.Init Sdk
-
 
 Echo In Docker
     [Documentation]  Test Factorial
@@ -90,7 +67,7 @@ Factorial
     Log  ${iexec_result.stderr}
     @{workUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
     Log  @{workUID}[0]
-    Wait Until Keyword Succeeds  5 min	30 sec  Check Factorial Result  @{workUID}[0]
+    Wait Until Keyword Succeeds  2 min	30 sec  Check Factorial Result  @{workUID}[0]
 
 Prepare Iexec Factorial
     ${rm_result} =  Run Process  rm -rf iexec-factorial  shell=yes
