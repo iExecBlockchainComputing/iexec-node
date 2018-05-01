@@ -39,7 +39,7 @@ Npm Install Iexec Sdk
     Iexec  --help
 
 
-Iexec
+Iexec Github
     [Arguments]  ${args}
     ${iexec_result} =  Run Process  ${IEXEC_SDK_DISTRIB} ${args}  shell=yes
     Log  ${iexec_result.stderr}

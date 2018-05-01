@@ -27,7 +27,7 @@ Npm Install Iexec Sdk
     Should Be Equal As Integers	${iexec_result.rc}	0
 
 
-Iexec
+Iexec JS
     [Arguments]  ${args}
     ${iexec_result} =  Run Process  iexec ${args}  shell=yes
     Log  ${iexec_result.stderr}
