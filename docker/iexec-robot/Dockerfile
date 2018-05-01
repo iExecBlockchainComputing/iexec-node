@@ -38,8 +38,4 @@ RUN \
 ENV GRADLE_HOME=/usr/local/gradle-4.7
 ENV PATH=$PATH:$GRADLE_HOME/bin JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
-
-# Setup volumes for input and output
-VOLUME /opt/robotframework/reports
-VOLUME /opt/robotframework/tests
 ENTRYPOINT ["robot"]
