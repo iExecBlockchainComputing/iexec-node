@@ -36,8 +36,9 @@ Test Submit Katacoda Factorial Scenario On Kovan
     IexecSdk.Iexec An App  iexec-factorial  account allow 1 --network kovan
     IexecSdk.Iexec An App  iexec-factorial  wallet getRLC --network kovan
     IexecSdk.Iexec An App  iexec-factorial  account login --network kovan
-    ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network kovan
-    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
+    IexecSdk.Iexec An App  iexec-factorial  submit 10 --network kovan
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  5 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network kovan
 
 
@@ -49,8 +50,9 @@ Test Deploy And Submit Katacoda Factorial Scenario On Ropsten
     IexecSdk.Iexec An App  iexec-factorial  wallet getRLC
     IexecSdk.Iexec An App  iexec-factorial  account login
     IexecSdk.Iexec An App  iexec-factorial  deploy
-    ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10
-    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
+    IexecSdk.Iexec An App  iexec-factorial  submit 10
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network ropsten
 
 Test Submit Katacoda Factorial Scenario On Ropsten
@@ -60,8 +62,9 @@ Test Submit Katacoda Factorial Scenario On Ropsten
     IexecSdk.Iexec An App  iexec-factorial  account allow 1
     IexecSdk.Iexec An App  iexec-factorial  wallet getRLC
     IexecSdk.Iexec An App  iexec-factorial  account login
-    ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10
-    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
+    IexecSdk.Iexec An App  iexec-factorial  submit 10
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network ropsten
 
 
@@ -73,8 +76,9 @@ Test Deploy And Submit Katacoda Factorial Scenario On Rinkeby
     IexecSdk.Iexec An App  iexec-factorial  wallet getRLC --network rinkeby
     IexecSdk.Iexec An App  iexec-factorial  account login --network rinkeby
     IexecSdk.Iexec An App  iexec-factorial  deploy --network rinkeby
-    ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network rinkeby
-    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
+    IexecSdk.Iexec An App  iexec-factorial  submit 10 --network rinkeby
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network rinkeby
 
 Test Submit Katacoda Factorial Scenario On Rinkeby
@@ -84,8 +88,9 @@ Test Submit Katacoda Factorial Scenario On Rinkeby
     IexecSdk.Iexec An App  iexec-factorial  account allow 1 --network rinkeby
     IexecSdk.Iexec An App  iexec-factorial  wallet getRLC --network rinkeby
     IexecSdk.Iexec An App  iexec-factorial  account login --network rinkeby
-    ${iexec_result.stderr} =  IexecSdk.Iexec An App  iexec-factorial  submit 10 --network rinkeby
-    @{transactionHash} =  Get Regexp Matches  ${iexec_result.stderr}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
+    IexecSdk.Iexec An App  iexec-factorial  submit 10 --network rinkeby
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    @{transactionHash} =  Get Regexp Matches  ${iexec_result}  "transactionHash": "(?P<transactionHash>.*)",  transactionHash
     Wait Until Keyword Succeeds  10 min	30 sec  Check Factorial 10 In Result  @{transactionHash}[0]  --network rinkeby
 
 
@@ -105,7 +110,8 @@ Prepare Iexec Factorial
 
 Check Factorial 10 In Result
     [Arguments]  ${transactionHash}  ${network}
-    ${stdout} =  IexecSdk.Iexec An App  iexec-factorial  result ${transactionHash} ${network} --save
+    IexecSdk.Iexec An App  iexec-factorial  result ${transactionHash} ${network} --save
+    ${stdout} =  IexecSdk.Get Iexec Sdk Log
     ${count_zip} =	Count Files In Directory  iexec-factorial  *.zip
     ${count_txt} =  Count Files In Directory  iexec-factorial  *.text
     ${sum}=  Evaluate  int(${count_zip}) + int(${count_txt})

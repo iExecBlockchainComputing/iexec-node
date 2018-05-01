@@ -3,20 +3,18 @@ Documentation    dappNonReg
 Library           OperatingSystem
 Library           ArchiveLibrary
 Resource  ../Resources/DappNonReg.robot
-Resource  ../Resources/IexecSdkFromGithub.robot
-Resource  ../Resources/IexecSdkDocker.robot
-Suite Setup  IexecSdkDocker.Iexec Docker  --version
+Resource  ../Resources/IexecSdk.robot
+Suite Setup  IexecSdk.Init Sdk
 
 # to launch tests :
-# pybot -d Results ./tests/rf/Ping/dappNonRegOnRemoteEnv.robot
+# pybot -d Results -v LAUNCHED_IN_CONTAINER:true ./tests/rf/Ping/dappNonRegOnRemoteEnv.robot
 
-#docker run -v /var/run/docker.sock:/var/run/docker.sock -w /opt/robotframework iexechub/iexec-robot -d /opt/robotframework/tests/Results -t 'Test Factorial' /opt/robotframework/tests/rf/Ping/dappNonRegOnRemoteEnv.robot
+#docker run -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/opt/robotframework -v $(pwd)/Results:/opt/robotframework/tests/Results iexechub/iexec-robot -d /opt/robotframework/tests/Results -t 'Test Factorial' -v LAUNCHED_IN_CONTAINER:true /opt/robotframework/tests/rf/Ping/dappNonRegOnRemoteEnv.robot
 
 *** Variables ***
 ${DAPPNAME}
 ${XW_HOST} =  devxw.iex.ec
 ${REPO_DIR} =  ${CURDIR}/../repo
-
 
 *** Test Cases ***
 
@@ -35,6 +33,9 @@ Test Echo In Docker
 
 
 *** Keywords ***
+
+
+
 
 
 

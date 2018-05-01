@@ -3,13 +3,13 @@ Documentation    dappNonReg
 Library           OperatingSystem
 Library           ArchiveLibrary
 
-Resource   ./IexecSdkDocker.robot
+Resource   ./IexecSdk.robot
+
 
 *** Variables ***
 ${DAPPNAME}
 ${XW_HOST}
 ${REPO_DIR}
-
 
 *** Keywords ***
 
@@ -18,16 +18,17 @@ Echo In Docker
     [Tags]  dappNonReg
     Prepare Iexec Echo In Docker
     Log  ${DAPPNAME}
-    IexecSdkDocker.Iexec An App  iexec-tta-step1  account login
-    ${iexec_result.stderr} =  IexecSdkDocker.Iexec An App  iexec-tta-step1  server deploy
-    @{appUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client appUID (?P<appUID>.*)  appUID
+    IexecSdk.Iexec An App  iexec-tta-step1  account login
+    IexecSdk.Iexec An App  iexec-tta-step1  server deploy
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    @{appUID} =  Get Regexp Matches  ${iexec_result}  iexec-server-js-client appUID (?P<appUID>.*)  appUID
     Log  @{appUID}[0]
-    ${iexec_result.stderr} =  IexecSdkDocker.Iexec An App  iexec-tta-step1  server submit --app @{appUID}[0]
-    Log  ${iexec_result.stderr}
-    @{workUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
+    IexecSdk.Iexec An App  iexec-tta-step1  server submit --app @{appUID}[0]
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    Log  ${iexec_result}
+    @{workUID} =  Get Regexp Matches  ${iexec_result}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
     Log  @{workUID}[0]
     Wait Until Keyword Succeeds  2 min	30 sec  Check Echo In Docker Result  @{workUID}[0]
-
 
 
 
@@ -35,8 +36,8 @@ Prepare Iexec Echo In Docker
     ${rm_result} =  Run Process  rm -rf ${REPO_DIR}/iexec-tta-step1  shell=yes
     Should Be Empty	${rm_result.stderr}
     Should Be Equal As Integers	${rm_result.rc}	0
-    IexecSdkDocker.Iexec Init An App  tta-step1
-    IexecSdkDocker.Iexec An App  iexec-tta-step1  wallet create
+    IexecSdk.Iexec Init An App  tta-step1
+    IexecSdk.Iexec An App  iexec-tta-step1  wallet create
     Run  sed "s/testxw.iex.ec/${XW_HOST}/g" ${REPO_DIR}/iexec-tta-step1/truffle.js > ${REPO_DIR}/iexec-tta-step1/truffle.tmp && cat ${REPO_DIR}/iexec-tta-step1/truffle.tmp > ${REPO_DIR}/iexec-tta-step1/truffle.js
     # change the name adress of tta-step1
     ${wallet} =  Get File  ${REPO_DIR}/iexec-tta-step1/wallet.json
@@ -49,7 +50,7 @@ Prepare Iexec Echo In Docker
 
 Check Echo In Docker Result
     [Arguments]  ${workUID}
-    IexecSdkDocker.Iexec An App  iexec-tta-step1  server result ${workUID} --save
+    IexecSdk.Iexec An App  iexec-tta-step1  server result ${workUID} --save
     ${result} =  Get File  ${REPO_DIR}/iexec-tta-step1/${workUID}.text
     ${lines} =  Get Lines Containing String  ${result}  IamAWorker
     ${lines_count} =  Get Line Count  ${lines}
@@ -60,13 +61,15 @@ Factorial
     [Tags]  dappNonReg
     Prepare Iexec Factorial
     Log  ${DAPPNAME}
-    IexecSdkDocker.Iexec An App  iexec-factorial  account login
-    ${iexec_result.stderr} =  IexecSdkDocker.Iexec An App  iexec-factorial  server deploy
-    @{appUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client appUID (?P<appUID>.*)  appUID
+    IexecSdk.Iexec An App  iexec-factorial  account login
+    IexecSdk.Iexec An App  iexec-factorial  server deploy
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    @{appUID} =  Get Regexp Matches  ${iexec_result}  iexec-server-js-client appUID (?P<appUID>.*)  appUID
     Log  @{appUID}[0]
-    ${iexec_result.stderr} =  IexecSdkDocker.Iexec An App  iexec-factorial  server submit --app @{appUID}[0]
-    Log  ${iexec_result.stderr}
-    @{workUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
+    IexecSdk.Iexec An App  iexec-factorial  server submit --app @{appUID}[0]
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    Log  ${iexec_result}
+    @{workUID} =  Get Regexp Matches  ${iexec_result}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
     Log  @{workUID}[0]
     Wait Until Keyword Succeeds  2 min	30 sec  Check Factorial Result  @{workUID}[0]
 
@@ -74,8 +77,8 @@ Prepare Iexec Factorial
     ${rm_result} =  Run Process  rm -rf ${REPO_DIR}/iexec-factorial  shell=yes
     Should Be Empty	${rm_result.stderr}
     Should Be Equal As Integers	${rm_result.rc}	0
-    IexecSdkDocker.Iexec Init An App  factorial
-    IexecSdkDocker.Iexec An App  iexec-factorial  wallet create
+    IexecSdk.Iexec Init An App  factorial
+    IexecSdk.Iexec An App  iexec-factorial  wallet create
     Run  sed "s/testxw.iex.ec/${XW_HOST}/g" ${REPO_DIR}/iexec-factorial/truffle.js > ${REPO_DIR}/iexec-factorial/truffle.tmp && cat ${REPO_DIR}/iexec-factorial/truffle.tmp > ${REPO_DIR}/iexec-factorial/truffle.js
     # change the name adress of factorial
     ${wallet} =  Get File  ${REPO_DIR}/iexec-factorial/wallet.json
@@ -88,7 +91,7 @@ Prepare Iexec Factorial
 
 Check Factorial Result
     [Arguments]  ${workUID}
-    IexecSdkDocker.Iexec An App  iexec-factorial  server result ${workUID} --save
+    IexecSdk.Iexec An App  iexec-factorial  server result ${workUID} --save
     ${count_zip} =	Count Files In Directory  ${REPO_DIR}/iexec-factorial  *.zip
     ${count_txt} =  Count Files In Directory  ${REPO_DIR}/iexec-factorial  *.text
     ${sum}=  Evaluate  int(${count_zip}) + int(${count_txt})
@@ -117,13 +120,15 @@ Ffmpeg
     [Tags]  dappNonReg
     Prepare Iexec Ffmpeg
     Log  ${DAPPNAME}
-    IexecSdkDocker.Iexec An App  iexec-ffmpeg  account login
-    ${iexec_result.stderr} =  IexecSdkDocker.Iexec An App  iexec-ffmpeg  server deploy
-    @{appUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client appUID (?P<appUID>.*)  appUID
+    IexecSdk.Iexec An App  iexec-ffmpeg  account login
+    IexecSdk.Iexec An App  iexec-ffmpeg  server deploy
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    @{appUID} =  Get Regexp Matches  ${iexec_result}  iexec-server-js-client appUID (?P<appUID>.*)  appUID
     Log  @{appUID}[0]
-    ${iexec_result.stderr} =  IexecSdkDocker.Iexec An App  iexec-ffmpeg  server submit --app @{appUID}[0]
-    Log  ${iexec_result.stderr}
-    @{workUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
+    IexecSdk.Iexec An App  iexec-ffmpeg  server submit --app @{appUID}[0]
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    Log  ${iexec_result}
+    @{workUID} =  Get Regexp Matches  ${iexec_result}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
     Log  @{workUID}[0]
     Wait Until Keyword Succeeds  2 min	30 sec  Check Ffmpeg Result  @{workUID}[0]
 
@@ -133,8 +138,8 @@ Prepare Iexec Ffmpeg
    ${rm_result} =  Run Process  rm -rf ${REPO_DIR}/iexec-ffmpeg  shell=yes
    Should Be Empty	${rm_result.stderr}
    Should Be Equal As Integers	${rm_result.rc}	0
-   IexecSdkDocker.Iexec Init An App  ffmpeg
-   IexecSdkDocker.Iexec An App  iexec-ffmpeg   wallet create
+   IexecSdk.Iexec Init An App  ffmpeg
+   IexecSdk.Iexec An App  iexec-ffmpeg   wallet create
    Run  sed "s/testxw.iex.ec/${XW_HOST}/g" ${REPO_DIR}/iexec-ffmpeg/truffle.js > ${REPO_DIR}/iexec-ffmpeg/truffle.tmp && cat ${REPO_DIR}/iexec-ffmpeg/truffle.tmp > ${REPO_DIR}/iexec-ffmpeg/truffle.js
    # change the name adress of ffmpeg
    ${wallet} =  Get File  ${REPO_DIR}/iexec-ffmpeg/wallet.json
@@ -146,7 +151,7 @@ Prepare Iexec Ffmpeg
 
 Check Ffmpeg Result
     [Arguments]  ${workUID}
-    IexecSdkDocker.Iexec An App  iexec-ffmpeg  server result ${workUID} --save
+    IexecSdk.Iexec An App  iexec-ffmpeg  server result ${workUID} --save
     Archive Should Contain File  ${REPO_DIR}/iexec-ffmpeg/${workUID}.zip  small.avi
 
 DockerWithScript
@@ -154,13 +159,15 @@ DockerWithScript
     [Tags]  dappNonReg
     Prepare Iexec DockerWithScript
     Log  ${DAPPNAME}
-    IexecSdkDocker.Iexec An App  iexec-docker-with-script  account login
-    ${iexec_result.stderr} =  IexecSdkDocker.Iexec An App  iexec-docker-with-script  server deploy
-    @{appUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client appUID (?P<appUID>.*)  appUID
+    IexecSdk.Iexec An App  iexec-docker-with-script  account login
+    IexecSdk.Iexec An App  iexec-docker-with-script  server deploy
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    @{appUID} =  Get Regexp Matches  ${iexec_result}  iexec-server-js-client appUID (?P<appUID>.*)  appUID
     Log  @{appUID}[0]
-    ${iexec_result.stderr} =  IexecSdkDocker.Iexec An App  iexec-docker-with-script  server submit --app @{appUID}[0]
-    Log  ${iexec_result.stderr}
-    @{workUID} =  Get Regexp Matches  ${iexec_result.stderr}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
+    IexecSdk.Iexec An App  iexec-docker-with-script  server submit --app @{appUID}[0]
+    ${iexec_result} =  IexecSdk.Get Iexec Sdk Log
+    Log  ${iexec_result}
+    @{workUID} =  Get Regexp Matches  ${iexec_result}  iexec-server-js-client workUID (?P<workUID>.*)  workUID
     Log  @{workUID}[0]
     Wait Until Keyword Succeeds  2 min	30 sec  Check DockerWithScript Result  @{workUID}[0]
 
@@ -168,8 +175,8 @@ Prepare Iexec DockerWithScript
     ${rm_result} =  Run Process  rm -rf ${REPO_DIR}/iexec-docker-with-script  shell=yes
     Should Be Empty	${rm_result.stderr}
     Should Be Equal As Integers	${rm_result.rc}	0
-    IexecSdkDocker.Iexec Init An App  docker-with-script
-    IexecSdkDocker.Iexec An App  iexec-docker-with-script  wallet create
+    IexecSdk.Iexec Init An App  docker-with-script
+    IexecSdk.Iexec An App  iexec-docker-with-script  wallet create
     Run  sed "s/testxw.iex.ec/${XW_HOST}/g" ${REPO_DIR}/iexec-docker-with-script/truffle.js > ${REPO_DIR}/iexec-docker-with-script/truffle.tmp && cat ${REPO_DIR}/iexec-docker-with-script/truffle.tmp > ${REPO_DIR}/iexec-docker-with-script/truffle.js
     # change the name adress of iexec-docker-with-script
     ${wallet} =  Get File  ${REPO_DIR}/iexec-docker-with-script/wallet.json
@@ -183,7 +190,7 @@ Prepare Iexec DockerWithScript
 
 Check DockerWithScript Result
      [Arguments]  ${workUID}
-     IexecSdkDocker.Iexec An App  iexec-docker-with-script  server result ${workUID} --save
+     IexecSdk.Iexec An App  iexec-docker-with-script  server result ${workUID} --save
      Archive Should Contain File  ${REPO_DIR}/iexec-docker-with-script/${workUID}.zip  seeYouInMyZip.txt
      Extract Zip File  ${REPO_DIR}/iexec-docker-with-script/${workUID}.zip    ${REPO_DIR}/iexec-docker-with-script/zipout
      ${stdout} =  Get File  ${REPO_DIR}/iexec-docker-with-script/zipout/stdout.txt
