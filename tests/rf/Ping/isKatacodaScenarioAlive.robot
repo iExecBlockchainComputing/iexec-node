@@ -107,7 +107,7 @@ Prepare Iexec Factorial
     Should Be Equal As Integers	${rm_result.rc}	0
     IexecSdk.Iexec Init An App  factorial
     IexecSdk.Iexec An App  iexec-factorial  wallet create
-    Run  sed -i 's/.*\"privateKey\":.*/\"privateKey\":\"${PKEY}\",/g' ${REPO_DIR}/iexec-factorial/wallet.json
+    Run  sed 's/.*\"privateKey\":.*/\"privateKey\":\"${PKEY}\",/g' ${REPO_DIR}/iexec-factorial/wallet.json > ${REPO_DIR}/iexec-factorial/wallet.tmp && cat ${REPO_DIR}/iexec-factorial/wallet.tmp > ${REPO_DIR}/iexec-factorial/wallet.json
 
 Check Factorial 10 In Result
     [Arguments]  ${transactionHash}  ${network}
