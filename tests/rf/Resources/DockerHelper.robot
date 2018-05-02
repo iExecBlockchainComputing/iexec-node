@@ -4,6 +4,8 @@ Library  OperatingSystem
 *** Variables ***
 
 ${DOCKER_HOST}
+${REPO_DIR}
+${DOCKER_NETWORK} =  docker_iexec-net
 
 *** Keywords ***
 
@@ -17,14 +19,23 @@ Get Docker Container Id From Image
     Should not be empty  ${container_id.stdout}
     [Return]  ${container_id.stdout}
 
+
+Get Docker Container Id By Name
+    [Arguments]  ${docker_name}
+    ${container_id} =  Run Process  docker ps -a -q --filter \"name\=${docker_name}\"  shell=yes
+    Log  ${container_id.stdout}
+    Log  ${container_id.stderr}
+    Should not be empty  ${container_id.stdout}
+    [Return]  ${container_id.stdout}
+
 Logs By Container Id
     [Arguments]  ${container_id}
     Log  ${container_id}
-    Remove File  ${CURDIR}/${container_id}.log
-    Create File  ${CURDIR}/${container_id}.log
-    Run Process  docker logs ${container_id} > ${CURDIR}/${container_id}.log 2>&1  shell=yes
-    Log File  ${CURDIR}/${container_id}.log
-    ${content} =  Get File  ${CURDIR}/${container_id}.log
+    Remove File  ${REPO_DIR}/${container_id}.log
+    Create File  ${REPO_DIR}/${container_id}.log
+    Run Process  docker logs ${container_id} > ${REPO_DIR}/${container_id}.log 2>&1  shell=yes
+    Log File  ${REPO_DIR}/${container_id}.log
+    ${content} =  Get File  ${REPO_DIR}/${container_id}.log
     [Return]  ${content}
 
 Log File Of Container
@@ -49,6 +60,11 @@ Remove All Images
     Stop And Remove All Containers
     Run Process  docker rmi $(docker images -q)  shell=yes
 
+Stop Log And Remove Container
+    [Arguments]  ${container_id}
+    Stop Container  ${container_id}
+    Logs By Container Id  ${container_id}
+    Remove Container  ${container_id}
 
 Stop Container
     [Arguments]  ${container_id}
@@ -60,8 +76,9 @@ Remove Container
     Log  ${container_id}
     Run Process  docker rm -f ${container_id}  shell=yes
 
-Init Webproxy Network
-    Run Process  docker network create webproxy  shell=yes
+Create Network
+    Run Process  docker network create ${DOCKER_NETWORK}  shell=yes
+    Set Suite Variable  ${DOCKER_NETWORK}  ${DOCKER_NETWORK}
 
 Copy File To Container
     [Arguments]  ${container_id}  ${src}  ${dest}

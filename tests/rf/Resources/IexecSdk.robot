@@ -7,13 +7,11 @@ Library  String
 # Github mode
 ${IEXEC_SDK_GIT_URL} =  https://github.com/iExecBlockchainComputing/iexec-sdk.git
 ${IEXEC_SDK_GIT_BRANCH} =  master
-${IEXEC_ORACLE_GIT_BRANCH} =  master
 ${IEXEC_SDK_FORCE_GIT_CLONE} =  true
 ${IEXEC_SDK_DISTRIB}
 # docker mode
 ${IEXEC_SDK_IMAGE} =  iexechub/iexec-sdk
 ${IEXEC_SDK_IMAGE_VERSION} =  1.7.7
-${DOCKER_NETWORK}  =  docker_iexec-net
 ${REPO_DIR}
 
 ${LAUNCHED_IN_CONTAINER} =  false
@@ -94,7 +92,7 @@ Iexec Docker
     [Arguments]  ${args}
     Remove File  ${REPO_DIR}/iexec-sdk.log
     Create File  ${REPO_DIR}/iexec-sdk.log
-    ${iexec_result} =  Run Process  docker run -e DEBUG\=* --interactive --rm -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} ${args}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
+    ${iexec_result} =  Run Process  docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} ${args}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
     ${logs} =  Get Iexec Sdk Log
     Should Be Equal As Integers  ${iexec_result.rc}  0
     [Return]  ${logs}
@@ -104,7 +102,7 @@ Iexec An app Docker
     [Arguments]  ${directory}  ${args}
     Remove File  ${REPO_DIR}/iexec-sdk.log
     Create File  ${REPO_DIR}/iexec-sdk.log
-    ${iexec_result} =  Run Process  cd ${REPO_DIR}/${directory} && ls && docker run -e DEBUG\=* --interactive --rm -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} ${args}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
+    ${iexec_result} =  Run Process  cd ${REPO_DIR}/${directory} && ls && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} ${args}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
     ${logs} =  Get Iexec Sdk Log
     #Should Be Equal As Integers	${iexec_result.rc}	0
     [Return]  ${logs}
@@ -114,16 +112,11 @@ Iexec Init An App Docker
     [Arguments]  ${appName}
     Remove File  ${REPO_DIR}/iexec-sdk.log
     Create File  ${REPO_DIR}/iexec-sdk.log
-    ${iexec_result} =  Run Process  cd ${REPO_DIR} && docker run -e DEBUG\=* --interactive --rm -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} init ${appName}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
+    ${iexec_result} =  Run Process  cd ${REPO_DIR} && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} init ${appName}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
     ${logs} =  Get Iexec Sdk Log
     Directory Should Exist  ${REPO_DIR}/iexec-${appName}
     [Return]  ${logs}
 
-iexec Docker Net
-    [Arguments]  ${args}
-    ${logs} =  Run Process  docker run -e DEBUG\=* --interactive --rm -v $(pwd):/iexec-project -w /iexec-project --net ${DOCKER_NETWORK} ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} ${args}  shell=yes  stderr=STDOUT  timeout=340s  stdout=stdoutxwbuild.txt
-    LOG  ${logs}
-    [Return]  ${logs}
 # Docker section end
 
 # Github section start

@@ -23,7 +23,7 @@ ${REPO_DIR} =  ${CURDIR}/../repo
 
 *** Test Cases ***
 
-#pybot -d Results -t 'Test Suite Setup Initialized' ./tests/rf/Tests/iexec-poco-mock.robot
+#pybot -d Results ./tests/rf/Tests/iexec-poco-mock.robot
 Test Suite Setup Initialized
     Log  Suite Setup Initialized
 
