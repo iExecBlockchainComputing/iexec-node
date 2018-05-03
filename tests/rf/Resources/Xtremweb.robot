@@ -60,6 +60,9 @@ Gradle Build Xtremweb
     Create File  ${REPO_DIR}/xtremweb-hep-build.log
     Run Keyword If  '${BUILD_DOCKER_IMAGES}' == 'true'  Gradle BuildAll BuildImages Xtremweb
     Run Keyword If  '${BUILD_DOCKER_IMAGES}' == 'false'  Gradle BuildAll Xtremweb
+    Wait Until Keyword Succeeds  30 sec	3 sec  Check Build Xtremweb Log
+
+Check Build Xtremweb Log
     ${ret} =  Grep File  ${REPO_DIR}/xtremweb-hep-build.log  BUILD SUCCESSFUL in
     ${line_count} =  Get Line Count  ${ret}
     Should Be Equal As Integers	${line_count}	1
@@ -113,6 +116,9 @@ Start DockerCompose Xtremweb
     Log  ${container_id}
     Set Suite Variable  ${SERVER_CONTAINER_ID}  ${container_id}
 
+
+
+
     # copy scripts, conf and certificate from scheduler
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/bin ${REPO_DIR}/dbbin  shell=yes
     Log  ${result.stderr}
@@ -146,6 +152,8 @@ Start DockerCompose Xtremweb
     ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${MYSQL_CONTAINER_NAME}
     Log  ${container_id}
     Set Suite Variable  ${MYSQL_CONTAINER_ID}  ${container_id}
+
+    Sleep  10 sec
 
     # copy scripts and conf in the mysql container
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker exec -i ${MYSQL_CONTAINER_NAME} mkdir scripts  shell=yes
