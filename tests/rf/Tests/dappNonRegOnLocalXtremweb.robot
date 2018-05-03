@@ -37,6 +37,7 @@ Test Factorial
 
 
 DappNonReg Suite Setup
+     Create Directory  ${REPO_DIR}
      IexecSdk.Init Sdk
      Xtremweb.Gradle Build Xtremweb
      Xtremweb.Start DockerCompose Xtremweb
