@@ -3,6 +3,7 @@ Resource  ./DockerHelper.robot
 Library  Process
 Library  OperatingSystem
 Library  String
+Library  DateTime
 
 *** Variables ***
 ${XTREMWEB_GIT_URL} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
@@ -167,7 +168,7 @@ Start DockerCompose Xtremweb
 
     # Sleep 10?
 
-    # remove temporary files and folders 
+    # remove temporary files and folders
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && rm -rf dbbin/  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
