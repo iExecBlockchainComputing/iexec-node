@@ -3,9 +3,7 @@ Library  OperatingSystem
 
 *** Variables ***
 
-${DOCKER_HOST}
 ${REPO_DIR}
-${DOCKER_NETWORK} =  docker_iexec-net
 
 *** Keywords ***
 
@@ -76,9 +74,6 @@ Remove Container
     Log  ${container_id}
     Run Process  docker rm -f ${container_id}  shell=yes
 
-Create Network
-    Run Process  docker network create ${DOCKER_NETWORK}  shell=yes
-    Set Suite Variable  ${DOCKER_NETWORK}  ${DOCKER_NETWORK}
 
 Copy File To Container
     [Arguments]  ${container_id}  ${src}  ${dest}

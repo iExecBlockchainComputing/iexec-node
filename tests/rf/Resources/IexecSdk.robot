@@ -12,6 +12,7 @@ ${IEXEC_SDK_DISTRIB}
 # docker mode
 ${IEXEC_SDK_IMAGE} =  iexechub/iexec-sdk
 ${IEXEC_SDK_IMAGE_VERSION} =  1.7.7
+${DOCKER_NETWORK} =  docker_iexec-net
 ${REPO_DIR}
 
 ${LAUNCHED_IN_CONTAINER} =  false
@@ -20,7 +21,6 @@ ${LAUNCHED_IN_CONTAINER} =  false
 
 Init Sdk
     Run Keyword If  '${LAUNCHED_IN_CONTAINER}' == 'true'  Init Sdk JS
-    Run Keyword If  '${LAUNCHED_IN_CONTAINER}' == 'false'  Iexec Docker  --version
 
 Iexec
     [Arguments]  ${args}

@@ -10,7 +10,7 @@ Suite Setup  DappNonReg Suite Setup
 Suite Teardown  DappNonReg Suite Teardown
 
 # to launch tests :
-# pybot -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/dappNonRegOnLocalXtremweb.robot
+# pybot -d Results ./tests/rf/Tests/dappNonRegOnLocalXtremweb.robot
 
 
 *** Variables ***
@@ -20,11 +20,11 @@ ${REPO_DIR} =  ${CURDIR}/../repo
 
 *** Test Cases ***
 
-#Test Factorial
-#    DappNonReg.Factorial
+Test Factorial
+    DappNonReg.Factorial
 
-Test Ffmpeg
-    DappNonReg.Ffmpeg
+#Test Ffmpeg
+	#	    DappNonReg.Ffmpeg
 
 #Test DockerWithScript
 #    DappNonReg.DockerWithScript
@@ -37,7 +37,6 @@ Test Ffmpeg
 
 
 DappNonReg Suite Setup
-     DockerHelper.Create Network
      IexecSdk.Init Sdk
      Xtremweb.Gradle Build Xtremweb
      Xtremweb.Start DockerCompose Xtremweb
