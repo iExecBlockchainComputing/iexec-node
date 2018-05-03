@@ -114,18 +114,20 @@ Start DockerCompose Xtremweb
     Set Suite Variable  ${SERVER_CONTAINER_ID}  ${container_id}
 
     # copy scripts, conf and certificate from scheduler
-    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/bin dbbin  shell=yes
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/bin ${REPO_DIR}/dbbin  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
+    Directory Should Exist  ${REPO_DIR}/dbbin
 
 
-    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/conf dbconf  shell=yes
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/conf ${REPO_DIR}/dbconf  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
+    Directory Should Exist  ${REPO_DIR}/dbconf
 
-    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/keystore/xwscheduler.pem .  shell=yes
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/keystore/xwscheduler.pem ${REPO_DIR}  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
@@ -151,12 +153,12 @@ Start DockerCompose Xtremweb
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
 
-    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp dbbin ${MYSQL_CONTAINER_NAME}:/scripts/bin  shell=yes
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${REPO_DIR}/dbbin ${MYSQL_CONTAINER_NAME}:/scripts/bin  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
 
-    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp dbconf ${MYSQL_CONTAINER_NAME}:/scripts/conf  shell=yes
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${REPO_DIR}/dbconf ${MYSQL_CONTAINER_NAME}:/scripts/conf  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
@@ -170,11 +172,11 @@ Start DockerCompose Xtremweb
     # Sleep 10?
 
     # remove temporary files and folders
-    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && rm -rf dbbin/  shell=yes
+    ${result} =  Run Process  rm -rf ${REPO_DIR}/dbbin/  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
-    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && rm -rf dbconf/  shell=yes
+    ${result} =  Run Process  rm -rf ${REPO_DIR}/dbconf/  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
