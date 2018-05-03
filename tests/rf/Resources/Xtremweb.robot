@@ -161,6 +161,15 @@ Start DockerCompose Xtremweb
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
 
+    ${result} =  Run Process  chmod +x ${REPO_DIR}/dbbin/*  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+
+
+    ${result} =  Run Process  ls -altr ${REPO_DIR}/dbbin/  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${REPO_DIR}/dbbin ${MYSQL_CONTAINER_NAME}:/scripts/bin  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
