@@ -17,6 +17,7 @@ ${LAUNCHED_IN_CONTAINER} =  false
 
 ${JWTETHISSUER} =  TBD
 ${JWTETHSECRET} =  TBD
+
 ${LOGGERLEVEL} =  FINEST
 ${RESULTS_FOLDER_BASE}  =  /tmp/worker
 
@@ -161,7 +162,7 @@ Start DockerCompose Xtremweb
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
 
-    ${result} =  Run Process  chmod +x ${REPO_DIR}/dbbin/*  shell=yes
+    ${result} =  Run Process  chmod 777 ${REPO_DIR}/dbbin/*  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
 
@@ -205,6 +206,12 @@ Start DockerCompose Xtremweb
     ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${SERVER_CONTAINER_NAME}
     Log  ${container_id}
     Set Suite Variable  ${SERVER_CONTAINER_ID}  ${container_id}
+
+    ${result} =  Run Process  docker inspect ${SERVER_CONTAINER_ID}  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+
 
     ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker-compose -f docker-compose.yml up -d  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
     Set Suite Variable  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}  ${created_process}
