@@ -17,6 +17,8 @@ ${LAUNCHED_IN_CONTAINER} =  false
 ${JWTETHISSUER} =  TBD
 ${JWTETHSECRET} =  TBD
 ${LOGGERLEVEL} =  FINEST
+${RESULTS_FOLDER_BASE}  =  /tmp/worker
+
 
 ${XTREMWEB_DOCKERCOMPOSE_PROCESS}
 
@@ -62,10 +64,10 @@ Gradle Build Xtremweb
     LOG  ${logs}
 
 Gradle BuildAll BuildImages Xtremweb
-  Run Process  cd ${REPO_DIR}/xtremweb-hep && gradle buildAll buildImages -Penvironment\=docker  shell=yes stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep-build.log
+  Run Process  cd ${REPO_DIR}/xtremweb-hep && ./gradlew buildAll buildImages -Penvironment\=docker  shell=yes stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep-build.log
 
 Gradle BuildAll Xtremweb
-  Run Process  cd ${REPO_DIR}/xtremweb-hep && gradle buildAll  shell=yes stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep-build.log
+  Run Process  cd ${REPO_DIR}/xtremweb-hep && ./gradlew buildAll  shell=yes stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep-build.log
 
 
 Start DockerCompose Xtremweb
@@ -86,27 +88,108 @@ Start DockerCompose Xtremweb
     Log  ${result.stderr}
     Log  ${result.stdout}
 
-    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/iexecscheduler/scheduler/g" docker-compose.yml > docker-compose.tmp && cat docker-compose.tmp > docker-compose.yml  shell=yes
+    ${date} =	Get Current Date
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^RESULTS_FOLDER\=.*/RESULTS_FOLDER\=${RESULTS_FOLDER_BASE}_${date}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/iexecscheduler/${SERVER_CONTAINER_NAME}/g" docker-compose.yml > docker-compose.tmp && cat docker-compose.tmp > docker-compose.yml  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
 
 
-    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/iexecscheduler/scheduler/g" docker-compose-firstinstall.sh > docker-compose-firstinstall.tmp && cat docker-compose-firstinstall.tmp > docker-compose-firstinstall.sh  shell=yes
-    Log  ${result.stderr}
-    Log  ${result.stdout}
 
     Remove File  ${REPO_DIR}/xtremweb-hep.log
     Create File  ${REPO_DIR}/xtremweb-hep.log
-    ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && ./docker-compose-firstinstall.sh  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
+
+    # run dummy scheduler to get scripts for db
+    ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && ./docker-compose -f docker-compose.yml up -d ${SERVER_CONTAINER_NAME}  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
     Set Suite Variable  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}  ${created_process}
+
+    ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${SERVER_CONTAINER_NAME}
+    Log  ${container_id}
+    Set Suite Variable  ${SERVER_CONTAINER_ID}  ${container_id}
+
+    # copy scripts, conf and certificate from scheduler
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/bin dbbin  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/conf dbconf  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/keystore/xwscheduler.pem .  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+
+    # kill the dummy scheduler
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker-compose -f docker-compose.yml down -v  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+
+
+    # first start the database and wait a bit to have it started
+    ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && ./docker-compose -f docker-compose.yml up -d ${MYSQL_CONTAINER_NAME}  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
+    Set Suite Variable  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}  ${created_process}
+    docker-compose -f $dockerComposeFile up -d db
 
     ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${MYSQL_CONTAINER_NAME}
     Log  ${container_id}
     Set Suite Variable  ${MYSQL_CONTAINER_ID}  ${container_id}
 
+    # copy scripts and conf in the mysql container
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker exec -i ${MYSQL_CONTAINER_NAME} mkdir scripts  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp dbbin ${MYSQL_CONTAINER_NAME}:/scripts/bin  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp dbconf ${MYSQL_CONTAINER_NAME}:/scripts/conf  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+
+    # trigger the database creation in the mysql container
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker exec -i ${MYSQL_CONTAINER_NAME} /scripts/bin/setupDatabase --yes --rmdb --dbhost db  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+
+    # Sleep 10?
+
+    # remove temporary files and folders 
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && rm -rf dbbin/  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && rm -rf dbconf/  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+
+    # then start the scheduler and a little bit after all remaining services
+    ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker-compose -f docker-compose.yml up -d ${SERVER_CONTAINER_NAME}  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
+    Set Suite Variable  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}  ${created_process}
+
     ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${SERVER_CONTAINER_NAME}
     Log  ${container_id}
     Set Suite Variable  ${SERVER_CONTAINER_ID}  ${container_id}
+
+    ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker-compose -f docker-compose.yml up -d  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
+    Set Suite Variable  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}  ${created_process}
+
+    ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker-compose -f docker-compose.yml logs -f  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
+    Set Suite Variable  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}  ${created_process}
 
     ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${WORKER_CONTAINER_NAME}
     Log  ${container_id}
@@ -119,6 +202,8 @@ Start DockerCompose Xtremweb
     ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${GRAFANA_CONTAINER_NAME}
     Log  ${container_id}
     Set Suite Variable  ${GRAFANA_CONTAINER_ID}  ${container_id}
+
+
 
 Stop DockerCompose Xtremweb
     Get Xtremweb Log
