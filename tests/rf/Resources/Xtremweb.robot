@@ -82,9 +82,9 @@ Gradle BuildAll Xtremweb
 
 
 Start DockerCompose Xtremweb
-    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^ADMINUID\=.*/ADMINUID\=/g" .env > env.tmp && cat env.tmp > .env  shell=yes
-    Log  ${result.stderr}
-    Log  ${result.stdout}
+   # ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^ADMINUID\=.*/ADMINUID\=/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+   # Log  ${result.stderr}
+   # Log  ${result.stdout}
 
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^JWTETHISSUER\=.*/JWTETHISSUER\=${JWTETHISSUER}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
     Log  ${result.stderr}
@@ -184,6 +184,15 @@ Start DockerCompose Xtremweb
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
 
+    #get adminuid
+    ${get_admin_uid} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker exec -i ${MYSQL_CONTAINER_NAME} mysql --user\=root --password\=root --database\="iexec" -e "SELECT uid FROM users where login\='admin';"  shell=yes
+    Log  ${get_admin_uid.stderr}
+    Log  ${get_admin_uid.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^ADMINUID\=.*/ADMINUID\=${get_admin_uid.stdout}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
 
     # remove temporary files and folders
     ${result} =  Run Process  rm -rf ${REPO_DIR}/dbbin/  shell=yes
