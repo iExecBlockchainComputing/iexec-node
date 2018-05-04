@@ -78,12 +78,7 @@ Gradle BuildAll Xtremweb
 
 
 
-Check XtremWeb Server Start From Log
-    [Arguments]  ${log}
-    ${ret} =  Grep File  ${log}  listening on port : 443
-    ${line_count} =  Get Line Count  ${ret}
-    #listening on port : must be present twice for success
-    Should Be Equal As Integers	${line_count}	2
+
 
 
 Start DockerCompose Xtremweb
@@ -163,22 +158,13 @@ Start DockerCompose Xtremweb
     Log  ${container_id}
     Set Suite Variable  ${MYSQL_CONTAINER_ID}  ${container_id}
 
-    Sleep  10 sec
+    Wait Until Keyword Succeeds  2 min	5 sec  Check Mysql Start From Log
 
     # copy scripts and conf in the mysql container
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker exec -i ${MYSQL_CONTAINER_NAME} mkdir scripts  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
-
-    ${result} =  Run Process  chmod 777 ${REPO_DIR}/dbbin/*  shell=yes
-    Log  ${result.stderr}
-    Log  ${result.stdout}
-
-
-    ${result} =  Run Process  ls -altr ${REPO_DIR}/dbbin/  shell=yes
-    Log  ${result.stderr}
-    Log  ${result.stdout}
 
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${REPO_DIR}/dbbin ${MYSQL_CONTAINER_NAME}:/scripts/bin  shell=yes
     Log  ${result.stderr}
@@ -196,7 +182,6 @@ Start DockerCompose Xtremweb
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
 
-    # Sleep 10?
 
     # remove temporary files and folders
     ${result} =  Run Process  rm -rf ${REPO_DIR}/dbbin/  shell=yes
@@ -221,7 +206,7 @@ Start DockerCompose Xtremweb
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
 
-    Wait Until Keyword Succeeds  2 min	5 sec  Check XtremWeb Server Start From Log  ${REPO_DIR}/${SERVER_CONTAINER_ID}.log
+    Wait Until Keyword Succeeds  2 min	5 sec  Check XtremWeb Server Start From Log
 
     ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker-compose -f docker-compose.yml up -d  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
     Set Suite Variable  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}  ${created_process}
@@ -241,6 +226,19 @@ Start DockerCompose Xtremweb
     Log  ${container_id}
     Set Suite Variable  ${GRAFANA_CONTAINER_ID}  ${container_id}
 
+
+Check Mysql Start From Log
+    DockerHelper.Logs By Container Id  ${MYSQL_CONTAINER_ID}
+    ${ret} =  Grep File  ${REPO_DIR}/${MYSQL_CONTAINER_ID}.log  mysqld: ready for connections.
+    ${line_count} =  Get Line Count  ${ret}
+    Should Be Equal As Integers	${line_count}	1
+
+Check XtremWeb Server Start From Log
+    DockerHelper.Logs By Container Id  ${SERVER_CONTAINER_ID}
+    ${ret} =  Grep File  ${REPO_DIR}/${SERVER_CONTAINER_ID}.log  listening on port : 443
+    ${line_count} =  Get Line Count  ${ret}
+    #listening on port : must be present twice for success
+    Should Be Equal As Integers	${line_count}	2
 
 
 Stop DockerCompose Xtremweb
