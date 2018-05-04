@@ -240,9 +240,9 @@ Start DockerCompose Xtremweb
 
 Check Mysql Start From Log
     DockerHelper.Logs By Container Id  ${MYSQL_CONTAINER_ID}
-    ${ret} =  Grep File  ${REPO_DIR}/${MYSQL_CONTAINER_ID}.log  socket: '/var/run/mysqld/mysqld.sock'  port: 3306
+    ${ret} =  Grep File  ${REPO_DIR}/${MYSQL_CONTAINER_ID}.log  mysqld: ready for connections.
     ${line_count} =  Get Line Count  ${ret}
-    Should Be Equal As Integers	${line_count}	1
+    Should Not Be Equal As Integers	${line_count}	0
 
 Check XtremWeb Server Start From Log
     DockerHelper.Logs By Container Id  ${SERVER_CONTAINER_ID}
