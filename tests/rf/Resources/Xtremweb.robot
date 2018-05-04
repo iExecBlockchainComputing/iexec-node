@@ -77,6 +77,15 @@ Gradle BuildAll Xtremweb
   Run Process  cd ${REPO_DIR}/xtremweb-hep && ./gradlew buildAll  shell=yes stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep-build.log
 
 
+
+Check XtremWeb Server Start From Log
+    [Arguments]  ${log}
+    ${ret} =  Grep File  ${log}  listening on port : 443
+    ${line_count} =  Get Line Count  ${ret}
+    #listening on port : must be present twice for success
+    Should Be Equal As Integers	${line_count}	2
+
+
 Start DockerCompose Xtremweb
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^ADMINUID\=.*/ADMINUID\=/g" .env > env.tmp && cat env.tmp > .env  shell=yes
     Log  ${result.stderr}
@@ -212,6 +221,7 @@ Start DockerCompose Xtremweb
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
 
+    Wait Until Keyword Succeeds  2 min	5 sec  Check XtremWeb Server Start From Log  ${REPO_DIR}/${SERVER_CONTAINER_ID}.log
 
     ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker-compose -f docker-compose.yml up -d  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
     Set Suite Variable  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}  ${created_process}
