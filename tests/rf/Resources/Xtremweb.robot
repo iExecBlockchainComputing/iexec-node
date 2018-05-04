@@ -160,6 +160,8 @@ Start DockerCompose Xtremweb
 
     Wait Until Keyword Succeeds  2 min	5 sec  Check Mysql Start From Log
 
+    Sleep  10 sec
+
     # copy scripts and conf in the mysql container
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker exec -i ${MYSQL_CONTAINER_NAME} mkdir scripts  shell=yes
     Log  ${result.stderr}
