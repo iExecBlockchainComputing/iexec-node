@@ -61,7 +61,7 @@ Gradle Build Xtremweb
     Create File  ${REPO_DIR}/xtremweb-hep-build.log
     Run Keyword If  '${BUILD_DOCKER_IMAGES}' == 'true'  Gradle BuildAll BuildImages Xtremweb
     Run Keyword If  '${BUILD_DOCKER_IMAGES}' == 'false'  Gradle BuildAll Xtremweb
-    Wait Until Keyword Succeeds  30 sec	3 sec  Check Build Xtremweb Log
+    Wait Until Keyword Succeeds  2 min	3 sec  Check Build Xtremweb Log
 
 Check Build Xtremweb Log
     ${ret} =  Grep File  ${REPO_DIR}/xtremweb-hep-build.log  BUILD SUCCESSFUL in
