@@ -7,7 +7,7 @@ Library  DateTime
 
 *** Variables ***
 ${XTREMWEB_GIT_URL} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
-${XTREMWEB_GIT_BRANCH} =  master
+${XTREMWEB_GIT_BRANCH} =  fix-SchedulerPocoWatcherImpl
 ${BUILD_DOCKER_IMAGES} =  true
 ${XTREMWEB_FORCE_GIT_CLONE} =  true
 
