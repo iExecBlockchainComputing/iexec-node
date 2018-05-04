@@ -185,7 +185,7 @@ Start DockerCompose Xtremweb
     Should Be Equal As Integers  ${result.rc}  0
 
     #get adminuid
-    ${get_admin_uid} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker exec -i ${MYSQL_CONTAINER_NAME} mysql --user\=root --password\=root --database\="iexec" -e "SELECT uid FROM users where login\='admin';"  shell=yes
+    ${get_admin_uid} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker exec -i ${MYSQL_CONTAINER_NAME} mysql -sN --user\=root --password\=root --database\="iexec" -e "SELECT uid FROM users where login\='admin';"  shell=yes
     Log  ${get_admin_uid.stderr}
     Log  ${get_admin_uid.stdout}
     Should Be Equal As Integers  ${result.rc}  0
