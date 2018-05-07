@@ -53,6 +53,8 @@ Logs By Image
 Stop And Remove All Containers
     Run Process  docker stop $(docker ps -a -q)  shell=yes
     Run Process  docker rm $(docker ps -a -q)  shell=yes
+    # Delete all images
+    # docker rmi $(docker images -q)
 
 Remove All Images
     Stop And Remove All Containers
