@@ -17,6 +17,7 @@ ${LAUNCHED_IN_CONTAINER} =  false
 
 ${JWTETHISSUER}
 ${JWTETHSECRET}
+${BLOCKCHAINETHENABLED} =  false
 
 ${LOGGERLEVEL} =  FINEST
 ${RESULTS_FOLDER_BASE}  =  /tmp/worker
@@ -82,9 +83,9 @@ Gradle BuildAll Xtremweb
 
 
 Start DockerCompose Xtremweb
-   # ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^ADMINUID\=.*/ADMINUID\=/g" .env > env.tmp && cat env.tmp > .env  shell=yes
-   # Log  ${result.stderr}
-   # Log  ${result.stdout}
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^BLOCKCHAINETHENABLED\=.*/BLOCKCHAINETHENABLED\=${BLOCKCHAINETHENABLED}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
 
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^JWTETHISSUER\=.*/JWTETHISSUER\=${JWTETHISSUER}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
     Log  ${result.stderr}
