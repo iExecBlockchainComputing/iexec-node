@@ -48,8 +48,10 @@ ${GETH_POCO_IMAGE} =  iexechub/geth-poco
 ${GETH_POCO_IMAGE_VERSION} =  1.0.10
 ${GETH_POCO_PROCESS}
 ${GETH_POCO_CONTAINER_ID}
+${GETH_POCO_IP_IN_DOCKER_NETWORK}
 ${DOCKER_NETWORK} =  docker_iexec-net
-
+${GETH_POCO_RLCCONTRACT} =  0x091233035dcb12ae5a4a4b7fb144d3c5189892e1
+${GETH_POCO_IEXECHUBCONTRACT} =  0xc4e4a08bf4c6fd11028b714038846006e27d7be8
 
 *** Keywords ***
 
@@ -216,7 +218,6 @@ Start DockerCompose Xtremweb
     Run Keyword If  '${START_POA_GETH_POCO}' == 'true'  Start Poa Geth PoCo
 
 
-
     # then start the scheduler and a little bit after all remaining services
     ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker-compose -f docker-compose.yml up -d ${SERVER_SERVICE_NAME}  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
     Set Suite Variable  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}  ${created_process}
@@ -264,6 +265,22 @@ Start Poa Geth PoCo
         Log  ${result.stderr}
         Log  ${result.stdout}
         Should Be Equal As Integers  ${result.rc}  0
+        @{IPAddress} =  Get Regexp Matches  ${result.stdout}  "IPAddress": "1(?P<IPAddress>.*)"  IPAddress
+        Log  @{IPAddress}[0]
+        ${ip_poco} =  Catenate  SEPARATOR=  1  @{IPAddress}[0]
+        Set Suite Variable  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${ip_poco}
+
+        ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/172\.17\.0\.2/${GETH_POCO_IP_IN_DOCKER_NETWORK}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+        Log  ${result.stderr}
+        Log  ${result.stdout}
+
+        ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^RLCCONTRACT\=.*/RLCCONTRACT\=${GETH_POCO_RLCCONTRACT}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+        Log  ${result.stderr}
+        Log  ${result.stdout}
+
+        ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^IEXECHUBCONTRACT\=.*/IEXECHUBCONTRACT\=${GETH_POCO_IEXECHUBCONTRACT}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+        Log  ${result.stderr}
+        Log  ${result.stdout}
 
 
 Check Mysql Start From Log
