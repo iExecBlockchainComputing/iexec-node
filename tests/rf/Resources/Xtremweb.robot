@@ -10,6 +10,7 @@ ${XTREMWEB_GIT_URL} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.
 ${XTREMWEB_GIT_BRANCH} =  master-compile
 ${BUILD_DOCKER_IMAGES} =  true
 ${XTREMWEB_FORCE_GIT_CLONE} =  true
+${START_POA_GETH_POCO} =  true
 
 ${REPO_DIR}
 
@@ -42,6 +43,12 @@ ${GRAFANA_CONTAINER_ID}
 
 ${ADMINER_IMAGE} =  adminer:4.6.2
 ${ADMINER_CONTAINER_ID}
+
+${GETH_POCO_IMAGE} =  iexechub/geth-poco
+${GETH_POCO_IMAGE_VERSION} =  1.0.10
+${GETH_POCO_PROCESS}
+${GETH_POCO_CONTAINER_ID}
+${DOCKER_NETWORK} =  docker_iexec-net
 
 
 *** Keywords ***
@@ -205,6 +212,11 @@ Start DockerCompose Xtremweb
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
 
+
+    Run Keyword If  '${START_POA_GETH_POCO}' == 'true'  Start Poa Geth PoCo
+
+
+
     # then start the scheduler and a little bit after all remaining services
     ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker-compose -f docker-compose.yml up -d ${SERVER_SERVICE_NAME}  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
     Set Suite Variable  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}  ${created_process}
@@ -239,6 +251,21 @@ Start DockerCompose Xtremweb
     Set Suite Variable  ${GRAFANA_CONTAINER_ID}  ${container_id}
 
 
+
+Start Poa Geth PoCo
+        Remove File  ${REPO_DIR}/geth-poco.log
+        Create File  ${REPO_DIR}/geth-poco.log
+        ${created_process} =  Start Process  docker run -t -d --net ${DOCKER_NETWORK} --name geth-poco -p 8545:8545 ${GETH_POCO_IMAGE}:${GETH_POCO_IMAGE_VERSION}  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/geth-poco.log
+        Set Suite Variable  ${GETH_POCO_PROCESS}  ${created_process}
+        ${container_id} =  Wait Until Keyword Succeeds  1 min	10 sec  DockerHelper.Get Docker Container Id From Image  ${GETH_POCO_IMAGE}:${GETH_POCO_IMAGE_VERSION}
+        Log  ${container_id}
+        Set Suite Variable  ${GETH_POCO_CONTAINER_ID}  ${container_id}
+        ${result} =  Run Process  docker inspect ${GETH_POCO_CONTAINER_ID}  shell=yes
+        Log  ${result.stderr}
+        Log  ${result.stdout}
+        Should Be Equal As Integers  ${result.rc}  0
+
+
 Check Mysql Start From Log
     DockerHelper.Logs By Container Id  ${MYSQL_CONTAINER_ID}
     ${ret} =  Grep File  ${REPO_DIR}/${MYSQL_CONTAINER_ID}.log  mysqld: ready for connections.
@@ -265,6 +292,8 @@ Stop DockerCompose Xtremweb
     DockerHelper.Stop Log And Remove Container  ${SERVER_CONTAINER_ID}
 
     DockerHelper.Stop Log And Remove Container  ${MYSQL_CONTAINER_ID}
+
+    Run Keyword If  '${START_POA_GETH_POCO}' == 'true'  DockerHelper.Stop Log And Remove Container  ${GETH_POCO_CONTAINER_ID}
 
     Terminate Process  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}
 
