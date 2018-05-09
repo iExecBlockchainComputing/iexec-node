@@ -40,15 +40,15 @@ This Suite Setup
     IexecSdk.Init Sdk
     Xtremweb.Gradle Build Xtremweb
     Xtremweb.Start DockerCompose Xtremweb
-    #IexecCommon.Gradle Build Iexec Common
-    #IexecScheduler.Gradle Build Iexec Scheduler
-    #IexecSchedulerMock.Gradle Build BootRun Iexec Scheduler Mock
-    #IexecWorker.Gradle Build Iexec Worker
-    #IexecWorkerMock.Gradle Build BootRun Iexec Worker Mock
+    IexecCommon.Gradle Build Iexec Common
+    IexecScheduler.Gradle Build Iexec Scheduler
+    IexecSchedulerMock.Gradle Build BootRun Iexec Scheduler Mock
+    IexecWorker.Gradle Build Iexec Worker
+    IexecWorkerMock.Gradle Build BootRun Iexec Worker Mock
 
 
 This Suite Teardown
-    #IexecWorkerMock.Stop Worker Mock
-    #IexecSchedulerMock.Stop Scheduler Mock
+    IexecWorkerMock.Stop Worker Mock
+    IexecSchedulerMock.Stop Scheduler Mock
     #GethPocoDocker.Stop GethPoco Container
     Xtremweb.Stop DockerCompose Xtremweb
