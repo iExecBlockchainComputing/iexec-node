@@ -14,7 +14,7 @@ Suite Teardown  This Suite Teardown
 
 
 # to launch all tests if robot installed on your host:
-# pybot -d Results ./tests/rf/Tests/iexec-poco-mock.robot
+# nohup pybot -d Results ./tests/rf/Tests/iexec-poco-mock.robot &
 
 
 *** Variables ***
@@ -118,9 +118,6 @@ Check CreateMarketOrder
 Check WorkerPoolSubscription
     ${logs} =  Get File  ${REPO_DIR}/scheduler-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  Received WorkerPoolSubscriptionEvent
-    ${lines_count} =  Get Line Count  ${lines}
-    Should Be Equal As Integers	${lines_count}	1
-    ${lines} =  Get Lines Containing String  ${logs}  MockSchedulerService - onSubscription : worker =
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 

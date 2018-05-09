@@ -14,7 +14,7 @@ Suite Teardown  This Suite Teardown
 
 
 # to launch all tests if robot installed on your host:
-# pybot -d Results ./tests/rf/Tests/iexec-poco-lib.robot
+# nohup pybot -d Results ./tests/rf/Tests/iexec-poco-lib.robot &
 
 
 *** Variables ***
