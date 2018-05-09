@@ -34,6 +34,7 @@ Gradle Build Iexec Worker Mock
 Docker Run Iexec Worker Mock
     Gradle Build Iexec Worker Mock
     Desactivate All Worker Mock
+    Set Scheduler IP Conf
     ${result} =  Run Process  cd ${REPO_DIR}/iexec-worker-mock && docker build -t iexechub/iexec-worker-mock .  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
@@ -47,6 +48,12 @@ Docker Run Iexec Worker Mock
     Set Suite Variable  ${IEXEC_WORKER_MOCK_CONTAINER_ID}  ${container_id}
     Wait Until Keyword Succeeds  3 min	 5 sec  Check Worker Mock Initialized
 
+
+Set Scheduler IP Conf
+    File Should Exist  ${REPO_DIR}/iexec-worker-mock/src/main/resources/iexec-worker.yml
+    Run  cat ${REPO_DIR}/iexec-worker-mock/src/main/resources/iexec-worker.yml|sed 's/localhost/${IEXEC_SCHEDULER_IP_IN_DOCKER_NETWORK}/g' >${REPO_DIR}/iexec-worker-mock/src/main/resources/iexec-worker.tmp
+    File Should Exist  ${REPO_DIR}/iexec-worker-mock/src/main/resources/iexec-worker.tmp
+    Run  cat ${REPO_DIR}/iexec-worker-mock/src/main/resources/iexec-worker.tmp >${REPO_DIR}/iexec-worker-mock/src/main/resources/iexec-worker.yml
 
 
 Gradle Build BootRun Iexec Worker Mock

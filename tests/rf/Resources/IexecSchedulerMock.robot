@@ -9,6 +9,8 @@ ${IEXEC_SCHEDULER_MOCK_FORCE_GIT_CLONE} =  true
 ${IEXEC_SCHEDULER_MOCK_PROCESS}
 ${DOCKER_NETWORK} =  docker_iexec-net
 ${IEXEC_SCHEDULER_MOCK_CONTAINER_ID}
+${IEXEC_SCHEDULER_IP_IN_DOCKER_NETWORK}
+
 
 *** Keywords ***
 
@@ -49,6 +51,15 @@ Docker Run Iexec Scheduler Mock
     Log  ${container_id}
     Set Suite Variable  ${IEXEC_SCHEDULER_MOCK_CONTAINER_ID}  ${container_id}
     Wait Until Keyword Succeeds  3 min	 5 sec  Check Scheduler Mock Initialized
+
+    ${result} =  Run Process  docker inspect ${IEXEC_SCHEDULER_MOCK_CONTAINER_ID}  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+    Should Be Equal As Integers  ${result.rc}  0
+    @{IPAddress} =  Get Regexp Matches  ${result.stdout}  "IPAddress": "1(?P<IPAddress>.*)"  IPAddress
+    Log  @{IPAddress}[0]
+    ${ip} =  Catenate  SEPARATOR=  1  @{IPAddress}[0]
+    Set Suite Variable  ${IEXEC_SCHEDULER_IP_IN_DOCKER_NETWORK}  ${ip}
 
 
 

@@ -35,7 +35,6 @@ Test Suite Setup Initialized
 *** Keywords ***
 
 This Suite Setup
-    #GethPocoDocker.Start GethPoco Container
     Create Directory  ${REPO_DIR}
     IexecSdk.Init Sdk
     Xtremweb.Gradle Build Xtremweb
@@ -43,12 +42,11 @@ This Suite Setup
     IexecCommon.Gradle Build Iexec Common
     IexecScheduler.Gradle Build Iexec Scheduler
     IexecSchedulerMock.Docker Run Iexec Scheduler Mock
-    #IexecWorker.Gradle Build Iexec Worker
-    #IexecWorkerMock.Gradle Build BootRun Iexec Worker Mock
+    IexecWorker.Gradle Build Iexec Worker
+    IexecWorkerMock.Docker Run Iexec Worker Mock
 
 
 This Suite Teardown
-   # IexecWorkerMock.Stop Worker Mock
+    IexecWorkerMock.Docker Stop Worker Mock
     IexecSchedulerMock.Docker Stop Scheduler Mock
-    #GethPocoDocker.Stop GethPoco Container
     Xtremweb.Stop DockerCompose Xtremweb
