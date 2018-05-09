@@ -63,9 +63,9 @@ Set RlcAddress IexecHubAddress Conf
     Run  cat ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp >${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml
 
 Gradle BootRun Scheduler
-    ${created_process} =  Start Process  cd ${REPO_DIR}/iexec-scheduler-mock && gradle bootRun  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/scheduler-mock.log
+    ${created_process} =  Start Process  cd ${REPO_DIR}/iexec-scheduler-mock && ./gradlew bootRun  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/scheduler-mock.log
     Set Suite Variable  ${IEXEC_SCHEDULER_MOCK_PROCESS}  ${created_process}
-    Wait Until Keyword Succeeds  5 min	 5 sec  Check Scheduler Mock Initialized
+    Wait Until Keyword Succeeds  3 min	 5 sec  Check Scheduler Mock Initialized
 
 Check Scheduler Mock Initialized
     ${logs} =  Get File  ${REPO_DIR}/scheduler-mock.log

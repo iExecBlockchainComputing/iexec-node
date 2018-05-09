@@ -55,9 +55,9 @@ Desactivate All Worker Mock
     Run  cat ${REPO_DIR}/iexec-worker-mock/src/main/resources/application.tmp >${REPO_DIR}/iexec-worker-mock/src/main/resources/application.yml
 
 Gradle BootRun Worker
-    ${created_process} =  Start Process  cd ${REPO_DIR}/iexec-worker-mock && gradle bootRun  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/worker-mock.log
+    ${created_process} =  Start Process  cd ${REPO_DIR}/iexec-worker-mock && ./gradlew bootRun  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/worker-mock.log
     Set Suite Variable  ${IEXEC_WORKER_MOCK_PROCESS}  ${created_process}
-    Wait Until Keyword Succeeds  1 min	 5 sec  Check Worker Mock Initialized
+    Wait Until Keyword Succeeds  3 min	 5 sec  Check Worker Mock Initialized
 
 Check Worker Mock Initialized
     ${logs} =  Get File  ${REPO_DIR}/worker-mock.log
