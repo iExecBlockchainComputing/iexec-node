@@ -31,6 +31,12 @@ ${XW_HOST} =  scheduler
 Test Suite Setup Initialized
     Log  Suite Setup Initialized
 
+Test Only With Mock
+    ${logs} =  IexecSchedulerMock.Curl On Scheduler Mock  getMarketOrdersCount
+    Log  ${logs}
+
+
+
 
 *** Keywords ***
 
