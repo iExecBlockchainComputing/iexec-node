@@ -19,7 +19,7 @@ Gradle Build Iexec Common
 Git Clone Iexec Common
     Directory Should Exist  ${REPO_DIR}
     Remove Directory  ${REPO_DIR}/iexec-common  recursive=true
-    ${git_result} =  Run Process  cd ${REPO_DIR} && git clone -b ${IEXEC_COMMON_GIT_BRANCH} ${IEXEC_COMMON_GIT_URL} && git submodule update --init --recursive  shell=yes
+    ${git_result} =  Run Process  cd ${REPO_DIR} && git clone -b ${IEXEC_COMMON_GIT_BRANCH} ${IEXEC_COMMON_GIT_URL} && cd ${REPO_DIR}/iexec-common && git submodule update --init --recursive  shell=yes
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0
