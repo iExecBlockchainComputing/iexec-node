@@ -16,7 +16,7 @@ Start GethPoco Container
     Create File  ${REPO_DIR}/geth-poco.log
     ${created_process} =  Start Process  docker run -t -d --name geth-poco -p 8545:8545 ${GETH_POCO_IMAGE}:${GETH_POCO_IMAGE_VERSION}  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/geth-poco.log
     Set Suite Variable  ${GETH_POCO_PROCESS}  ${created_process}
-    ${container_id} =  Wait Until Keyword Succeeds  1 min	10 sec  DockerHelper.Get Docker Container Id From Image  ${GETH_POCO_IMAGE}:${GETH_POCO_IMAGE_VERSION}
+    ${container_id} =  Wait Until Keyword Succeeds  5 min	10 sec  DockerHelper.Get Docker Container Id From Image  ${GETH_POCO_IMAGE}:${GETH_POCO_IMAGE_VERSION}
     Log  ${container_id}
     Set Suite Variable  ${GETH_POCO_CONTAINER_ID}  ${container_id}
 
