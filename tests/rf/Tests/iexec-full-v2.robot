@@ -42,13 +42,13 @@ This Suite Setup
     Xtremweb.Start DockerCompose Xtremweb
     IexecCommon.Gradle Build Iexec Common
     IexecScheduler.Gradle Build Iexec Scheduler
-    IexecSchedulerMock.Gradle Build BootRun Iexec Scheduler Mock
-    IexecWorker.Gradle Build Iexec Worker
-    IexecWorkerMock.Gradle Build BootRun Iexec Worker Mock
+    IexecSchedulerMock.Docker Run Iexec Scheduler Mock
+    #IexecWorker.Gradle Build Iexec Worker
+    #IexecWorkerMock.Gradle Build BootRun Iexec Worker Mock
 
 
 This Suite Teardown
-    IexecWorkerMock.Stop Worker Mock
-    IexecSchedulerMock.Stop Scheduler Mock
+   # IexecWorkerMock.Stop Worker Mock
+    IexecSchedulerMock.Docker Stop Scheduler Mock
     #GethPocoDocker.Stop GethPoco Container
     Xtremweb.Stop DockerCompose Xtremweb

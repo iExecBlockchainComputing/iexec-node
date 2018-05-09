@@ -21,9 +21,7 @@ Start GethPoco Container
     Set Suite Variable  ${GETH_POCO_CONTAINER_ID}  ${container_id}
 
 Stop GethPoco Container
-    Get GethPoco Log
-    DockerHelper.Stop Container  ${GETH_POCO_CONTAINER_ID}
-    DockerHelper.Remove Container  ${GETH_POCO_CONTAINER_ID}
+    DockerHelper.Stop Log And Remove Container  ${GETH_POCO_CONTAINER_ID}
     Terminate Process  ${GETH_POCO_PROCESS}
 
 
