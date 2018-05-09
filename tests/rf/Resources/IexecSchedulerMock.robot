@@ -24,7 +24,7 @@ Gradle Build Iexec Scheduler Mock
     Create File  ${REPO_DIR}/scheduler-mock.log
     Run  sed -i '/compile "com.iexec.scheduler:iexec-scheduler*/d' ${REPO_DIR}/iexec-scheduler-mock/build.gradle
     Run  sed -i 's/\\/\\/compile files/compile files/g' ${REPO_DIR}/iexec-scheduler-mock/build.gradle
-    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-scheduler-mock && gradle build  shell=yes
+    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-scheduler-mock && ./gradlew build  shell=yes
     Log  ${gradle_result.stderr}
     Log  ${gradle_result.stdout}
     Should Be Equal As Integers	${gradle_result.rc}	0
