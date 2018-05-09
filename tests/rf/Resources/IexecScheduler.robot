@@ -4,7 +4,7 @@
 ${REPO_DIR}
 ${IEXEC_SCHEDULER_GIT_URL} =  https://github.com/iExecBlockchainComputing/iexec-scheduler.git
 ${IEXEC_SCHEDULER_GIT_BRANCH} =  master
-${IEXEC_SCHEDULER_FORCE_GIT_CLONE} =  false
+${IEXEC_SCHEDULER_FORCE_GIT_CLONE} =  true
 *** Keywords ***
 
 Gradle Build Iexec Scheduler

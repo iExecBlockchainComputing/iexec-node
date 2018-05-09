@@ -4,7 +4,7 @@
 ${REPO_DIR}
 ${IEXEC_WORKER_GIT_URL} =  https://github.com/iExecBlockchainComputing/iexec-worker.git
 ${IEXEC_WORKER_GIT_BRANCH} =  master
-${IEXEC_WORKER_FORCE_GIT_CLONE} =  false
+${IEXEC_WORKER_FORCE_GIT_CLONE} =  true
 *** Keywords ***
 
 Gradle Build Iexec Worker
