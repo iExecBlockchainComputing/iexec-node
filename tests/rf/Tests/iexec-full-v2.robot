@@ -25,6 +25,11 @@ ${REPO_DIR} =  ${CURDIR}/../repo
 ${XW_HOST} =  scheduler
 
 
+${XTREMWEB_GIT_BRANCH} =  13.1.0
+${START_POA_GETH_POCO} =  true
+${BLOCKCHAINETHENABLED} =  true
+
+
 *** Test Cases ***
 
 #nohup pybot -d Results -t 'Test Suite Setup Initialized' ./tests/rf/Tests/iexec-full-v2.robot &

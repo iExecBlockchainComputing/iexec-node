@@ -10,7 +10,7 @@ ${XTREMWEB_GIT_URL} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.
 ${XTREMWEB_GIT_BRANCH} =  master-compile
 ${BUILD_DOCKER_IMAGES} =  true
 ${XTREMWEB_FORCE_GIT_CLONE} =  true
-${START_POA_GETH_POCO} =  true
+${START_POA_GETH_POCO} =  false
 
 ${REPO_DIR}
 
