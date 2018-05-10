@@ -336,7 +336,7 @@ Get Xtremweb Log
 
 Curl On Scheduler
     [Arguments]  ${URL}
-    ${curl_result} =  Run Process  docker run --rm --net ${DOCKER_NETWORK} appropriate/curl -fsSL https://${SERVER_SERVICE_NAME}:443/${URL}  shell=yes
+    ${curl_result} =  Run Process  docker run --rm --net ${DOCKER_NETWORK} appropriate/curl -fsSL 'https://${SERVER_SERVICE_NAME}:443/${URL}'  shell=yes
     Log  ${curl_result.stdout}
     Log  ${curl_result.stderr}
     Should Be Equal As Integers  ${curl_result.rc}  0
