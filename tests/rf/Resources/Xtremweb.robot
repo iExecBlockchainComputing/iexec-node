@@ -301,7 +301,7 @@ Check XtremWeb Server Start From Log
 
 Retrieved WorkerPool Address Automaticaly Created
     ${content} =  DockerHelper.Logs By Container Id  ${SERVER_CONTAINER_ID}
-    ${ret} =  Grep File  ${REPO_DIR}/${SERVER_CONTAINER_ID}.log  CreateWorkerPool [address:0x597fa45586a1f4879605c0b8c04c4100a918ee0d]
+    ${ret} =  Grep File  ${REPO_DIR}/${SERVER_CONTAINER_ID}.log  CreateWorkerPool \[address
     ${line_count} =  Get Line Count  ${ret}
     Should Be Equal As Integers	${line_count}	1
     Set Suite Variable  ${GETH_POCO_WORKERPOOL_CREATED_AT_START}  0x597fa45586a1f4879605c0b8c04c4100a918ee0d
