@@ -132,7 +132,7 @@ Docker Stop Scheduler Mock
 
 Curl On Scheduler Mock
     [Arguments]  ${URL}
-    ${curl_result} =  Run Process  docker run --rm --net ${DOCKER_NETWORK} appropriate/curl https://${IEXEC_SCHEDULER_IP_IN_DOCKER_NETWORK}:8080/${URL}  shell=yes
+    ${curl_result} =  Run Process  docker run --rm --net ${DOCKER_NETWORK} appropriate/curl http://${IEXEC_SCHEDULER_IP_IN_DOCKER_NETWORK}:8080/${URL}  shell=yes
     Log  ${curl_result.stdout}
     Log  ${curl_result.stderr}
     Should Be Equal As Integers  ${curl_result.rc}  0
