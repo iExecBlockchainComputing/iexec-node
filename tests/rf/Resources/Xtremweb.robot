@@ -304,7 +304,7 @@ Retrieved WorkerPool Address Automaticaly Created
     ${ret} =  Grep File  ${REPO_DIR}/${SERVER_CONTAINER_ID}.log  CreateWorkerPool \[address
     ${line_count} =  Get Line Count  ${ret}
     Should Be Equal As Integers	${line_count}	1
-    @{CreateWorkerPool} =  Get Regexp Matches  ${result.stdout}  CreateWorkerPool \[address:(?P<CreateWorkerPool>.*)\]  CreateWorkerPool
+    @{CreateWorkerPool} =  Get Regexp Matches  ${content}  CreateWorkerPool \[address:(?P<CreateWorkerPool>.*)\]  CreateWorkerPool
     Log  @{CreateWorkerPool}[0]
     Set Suite Variable  ${GETH_POCO_WORKERPOOL_CREATED_AT_START}  @{CreateWorkerPool}[0]
 
