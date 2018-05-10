@@ -104,7 +104,7 @@ Set RlcAddress IexecHubAddress Conf
 
 Set WorkerPoolAddress Conf
     File Should Exist  ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml
-    Run  cat ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml|sed 's/address: /address: ${GETH_POCO_WORKERPOOL_CREATED_AT_START}/g' >${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp
+    Run  cat ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml|sed 's/address: /address: ${GETH_POCO_WORKERPOOL_CREATED_AT_START} /g' >${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp
     File Should Exist  ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp
     Run  cat ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp >${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml
 

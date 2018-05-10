@@ -309,9 +309,6 @@ Retrieved WorkerPool Address Automaticaly Created
     ${content} =  Fetch From Left  ${content}  ]
     Set Suite Variable  ${GETH_POCO_WORKERPOOL_CREATED_AT_START}  ${content}
 
-#CreateWorkerPool [address:0x597fa45586a1f4879605c0b8c04c4100a918ee0d]
-
-
 Stop DockerCompose Xtremweb
     Get Xtremweb Log
 
