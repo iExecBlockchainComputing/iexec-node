@@ -300,15 +300,13 @@ Check XtremWeb Server Start From Log
     Run Keyword If  '${START_POA_GETH_POCO}' == 'true'  Retrieved WorkerPool Address Automaticaly Created
 
 Retrieved WorkerPool Address Automaticaly Created
-    DockerHelper.Logs By Container Id  ${SERVER_CONTAINER_ID}
+    ${content} =  DockerHelper.Logs By Container Id  ${SERVER_CONTAINER_ID}
     ${ret} =  Grep File  ${REPO_DIR}/${SERVER_CONTAINER_ID}.log  CreateWorkerPool
     ${line_count} =  Get Line Count  ${ret}
     Should Be Equal As Integers	${line_count}	1
-    @{WorkerPoolAddress} =  Get Regexp Matches  ${ret}  CreateWorkerPool [address:(?P<WorkerPoolAddress>.*)]  WorkerPoolAddress
+    @{WorkerPoolAddress} =  Get Regexp Matches  ${content}  CreateWorkerPool [address:(?P<WorkerPoolAddress>.*)]  WorkerPoolAddress
     Log  @{WorkerPoolAddress}[0]
     Set Suite Variable  ${GETH_POCO_WORKERPOOL_CREATED_AT_START}  @{WorkerPoolAddress}[0]
-
-    #c.i.s.workerpool.WorkerPoolService - CreateWorkerPool [address:0x597fa45586a1f4879605c0b8c04c4100a918ee0d]
 
 
 Stop DockerCompose Xtremweb
