@@ -32,7 +32,7 @@ Test Suite Setup Initialized
     Log  Suite Setup Initialized
 
 Test Only With Mock
-    ${logs} =  IexecSchedulerMock.Curl On Scheduler Mock  getMarketOrdersCount
+    ${logs} =  IexecSchedulerMock.Curl On Scheduler Mock  api/getMarketOrdersCount
     Log  ${logs}
 
 
