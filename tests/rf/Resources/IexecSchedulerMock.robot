@@ -38,6 +38,7 @@ Docker Run Iexec Scheduler Mock
     Gradle Build Iexec Scheduler Mock
     Set RlcAddress IexecHubAddress Conf
     Set PoCo Geth IP Conf
+    Run Keyword If  '${GETH_POCO_WORKERPOOL_CREATED_AT_START}' != '${EMPTY}'  Set WorkerPoolAddress Conf
     Desactivate All Scheduler Mock
     ${result} =  Run Process  cd ${REPO_DIR}/iexec-scheduler-mock && docker build -t iexechub/iexec-scheduler-mock .  shell=yes
     Log  ${result.stderr}
@@ -98,6 +99,12 @@ Set PoCo Geth IP Conf
 Set RlcAddress IexecHubAddress Conf
     File Should Exist  ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml
     Run  cat ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml|sed 's/rlcAddress: 0xCHANGE_IT/rlcAddress: 0x091233035dcb12ae5a4a4b7fb144d3c5189892e1/g'|sed 's/iexecHubAddress: 0xCHANGE_IT/iexecHubAddress: 0xc4e4a08bf4c6fd11028b714038846006e27d7be8/g' >${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp
+    File Should Exist  ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp
+    Run  cat ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp >${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml
+
+Set WorkerPoolAddress Conf
+    File Should Exist  ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml
+    Run  cat ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml|sed 's/address: /address: ${GETH_POCO_WORKERPOOL_CREATED_AT_START}/g' >${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp
     File Should Exist  ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp
     Run  cat ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp >${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml
 
