@@ -16,7 +16,7 @@ Suite Teardown  This Suite Teardown
 
 
 # to launch all tests if robot installed on your host:
-# nohup pybot -d Results ./tests/rf/Tests/iexec-full-v2.robot &
+# nohup pybot -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/iexec-full-v2.robot &
 
 
 *** Variables ***
@@ -33,18 +33,34 @@ ${GETH_POCO_WORKERPOOL_CREATED_AT_START}
 
 *** Test Cases ***
 
-#nohup pybot -d Results -t 'Test Suite Setup Initialized' ./tests/rf/Tests/iexec-full-v2.robot &
+#nohup pybot -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD  -d Results -t 'Test Suite Setup Initialized' ./tests/rf/Tests/iexec-full-v2.robot &
 Test Suite Setup Initialized
     Log  Suite Setup Initialized
 
-Test Only With Mock
+Test Full V2
     ${logs} =  IexecSchedulerMock.Curl On Scheduler Mock  api/getMarketOrdersCount
     Log  ${logs}
     Should Be Equal As Integers	 ${logs}  0
+
+    # create app
+    ${app} =  IexecSchedulerMock.Curl On Scheduler Mock  api/createApp
+    Log  ${app}
+
+    # create marketorder
     ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>1</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>0x8bd535d49b095ef648cd85ea827867d358872809</workerpoolowneraddr></marketorder>
     Log  ${logs}
     ${logs} =  Xtremweb.Curl On Scheduler  getmarketorders?XWLOGIN=admin&XWPASSWD=adminp
     Log  ${logs}
+    Should Contain  ${logs}	 XMLVector SIZE="1"
+
+    #TODO check buyforworkorder
+    #TODO check allowtocontribute
+    #TODO check contributed
+    #TODO check revealConsensus
+    #TODO check reveal
+    #TODO check finializeWork
+
+
 
 
 *** Keywords ***

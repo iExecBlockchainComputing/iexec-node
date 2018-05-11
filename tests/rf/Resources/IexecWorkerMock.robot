@@ -4,7 +4,7 @@ Library  String
 *** Variables ***
 ${REPO_DIR}
 ${IEXEC_WORKER_MOCK_GIT_URL} =  https://github.com/iExecBlockchainComputing/iexec-worker-mock.git
-${IEXEC_WORKER_MOCK_GIT_BRANCH} =  dockerize-it
+${IEXEC_WORKER_MOCK_GIT_BRANCH} =  master
 ${IEXEC_WORKER_MOCK_FORCE_GIT_CLONE} =  true
 ${IEXEC_WORKER_MOCK_PROCESS}
 ${DOCKER_NETWORK} =  docker_iexec-net
