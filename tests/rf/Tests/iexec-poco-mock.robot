@@ -41,82 +41,82 @@ Test Workflow Ask With Mock Activate
 
 
 Check FinalizeWork
-    ${logs} =  Get File  ${REPO_DIR}/scheduler-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-scheduler-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  ActuatorService - FinalizeWork
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
-    ${logs} =  Get File  ${REPO_DIR}/worker-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-worker-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  Received WorkOrderCompletedEvent
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
-    ${logs} =  Get File  ${REPO_DIR}/worker-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-worker-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  Received RewardEvent
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 
 Check Reveal
-    ${logs} =  Get File  ${REPO_DIR}/worker-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-worker-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  ActuatorService - Reveal
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
-    ${logs} =  Get File  ${REPO_DIR}/scheduler-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-scheduler-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  Received RevealEvent
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 
 
 Check RevealConsensus
-    ${logs} =  Get File  ${REPO_DIR}/scheduler-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-scheduler-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  ActuatorService - RevealConsensus
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
-    ${logs} =  Get File  ${REPO_DIR}/worker-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-worker-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  Received RevealConsensusEvent
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 
 
 Check Contribute
-    ${logs} =  Get File  ${REPO_DIR}/worker-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-worker-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  ActuatorService - Contribute
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
-    ${logs} =  Get File  ${REPO_DIR}/scheduler-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-scheduler-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  Received ContributeEvent
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 
 Check AllowWorkersToContribute
-    ${logs} =  Get File  ${REPO_DIR}/scheduler-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-scheduler-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  AllowWorkersToContribute [workOrderId:
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
-    ${logs} =  Get File  ${REPO_DIR}/worker-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-worker-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  Received AllowWorkerToContributeEvent
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 
 
 Check BuyForWorkOrder
-    ${logs} =  Get File  ${REPO_DIR}/scheduler-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-scheduler-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  Received WorkOrderActivatedEvent
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 
 
 Check CreateMarketOrder
-    ${logs} =  Get File  ${REPO_DIR}/scheduler-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-scheduler-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  ActuatorService - CreateMarketOrder
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
-    ${logs} =  Get File  ${REPO_DIR}/scheduler-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-scheduler-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  Received marketOrderCreatedEvent
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 
 
 Check WorkerPoolSubscription
-    ${logs} =  Get File  ${REPO_DIR}/scheduler-mock.log
+    ${logs} =  Get File  ${REPO_DIR}/iexec-scheduler-mock.log
     ${lines} =  Get Lines Containing String  ${logs}  Received WorkerPoolSubscriptionEvent
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
