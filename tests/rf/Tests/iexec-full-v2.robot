@@ -25,7 +25,7 @@ ${REPO_DIR} =  ${CURDIR}/../repo
 ${XW_HOST} =  scheduler
 
 
-${XTREMWEB_GIT_BRANCH} =  support-blockchainenabled-in-docker-env
+${XTREMWEB_GIT_BRANCH} =  13.1.0
 ${START_POA_GETH_POCO} =  true
 ${BLOCKCHAINETHENABLED} =  true
 ${GETH_POCO_WORKERPOOL_CREATED_AT_START}
