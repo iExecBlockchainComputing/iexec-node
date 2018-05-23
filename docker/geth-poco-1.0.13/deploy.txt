@@ -1,0 +1,59 @@
+Running migration: 1_initial_migration.js
+  Deploying Migrations...
+  ... 0x4728d4292dc8e5d5206ef7264d75b13c670fa0f116afd894f49c095da34b9d39
+  Migrations: 0x069b8a39003a10d669c1fa1d8df9888edd15cd7c
+Saving successful migration to network...
+  ... 0x57dedbb63759cdc9d9531ee0878e4ce854e7e84b58a04b12de60665e79fb9b6b
+Saving artifacts...
+Running migration: 2_deploy_contracts.js
+  Deploying RLC...
+  ... 0x531723bc0854086e2caa60a0546b16468fa144bcf27b3714b8c7a3be73c45f88
+  RLC: 0x091233035dcb12ae5a4a4b7fb144d3c5189892e1
+RLC deployed at address: 0x091233035dcb12ae5a4a4b7fb144d3c5189892e1
+  ... 0xfcfafc1fa4825882e670658ffaafa1e0d53590dd894780d3e8f2aab9ec4ede2d
+RLC unlocked
+RLC faucet wallet is 0x1fa8602668d4bda4f45a25c8def0a619499457db
+RLC faucet supply is 87000000000000000
+  Deploying WorkerPoolHub...
+  ... 0x32ff15e67e1346548ebec18f3bc68e52708a6a549cee64e4be26d70c7ed1d1d4
+  WorkerPoolHub: 0x0a3479b035d450273a11cf0c69b5b3912a691d3b
+WorkerPoolHub deployed at address: 0x0a3479b035d450273a11cf0c69b5b3912a691d3b
+  Deploying AppHub...
+  ... 0x367f233c0cdf9c71ecc6ad74506417297486eb0e62a4cd721fc62c8c3782411c
+  AppHub: 0xbcc5873a00265259108f3f7757ba49bc689e4914
+AppHub deployed at address: 0xbcc5873a00265259108f3f7757ba49bc689e4914
+  Deploying DatasetHub...
+  ... 0xcf11641b7801177f308665d9e0359b75a31f518d245257979d157d7c9542d69d
+  DatasetHub: 0xecba1dcc128a9ad850dbc0cec36ab93abb2c6fae
+DatasetHub deployed at address: 0xecba1dcc128a9ad850dbc0cec36ab93abb2c6fae
+  Deploying IexecHub...
+  ... 0x455ba28681779de3e980448770f11759f160717a3e866f085669abd662f8341b
+  IexecHub: 0xc4e4a08bf4c6fd11028b714038846006e27d7be8
+IexecHub deployed at address: 0xc4e4a08bf4c6fd11028b714038846006e27d7be8
+  ... 0xe63567729c4d851b34e7bebe313188a805f013cffba390db549c4deef907be7c
+setImmutableOwnership of WorkerPoolHub to IexecHub
+  ... 0x399cd34fe6a3c1d5339c31014ed5f76a537c1cbe2e177db4d0a6732f0865b2fa
+setImmutableOwnership of AppHub to IexecHub
+  ... 0xff1d4a966979204127da32963e28c50c48b0c7ee1bb737a834afc6adfa1e42de
+setImmutableOwnership of DatasetHub to IexecHub
+  Deploying Marketplace...
+  ... 0x4d10898e90942fb944c05840268af3106289226f49e9239b719233d70ad7a1b9
+  Marketplace: 0x9d32b7cbfa9d68f04048589e5c9cefda241c6312
+Marketplace deployed at address: 0x9d32b7cbfa9d68f04048589e5c9cefda241c6312
+  ... 0x39f8ecdd88958c9f3233515038cca4ce4ab4c73f3245b475f0ed064881d571e1
+attach Contracts to IexecHub done
+  ... 0xc0c3a0ab8133bbbdaa3f41aafb5119ef994bc0833bb80caf3ae4656bf418c07d
+setCategoriesCreator to 0x1fa8602668d4bda4f45a25c8def0a619499457db
+create category : 1
+create category : 2
+create category : 3
+create category : 4
+create category : 5
+  ... 0x9d57336d77fdbe6d3033b3e070da001bff2ea2764a6dbc71a493be003ca7bfd8
+  ... 0xfe7a1821cc13eff28550e7779dc0b96836fdb3b521a6dfd8441efb255c29af84
+  ... 0x454e8db35522b6b6f1b1c48130bd298b9dafd998f56b0512551fed9ca2adae2d
+  ... 0xb9247370855144bd0f01efc9fc701098ed4e974182e0c95144037ed35d7d77f5
+  ... 0x163bc477a4f8a50bc70b90e29c20c44fc2e4f8668498da651f4dc781d0d49447
+m_categoriesCount is now: 5
+Saving successful migration to network...
+  ... 0x60855518eb0194ebc103799ebeb7952d7f3c59606210af8d0fcaf3fa2d87b076
