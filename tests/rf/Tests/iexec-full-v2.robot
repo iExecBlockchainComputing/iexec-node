@@ -7,6 +7,7 @@ Resource  ../Resources/IexecScheduler.robot
 Resource  ../Resources/IexecSchedulerMock.robot
 Resource  ../Resources/IexecWorker.robot
 Resource  ../Resources/IexecWorkerMock.robot
+Resource  ../Resources/IexecPocoAPI.robot
 Resource  ../Resources/IexecSdk.robot
 Resource  ../Resources/Xtremweb.robot
 Suite Setup  This Suite Setup
@@ -38,7 +39,7 @@ Test Suite Setup Initialized
     Log  Suite Setup Initialized
 
 Test Full V2
-    ${logs} =  IexecSchedulerMock.Curl On Scheduler Mock  api/getMarketOrdersCount
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
     Log  ${logs}
     Should Be Equal As Integers	 ${logs}  0
 
@@ -75,9 +76,11 @@ This Suite Setup
     IexecSchedulerMock.Docker Run Iexec Scheduler Mock
     IexecWorker.Gradle Build Iexec Worker
     IexecWorkerMock.Docker Run Iexec Worker Mock
+    IexecPocoAPI.Docker Run Iexec Poco Api
 
 
 This Suite Teardown
+    IexecPocoAPI.Docker Stop Iexec Poco Api
     IexecWorkerMock.Docker Stop Worker Mock
     IexecSchedulerMock.Docker Stop Scheduler Mock
     Xtremweb.Stop DockerCompose Xtremweb

@@ -10,6 +10,9 @@ ${IEXEC_SCHEDULER_MOCK_PROCESS}
 ${DOCKER_NETWORK} =  docker_iexec-net
 ${IEXEC_SCHEDULER_MOCK_CONTAINER_ID}
 ${IEXEC_SCHEDULER_IP_IN_DOCKER_NETWORK}
+${GETH_POCO_RLCCONTRACT} =  0x091233035dcb12ae5a4a4b7fb144d3c5189892e1
+${GETH_POCO_IEXECHUBCONTRACT} =  0xc4e4a08bf4c6fd11028b714038846006e27d7be8
+
 
 
 *** Keywords ***
@@ -95,6 +98,7 @@ Set PoCo Geth IP Conf
     Run  cat ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml|sed 's/localhost/${GETH_POCO_IP_IN_DOCKER_NETWORK}/g' >${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp
     File Should Exist  ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp
     Run  cat ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.tmp >${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml
+
 
 Set RlcAddress IexecHubAddress Conf
     File Should Exist  ${REPO_DIR}/iexec-scheduler-mock/src/main/resources/iexec-scheduler.yml
