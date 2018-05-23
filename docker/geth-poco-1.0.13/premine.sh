@@ -5,9 +5,6 @@ nohup geth --datadir node1/ --rpc --rpcaddr '0.0.0.0' --rpcport 8545 --rpcapi 'p
 
 sleep 2
 
-cd PoCo && git checkout tags/v1.0.10 && sed -i "s/\^4.1.5/4.1.6/" package.json && npm install && rm -R build/ && ./node_modules/.bin/truffle migrate && cd ..
+cd PoCo && git checkout tags/v1.0.13 && npm install && rm -R build/ && ./node_modules/.bin/truffle migrate && cd ..
 
 geth --exec 'loadScript("/giveRlc.js"); giveRlc("0x091233035dcb12ae5a4a4b7fb144d3c5189892e1")' attach http://127.0.0.1:8545
-
-
-
