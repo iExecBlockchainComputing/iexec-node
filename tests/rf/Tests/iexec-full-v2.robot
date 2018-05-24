@@ -32,6 +32,8 @@ ${XTREMWEB_GIT_BRANCH} =  13.1.0
 ${START_POA_GETH_POCO} =  true
 ${BLOCKCHAINETHENABLED} =  true
 ${GETH_POCO_WORKERPOOL_CREATED_AT_START}
+${GETH_POCO_RLCCONTRACT} =  0x091233035dcb12ae5a4a4b7fb144d3c5189892e1
+${GETH_POCO_IEXECHUBCONTRACT} =  0xc4e4a08bf4c6fd11028b714038846006e27d7be8
 
 
 *** Test Cases ***
@@ -41,6 +43,9 @@ Test Suite Setup Initialized
     Log  Suite Setup Initialized
 
 Test Full V2
+
+    IexecSdk.Prepare Iexec App For Robot Test Docker  blender  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
+
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
     Log  ${logs}
     Should Be Equal As Integers	 ${logs}  0
@@ -77,12 +82,13 @@ This Suite Setup
     IexecScheduler.Gradle Build Iexec Scheduler
     IexecSchedulerMock.Docker Run Iexec Scheduler Mock
     IexecWorker.Gradle Build Iexec Worker
-    IexecWorkerMock.Docker Run Iexec Worker Mock
+    #IexecWorkerMock.Docker Run Iexec Worker Mock
     IexecPocoAPI.Docker Run Iexec Poco Api
+
 
 
 This Suite Teardown
     IexecPocoAPI.Docker Stop Iexec Poco Api
-    IexecWorkerMock.Docker Stop Worker Mock
+    #IexecWorkerMock.Docker Stop Worker Mock
     IexecSchedulerMock.Docker Stop Scheduler Mock
     Xtremweb.Stop DockerCompose Xtremweb
