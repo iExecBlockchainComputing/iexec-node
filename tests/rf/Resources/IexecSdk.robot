@@ -117,6 +117,8 @@ Prepare Iexec App For Robot Test Docker
    Create Directory  ${REPO_DIR}/iexec-${appName}
    ${iexec_result} =  Run Process  cd ${REPO_DIR}/iexec-${appName} && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} init ${appName}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
    ${logs} =  Get Iexec Sdk Log
+   ${iexec_result} =  Run Process  cd ${REPO_DIR}/iexec-${appName} && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} app init  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
+   ${logs} =  Get Iexec Sdk Log
    Create Robot Chain Json  ${appName}  ${chainhost}  ${schedulerhost}  ${hub}
    Create Robot Wallet Json  ${appName}
 
