@@ -87,8 +87,6 @@ Test Full V2
     ${logs} =  IexecSdk.Iexec An app Docker  account deposit 30000
     Log  ${logs}
 
-    iexec order show
-
     #buyforworkorder
     ${logs} =  IexecSdk.Iexec An app Docker  order show 1
     Log  ${logs}
