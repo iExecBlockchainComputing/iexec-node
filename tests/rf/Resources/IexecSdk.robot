@@ -100,14 +100,14 @@ Iexec Docker
 
 
 Iexec An app Docker
-    [Arguments]  ${directory}  ${args}
+    [Arguments]  ${appName}  ${args}
     Remove File  ${REPO_DIR}/iexec-sdk.log
     Create File  ${REPO_DIR}/iexec-sdk.log
-    ${iexec_result} =  Run Process  cd ${REPO_DIR}/${directory} && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} ${args}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
+    Directory Should Exist  ${REPO_DIR}/iexec-${appName}
+    ${iexec_result} =  Run Process  cd ${REPO_DIR}/iexec-${appName} && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} ${args}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
     ${logs} =  Get Iexec Sdk Log
     #Should Be Equal As Integers	${iexec_result.rc}	0
     [Return]  ${logs}
-
 
 
 Prepare Iexec App For Robot Test Docker

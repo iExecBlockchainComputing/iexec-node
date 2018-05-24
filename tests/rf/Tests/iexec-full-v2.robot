@@ -54,6 +54,10 @@ Test Full V2
     ${app} =  IexecSchedulerMock.Curl On Scheduler Mock  api/createApp
     Log  ${app}
 
+    IexecSdk.Iexec An app Docker  blender  wallet show
+
+    IexecSdk.Iexec An app Docker  blender  app deploy
+
     # create marketorder
     ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>1</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>0x8bd535d49b095ef648cd85ea827867d358872809</workerpoolowneraddr></marketorder>
     Log  ${logs}
