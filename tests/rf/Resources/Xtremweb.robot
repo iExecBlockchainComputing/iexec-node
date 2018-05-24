@@ -271,7 +271,7 @@ Start Poa Geth PoCo
         ${ip_poco} =  Catenate  SEPARATOR=  1  @{IPAddress}[0]
         Set Suite Variable  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${ip_poco}
 
-        ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/172\.17\.0\.2/${GETH_POCO_IP_IN_DOCKER_NETWORK}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+        ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/geth-poco/${GETH_POCO_IP_IN_DOCKER_NETWORK}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
         Log  ${result.stderr}
         Log  ${result.stdout}
 
