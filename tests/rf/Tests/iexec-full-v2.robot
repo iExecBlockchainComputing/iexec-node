@@ -68,6 +68,9 @@ Test Full V2
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/apps/@{app}[0]
     Log  ${logs}
 
+    # add app address in iexec.json
+    IexecSdk.Add App To Buy To Iexec Conf  @{app}[0]
+
     # create marketorder
     ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>1</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
     Log  ${logs}
@@ -87,10 +90,12 @@ Test Full V2
     ${logs} =  IexecSdk.Iexec An app Docker  account deposit 30000
     Log  ${logs}
 
-    #buyforworkorder
+
+
+
     ${logs} =  IexecSdk.Iexec An app Docker  order show 1
     Log  ${logs}
-
+    #buyforworkorder
     ${logs} =  IexecSdk.Iexec An app Docker  order fill 1
     Log  ${logs}
 

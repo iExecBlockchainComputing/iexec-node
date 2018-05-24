@@ -127,6 +127,16 @@ Prepare Iexec App For Robot Test Docker
    Create Robot Wallet Json
 
 
+Add App To Buy To Iexec Conf
+   [Arguments]  ${app}
+    Directory Should Exist  ${REPO_DIR}/iexec-app
+    File Should Exist  ${REPO_DIR}/iexec-app/iexec.json
+    ${contents}=  Get File  ${REPO_DIR}/iexec-app/iexec.json
+    ${contents} =  Replace String  ${contents}  "params": {  ,app :"${app}","params": {
+    Copy File  ${REPO_DIR}/iexec-app/iexec.json  ${REPO_DIR}/iexec-app/iexec.json.${app}
+    Remove File  ${REPO_DIR}/iexec-app/iexec.json
+    Create File  ${REPO_DIR}/iexec-app/iexec.json  content=${contents}
+
 Create Robot Wallet Json
     Directory Should Exist  ${REPO_DIR}/iexec-app
     File Should Exist  ${REPO_DIR}/iexec-app/wallet.json
