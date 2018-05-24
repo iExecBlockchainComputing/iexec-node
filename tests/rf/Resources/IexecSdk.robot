@@ -100,60 +100,62 @@ Iexec Docker
 
 
 Iexec An app Docker
-    [Arguments]  ${appName}  ${args}
+    [Arguments]  ${args}
     Remove File  ${REPO_DIR}/iexec-sdk.log
     Create File  ${REPO_DIR}/iexec-sdk.log
-    Directory Should Exist  ${REPO_DIR}/iexec-${appName}
-    ${iexec_result} =  Run Process  cd ${REPO_DIR}/iexec-${appName} && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} ${args} --chain robot  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
+    Directory Should Exist  ${REPO_DIR}/iexec-app
+    ${iexec_result} =  Run Process  cd ${REPO_DIR}/iexec-app && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} ${args} --chain robot  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
     ${logs} =  Get Iexec Sdk Log
     #Should Be Equal As Integers	${iexec_result.rc}	0
     [Return]  ${logs}
 
 
 Prepare Iexec App For Robot Test Docker
-   [Arguments]  ${appName}  ${chainhost}  ${schedulerhost}  ${hub}
+   [Arguments]  ${iexecdotjs}  ${chainhost}  ${schedulerhost}  ${hub}
    Directory Should Exist  ${REPO_DIR}
-   Remove Directory  ${REPO_DIR}/iexec-${appName}  recursive=true
-   Create Directory  ${REPO_DIR}/iexec-${appName}
-   ${iexec_result} =  Run Process  cd ${REPO_DIR}/iexec-${appName} && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} init ${appName}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
+   Remove Directory  ${REPO_DIR}/iexec-app recursive=true
+   Create Directory  ${REPO_DIR}/iexec-app
+   Run Process  cd ${REPO_DIR}/iexec-app && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} init  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
    ${logs} =  Get Iexec Sdk Log
-   ${iexec_result} =  Run Process  cd ${REPO_DIR}/iexec-${appName} && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} app init  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
-   ${logs} =  Get Iexec Sdk Log
-   Create Robot Chain Json  ${appName}  ${chainhost}  ${schedulerhost}  ${hub}
-   Create Robot Wallet Json  ${appName}
-
+   File Should Exist  ${REPO_DIR}/iexec-app/iexec.js
+   Copy File  ${REPO_DIR}/iexec-app/iexec.js  ${REPO_DIR}/iexec-app/iexec.js.ori
+   Remove File  ${REPO_DIR}/iexec-app/iexec.js
+   Run Process  cd ${REPO_DIR}/iexec-app && wget ${iexecdotjs}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
+   File Should Exist  ${REPO_DIR}/iexec-app/iexec.js
+   Log File  ${REPO_DIR}/iexec-app/iexec.js
+   Create Robot Chain Json  ${chainhost}  ${schedulerhost}  ${hub}
+   Create Robot Wallet Json
 
 
 Create Robot Wallet Json
-   [Arguments]  ${appName}
-    Directory Should Exist  ${REPO_DIR}/iexec-${appName}
-    File Should Exist  ${REPO_DIR}/iexec-${appName}/wallet.json
-    Copy File  ${REPO_DIR}/iexec-${appName}/wallet.json  ${REPO_DIR}/iexec-${appName}/wallet.json.ori
-    ${wallet_content} =  GET FILE  ${REPO_DIR}/iexec-${appName}/wallet.json
+    Directory Should Exist  ${REPO_DIR}/iexec-app
+    File Should Exist  ${REPO_DIR}/iexec-app/wallet.json
+    Copy File  ${REPO_DIR}/iexec-app/wallet.json  ${REPO_DIR}/iexec-app/wallet.json.ori
+    ${wallet_content} =  GET FILE  ${REPO_DIR}/iexec-app/wallet.json
     @{privateKey} =  Get Regexp Matches  ${wallet_content}  "privateKey": "(?P<privateKey>.*)"  privateKey
     Log  @{privateKey}[0]
     ${wallet_content} =  Replace String  ${wallet_content}  @{privateKey}[0]  ${PRIVATE_KEY_SDK_TO_USE}
-    Remove File  ${REPO_DIR}/iexec-${appName}/wallet.json
-    Create File  ${REPO_DIR}/iexec-${appName}/wallet.json  content=${wallet_content}
+    Remove File  ${REPO_DIR}/iexec-app/wallet.json
+    Create File  ${REPO_DIR}/iexec-app/wallet.json  content=${wallet_content}
 
 
 Create Robot Chain Json
-    [Arguments]  ${appName}  ${chainhost}  ${schedulerhost}  ${hub}
-     Directory Should Exist  ${REPO_DIR}/iexec-${appName}
-     File Should Exist  ${REPO_DIR}/iexec-${appName}/chain.json
-     Copy File  ${REPO_DIR}/iexec-${appName}/chain.json  ${REPO_DIR}/iexec-${appName}/chain.json.ori
-     Remove File  ${REPO_DIR}/iexec-${appName}/chain.json
-     Create File  ${REPO_DIR}/iexec-${appName}/chain.json
-     Append To File  ${REPO_DIR}/iexec-${appName}/chain.json  {
-     Append To File  ${REPO_DIR}/iexec-${appName}/chain.json  "chains": {
-     Append To File  ${REPO_DIR}/iexec-${appName}/chain.json  "robot": {
-     Append To File  ${REPO_DIR}/iexec-${appName}/chain.json  "host": "http://${chainhost}:8545",
-     Append To File  ${REPO_DIR}/iexec-${appName}/chain.json  "id": "1337",
-     Append To File  ${REPO_DIR}/iexec-${appName}/chain.json  "server": "https://${schedulerhost}:443",
-     Append To File  ${REPO_DIR}/iexec-${appName}/chain.json  "hub": "${hub}"
-     Append To File  ${REPO_DIR}/iexec-${appName}/chain.json   }
-     Append To File  ${REPO_DIR}/iexec-${appName}/chain.json   }
-     Append To File  ${REPO_DIR}/iexec-${appName}/chain.json   }
+    [Arguments]  ${chainhost}  ${schedulerhost}  ${hub}
+     Directory Should Exist  ${REPO_DIR}/iexec-app
+     File Should Exist  ${REPO_DIR}/iexec-app/chain.json
+     Copy File  ${REPO_DIR}/iexec-app/chain.json  ${REPO_DIR}/iexec-app/chain.json.ori
+     Remove File  ${REPO_DIR}/iexec-app/chain.json
+     Create File  ${REPO_DIR}/iexec-app/chain.json
+     Append To File  ${REPO_DIR}/iexec-app/chain.json  {
+     Append To File  ${REPO_DIR}/iexec-app/chain.json  "chains": {
+     Append To File  ${REPO_DIR}/iexec-app/chain.json  "robot": {
+     Append To File  ${REPO_DIR}/iexec-app/chain.json  "host": "http://${chainhost}:8545",
+     Append To File  ${REPO_DIR}/iexec-app/chain.json  "id": "1337",
+     Append To File  ${REPO_DIR}/iexec-app/chain.json  "server": "https://${schedulerhost}:443",
+     Append To File  ${REPO_DIR}/iexec-app/chain.json  "hub": "${hub}"
+     Append To File  ${REPO_DIR}/iexec-app/chain.json   }
+     Append To File  ${REPO_DIR}/iexec-app/chain.json   }
+     Append To File  ${REPO_DIR}/iexec-app/chain.json   }
 
 
 

@@ -46,7 +46,7 @@ Test Suite Setup Initialized
 
 Test Full V2
 
-    IexecSdk.Prepare Iexec App For Robot Test Docker  blender  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
+    IexecSdk.Prepare Iexec App For Robot Test Docker  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapps-registry/master/iExecBlockchainComputing/Blender/iexec.json  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
 
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
     Log  ${logs}
@@ -56,9 +56,9 @@ Test Full V2
     ${app} =  IexecSchedulerMock.Curl On Scheduler Mock  api/createApp
     Log  ${app}
 
-    IexecSdk.Iexec An app Docker  blender  wallet show
+    IexecSdk.Iexec An app Docker  wallet show
 
-    IexecSdk.Iexec An app Docker  blender  app deploy
+    IexecSdk.Iexec An app Docker  app deploy
 
     # create marketorder
     ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>1</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
@@ -69,11 +69,11 @@ Test Full V2
 
     Wait Until Keyword Succeeds  2 min	3 sec  Check One Marketorder
 
-    ${logs} =  IexecSdk.Iexec An app Docker  blender  order count
+    ${logs} =  IexecSdk.Iexec An app Docker  order count
     Should Be Equal As Integers	 ${logs}  1
 
     #buyforworkorder
-    ${logs} =  IexecSdk.Iexec An app Docker  blender  order fill 1
+    ${logs} =  IexecSdk.Iexec An app Docker  order fill 1
     Should Be Equal As Integers	 ${logs}  1
 
     #TODO check allowtocontribute
