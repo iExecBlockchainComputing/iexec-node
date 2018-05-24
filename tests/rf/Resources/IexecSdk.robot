@@ -14,6 +14,7 @@ ${IEXEC_SDK_IMAGE} =  iexechub/iexec-sdk
 ${IEXEC_SDK_IMAGE_VERSION} =  2.2.1
 ${DOCKER_NETWORK} =  docker_iexec-net
 ${REPO_DIR}
+${PRIVATE_KEY_SDK_TO_USE}
 
 ${LAUNCHED_IN_CONTAINER} =  false
 
@@ -117,7 +118,21 @@ Prepare Iexec App For Robot Test Docker
    ${iexec_result} =  Run Process  cd ${REPO_DIR}/iexec-${appName} && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} init ${appName}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
    ${logs} =  Get Iexec Sdk Log
    Create Robot Chain Json  ${appName}  ${chainhost}  ${schedulerhost}  ${hub}
+   Create Robot Wallet Json  ${appName}
 
+
+
+Create Robot Wallet Json
+   [Arguments]  ${appName}
+    Directory Should Exist  ${REPO_DIR}/iexec-${appName}
+    File Should Exist  ${REPO_DIR}/iexec-${appName}/wallet.json
+    Copy File  ${REPO_DIR}/iexec-${appName}/wallet.json  ${REPO_DIR}/iexec-${appName}/wallet.json.ori
+    ${wallet_content} =  GET FILE  ${REPO_DIR}/iexec-${appName}/wallet.json
+    @{privateKey} =  Get Regexp Matches  ${wallet_content}  "privateKey": "(?P<privateKey>.*)"  privateKey
+    Log  @{privateKey}[0]
+    ${wallet_content} =  Replace String  ${wallet_content}  @{privateKey}[0]  ${PRIVATE_KEY_SDK_TO_USE}
+    Remove File  ${REPO_DIR}/iexec-${appName}/wallet.json
+    Create File  ${REPO_DIR}/iexec-${appName}/wallet.json  content=${wallet_content}
 
 
 Create Robot Chain Json

@@ -27,7 +27,7 @@ ${XW_HOST} =  scheduler
 
 
 ${IEXEC_SDK_IMAGE_VERSION} =  2.2.1
-${PRIVATE_KEY_SDK_TO_USE} =
+${PRIVATE_KEY_SDK_TO_USE}
 ${XTREMWEB_GIT_BRANCH} =  13.1.0
 ${START_POA_GETH_POCO} =  true
 ${BLOCKCHAINETHENABLED} =  true
@@ -61,6 +61,8 @@ Test Full V2
     Log  ${logs}
     Should Contain  ${logs}	 XMLVector SIZE="1"
 
+    Wait Until Keyword Succeeds  2 min	3 sec  Check One Marketorder
+
     #TODO check buyforworkorder
     #TODO check allowtocontribute
     #TODO check contributed
@@ -72,6 +74,12 @@ Test Full V2
 
 
 *** Keywords ***
+
+
+Check One Marketorder
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
+    Log  ${logs}
+    Should Be Equal As Integers	 ${logs}  1
 
 This Suite Setup
     Create Directory  ${REPO_DIR}
