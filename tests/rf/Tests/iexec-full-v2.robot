@@ -62,6 +62,9 @@ Test Full V2
     @{app} =  Get Regexp Matches  ${logs}  app: '(?P<app>.*)',  app
     Log  @{app}[0]
 
+    ${logs} =  IexecSdk.Iexec An app Docker  app show @{app}[0]
+    Log  ${logs}
+
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/apps/@{app}[0]
     Log  ${logs}
 
@@ -74,6 +77,9 @@ Test Full V2
 
     Wait Until Keyword Succeeds  2 min	3 sec  Check One Marketorder
 
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/1
+    Log  ${logs}
+
     #${logs} =  IexecSdk.Iexec An app Docker  order count
     #Should Be Equal As Integers	 ${logs}  1
 
@@ -81,7 +87,12 @@ Test Full V2
     ${logs} =  IexecSdk.Iexec An app Docker  account deposit 30000
     Log  ${logs}
 
+    iexec order show
+
     #buyforworkorder
+    ${logs} =  IexecSdk.Iexec An app Docker  order show 1
+    Log  ${logs}
+
     ${logs} =  IexecSdk.Iexec An app Docker  order fill 1
     Log  ${logs}
 
