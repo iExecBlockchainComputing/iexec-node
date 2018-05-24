@@ -25,7 +25,7 @@ Gradle Build Iexec Worker Mock
     Directory Should Exist  ${REPO_DIR}/iexec-worker-mock
     Run  sed -i '/compile "com.iexec.worker:iexec-worker*/d' ${REPO_DIR}/iexec-worker-mock/build.gradle
     Run  sed -i 's/\\/\\/compile files/compile files/g' ${REPO_DIR}/iexec-worker-mock/build.gradle
-    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-worker-mock && ./gradlew build  shell=yes
+    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-worker-mock && ./gradlew build --refresh-dependencies  shell=yes
     Log  ${gradle_result.stderr}
     Log  ${gradle_result.stdout}
     Should Be Equal As Integers	${gradle_result.rc}	0

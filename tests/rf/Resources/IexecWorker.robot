@@ -12,7 +12,7 @@ Gradle Build Iexec Worker
     Directory Should Exist  ${REPO_DIR}/iexec-worker
     Run  sed -i '/compile "com.iexec.common:iexec-common*/d' ${REPO_DIR}/iexec-worker/build.gradle
     Run  sed -i 's/\\/\\/compile files/compile files/g' ${REPO_DIR}/iexec-worker/build.gradle
-    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-worker && ./gradlew build  shell=yes
+    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-worker && ./gradlew build --refresh-dependencies  shell=yes
     Log  ${gradle_result.stderr}
     Log  ${gradle_result.stdout}
     Should Be Equal As Integers	${gradle_result.rc}	0

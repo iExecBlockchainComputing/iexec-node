@@ -82,10 +82,10 @@ Check Build Xtremweb Log
     LOG  ${logs}
 
 Gradle BuildAll BuildImages Xtremweb
-  Run Process  cd ${REPO_DIR}/xtremweb-hep && ./gradlew buildAll buildImages -Penvironment\=docker  shell=yes stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep-build.log
+  Run Process  cd ${REPO_DIR}/xtremweb-hep && ./gradlew buildAll buildImages --refresh-dependencies -Penvironment\=docker  shell=yes stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep-build.log
 
 Gradle BuildAll Xtremweb
-  Run Process  cd ${REPO_DIR}/xtremweb-hep && ./gradlew buildAll  shell=yes stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep-build.log
+  Run Process  cd ${REPO_DIR}/xtremweb-hep && ./gradlew buildAll --refresh-dependencies  shell=yes stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep-build.log
 
 
 

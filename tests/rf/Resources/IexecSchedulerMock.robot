@@ -30,7 +30,7 @@ Gradle Build Iexec Scheduler Mock
     Directory Should Exist  ${REPO_DIR}/iexec-scheduler-mock
     Run  sed -i '/compile "com.iexec.scheduler:iexec-scheduler*/d' ${REPO_DIR}/iexec-scheduler-mock/build.gradle
     Run  sed -i 's/\\/\\/compile files/compile files/g' ${REPO_DIR}/iexec-scheduler-mock/build.gradle
-    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-scheduler-mock && ./gradlew build  shell=yes
+    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-scheduler-mock && ./gradlew build --refresh-dependencies  shell=yes
     Log  ${gradle_result.stderr}
     Log  ${gradle_result.stdout}
     Should Be Equal As Integers	${gradle_result.rc}	0

@@ -10,7 +10,7 @@ ${IEXEC_COMMON_FORCE_GIT_CLONE} =  true
 Gradle Build Iexec Common
     Run Keyword If  '${IEXEC_COMMON_FORCE_GIT_CLONE}' == 'true'  Git Clone Iexec Common
     Directory Should Exist  ${REPO_DIR}/iexec-common
-    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-common && ./gradlew build  shell=yes
+    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-common && ./gradlew build --refresh-dependencies  shell=yes
     Log  ${gradle_result.stderr}
     Log  ${gradle_result.stdout}
     Should Be Equal As Integers	${gradle_result.rc}	0

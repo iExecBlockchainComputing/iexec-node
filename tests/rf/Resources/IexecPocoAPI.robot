@@ -29,7 +29,7 @@ Gradle Build Iexec Poco Api
     Directory Should Exist  ${REPO_DIR}/iexec-poco-api
     Run  sed -i '/compile "com.iexec.scheduler:iexec-scheduler*/d' ${REPO_DIR}/iexec-poco-api/build.gradle
     Run  sed -i 's/\\/\\/compile files/compile files/g' ${REPO_DIR}/iexec-poco-api/build.gradle
-    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-poco-api && ./gradlew build  shell=yes
+    ${gradle_result} =  Run Process  cd ${REPO_DIR}/iexec-poco-api && ./gradlew build --refresh-dependencies  shell=yes
     Log  ${gradle_result.stderr}
     Log  ${gradle_result.stdout}
     Should Be Equal As Integers	${gradle_result.rc}	0
