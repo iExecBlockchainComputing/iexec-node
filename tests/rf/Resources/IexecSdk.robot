@@ -110,7 +110,7 @@ Iexec An app Docker
 
 
 Prepare Iexec App For Robot Test Docker
-   [Arguments]  ${appName}  ${chainhost}  ${chainid}  ${schedulerhost}  ${hub}
+   [Arguments]  ${appName}  ${chainhost}  ${schedulerhost}  ${hub}
    Directory Should Exist  ${REPO_DIR}
    Remove Directory  ${REPO_DIR}/iexec-${appName}  recursive=true
    Create Directory  ${REPO_DIR}/iexec-${appName}
