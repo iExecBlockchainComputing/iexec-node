@@ -4,7 +4,7 @@ Resource  ./DockerHelper.robot
 
 *** Variables ***
 ${GETH_POCO_IMAGE} =  iexechub/geth-poco
-${GETH_POCO_IMAGE_VERSION} =  1.0.10
+${GETH_POCO_IMAGE_VERSION} =  1.0.13
 ${GETH_POCO_PROCESS}
 ${GETH_POCO_CONTAINER_ID}
 
