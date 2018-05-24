@@ -83,21 +83,26 @@ Test Full V2
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/1
     Log  ${logs}
 
-    #${logs} =  IexecSdk.Iexec An app Docker  order count
-    #Should Be Equal As Integers	 ${logs}  1
-
     #deposit
     ${logs} =  IexecSdk.Iexec An app Docker  account deposit 30000
     Log  ${logs}
 
-
-
-
     ${logs} =  IexecSdk.Iexec An app Docker  order show 1
     Log  ${logs}
+
     #buyforworkorder
     ${logs} =  IexecSdk.Iexec An app Docker  order fill 1
     Log  ${logs}
+    Should Contain  ${logs}  woid
+    @{woid} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
+    Log  @{woid}[0]
+
+    Wait Until Keyword Succeeds  2 min	3 sec  Check WorkOrderCompleted  @{woid}[0]
+
+    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
+    Log  ${logs}
+
+
 
     #TODO check allowtocontribute
     #TODO check contributed
@@ -108,8 +113,13 @@ Test Full V2
 
 
 
-
 *** Keywords ***
+
+Check WorkOrderCompleted
+    [Arguments]  ${woid}
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/workorders/${woid}
+    Log  ${logs}
+    Should Contain  ${logs}  COMPLETED
 
 
 Check One Marketorder
