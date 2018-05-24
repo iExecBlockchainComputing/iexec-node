@@ -40,7 +40,7 @@ Docker Run Iexec Poco Api
     Run Keyword If  '${GETH_POCO_WORKERPOOL_CREATED_AT_START}' != '${EMPTY}'  Set WorkerPoolAddress Conf Iexec Poco Api
     Set RlcAddress IexecHubAddress Conf Iexec Poco Api
     Set PoCo Geth IP Conf Iexec Poco Api
-    ${result} =  Run Process  cd ${REPO_DIR}/iexec-poco-api && docker build -t iexechub/iexec-poco-api  .  shell=yes
+    ${result} =  Run Process  cd ${REPO_DIR}/iexec-poco-api && docker build -t iexechub/iexec-poco-api .  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers	${result.rc}	0
