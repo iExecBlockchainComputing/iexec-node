@@ -34,6 +34,8 @@ ${BLOCKCHAINETHENABLED} =  true
 ${GETH_POCO_WORKERPOOL_CREATED_AT_START}
 ${GETH_POCO_RLCCONTRACT} =  0x091233035dcb12ae5a4a4b7fb144d3c5189892e1
 ${GETH_POCO_IEXECHUBCONTRACT} =  0xc4e4a08bf4c6fd11028b714038846006e27d7be8
+${SCHEDULER_ADDRESS} =  0x8bd535d49b095ef648cd85ea827867d358872809
+
 
 
 *** Test Cases ***
@@ -59,7 +61,7 @@ Test Full V2
     IexecSdk.Iexec An app Docker  blender  app deploy
 
     # create marketorder
-    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>1</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>0x8bd535d49b095ef648cd85ea827867d358872809</workerpoolowneraddr></marketorder>
+    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>1</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
     Log  ${logs}
     ${logs} =  Xtremweb.Curl On Scheduler  getmarketorders?XWLOGIN=admin&XWPASSWD=adminp
     Log  ${logs}
@@ -67,12 +69,19 @@ Test Full V2
 
     Wait Until Keyword Succeeds  2 min	3 sec  Check One Marketorder
 
-    #TODO check buyforworkorder
+    ${logs} =  IexecSdk.Iexec An app Docker  blender  order count
+    Should Be Equal As Integers	 ${logs}  1
+
+    #buyforworkorder
+    ${logs} =  IexecSdk.Iexec An app Docker  blender  order fill 1
+    Should Be Equal As Integers	 ${logs}  1
+
     #TODO check allowtocontribute
     #TODO check contributed
     #TODO check revealConsensus
     #TODO check reveal
     #TODO check finializeWork
+
 
 
 
