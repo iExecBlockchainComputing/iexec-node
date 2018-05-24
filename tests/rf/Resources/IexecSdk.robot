@@ -11,7 +11,7 @@ ${IEXEC_SDK_FORCE_GIT_CLONE} =  true
 ${IEXEC_SDK_DISTRIB}
 # docker mode
 ${IEXEC_SDK_IMAGE} =  iexechub/iexec-sdk
-${IEXEC_SDK_IMAGE_VERSION} =  1.7.7
+${IEXEC_SDK_IMAGE_VERSION} =  2.2.1
 ${DOCKER_NETWORK} =  docker_iexec-net
 ${REPO_DIR}
 
