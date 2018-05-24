@@ -117,12 +117,12 @@ Prepare Iexec App For Robot Test Docker
    Create Directory  ${REPO_DIR}/iexec-app
    Run Process  cd ${REPO_DIR}/iexec-app && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} init  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
    ${logs} =  Get Iexec Sdk Log
-   File Should Exist  ${REPO_DIR}/iexec-app/iexec.js
-   Copy File  ${REPO_DIR}/iexec-app/iexec.js  ${REPO_DIR}/iexec-app/iexec.js.ori
-   Remove File  ${REPO_DIR}/iexec-app/iexec.js
+   File Should Exist  ${REPO_DIR}/iexec-app/iexec.json
+   Copy File  ${REPO_DIR}/iexec-app/iexec.json  ${REPO_DIR}/iexec-app/iexec.json.ori
+   Remove File  ${REPO_DIR}/iexec-app/iexec.json
    Run Process  cd ${REPO_DIR}/iexec-app && wget ${iexecdotjs}  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
-   File Should Exist  ${REPO_DIR}/iexec-app/iexec.js
-   Log File  ${REPO_DIR}/iexec-app/iexec.js
+   File Should Exist  ${REPO_DIR}/iexec-app/iexec.json
+   Log File  ${REPO_DIR}/iexec-app/iexec.json
    Create Robot Chain Json  ${chainhost}  ${schedulerhost}  ${hub}
    Create Robot Wallet Json
 
