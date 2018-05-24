@@ -132,7 +132,7 @@ Add App To Buy To Iexec Conf
     Directory Should Exist  ${REPO_DIR}/iexec-app
     File Should Exist  ${REPO_DIR}/iexec-app/iexec.json
     ${contents}=  Get File  ${REPO_DIR}/iexec-app/iexec.json
-    ${contents} =  Replace String  ${contents}  "params": {  ,app :"${app}","params": {
+    ${contents} =  Replace String  ${contents}  "params": {  "app":"${app}","params": {
     Copy File  ${REPO_DIR}/iexec-app/iexec.json  ${REPO_DIR}/iexec-app/iexec.json.${app}
     Remove File  ${REPO_DIR}/iexec-app/iexec.json
     Create File  ${REPO_DIR}/iexec-app/iexec.json  content=${contents}
