@@ -78,13 +78,13 @@ Set PoCo Geth IP Conf Iexec Poco Api
 
 Set RlcAddress IexecHubAddress Conf Iexec Poco Api
     File Should Exist  ${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.yml
-    Run  cat ${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.yml|sed 's/rlcAddress:*/rlcAddress: ${GETH_POCO_RLCCONTRACT}/g'|sed 's/iexecHubAddress:*/iexecHubAddress: ${GETH_POCO_IEXECHUBCONTRACT}/g' >${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.tmp
+    Run  cat ${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.yml|sed 's/0x091233035dcb12ae5a4a4b7fb144d3c5189892e1/${GETH_POCO_RLCCONTRACT}/g'|sed 's/0xc4e4a08bf4c6fd11028b714038846006e27d7be8/${GETH_POCO_IEXECHUBCONTRACT}/g' >${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.tmp
     File Should Exist  ${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.tmp
     Run  cat ${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.tmp >${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.yml
 
 Set WorkerPoolAddress Conf Iexec Poco Api
     File Should Exist  ${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.yml
-    Run  cat ${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.yml|sed 's/address: /address: ${GETH_POCO_WORKERPOOL_CREATED_AT_START} /g' >${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.tmp
+    Run  cat ${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.yml|sed 's/0x597fa45586a1f4879605c0b8c04c4100a918ee0d/${GETH_POCO_WORKERPOOL_CREATED_AT_START} /g' >${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.tmp
     File Should Exist  ${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.tmp
     Run  cat ${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.tmp >${REPO_DIR}/iexec-poco-api/src/main/resources/iexec-scheduler.yml
 
