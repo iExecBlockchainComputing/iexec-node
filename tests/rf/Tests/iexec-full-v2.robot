@@ -56,8 +56,6 @@ Test Full V2
     Should Be Equal As Integers	 ${logs}  0
 
     # create app
-    ${app} =  IexecSchedulerMock.Curl On Scheduler Mock  api/createApp
-    Log  ${app}
 
     ${logs} =  IexecSdk.Iexec An app Docker  app deploy
 
@@ -138,7 +136,7 @@ This Suite Setup
     Xtremweb.Start DockerCompose Xtremweb
     IexecCommon.Gradle Build Iexec Common
     IexecScheduler.Gradle Build Iexec Scheduler
-    IexecSchedulerMock.Docker Run Iexec Scheduler Mock
+    #IexecSchedulerMock.Docker Run Iexec Scheduler Mock
     IexecWorker.Gradle Build Iexec Worker
     #IexecWorkerMock.Docker Run Iexec Worker Mock
     IexecPocoAPI.Docker Run Iexec Poco Api
@@ -148,5 +146,5 @@ This Suite Setup
 This Suite Teardown
     IexecPocoAPI.Docker Stop Iexec Poco Api
     #IexecWorkerMock.Docker Stop Worker Mock
-    IexecSchedulerMock.Docker Stop Scheduler Mock
+    #IexecSchedulerMock.Docker Stop Scheduler Mock
     Xtremweb.Stop DockerCompose Xtremweb
