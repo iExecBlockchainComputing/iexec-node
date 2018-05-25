@@ -3,100 +3,40 @@
 
 ### Prerequisite 
 
-iexec vagrant, needed dependency are already in your local vagrant
-
-or
-
-ubuntu and see bootstrap.sh for lib needed: 
-
-[bootstrap.sh](../../vagrant/bootstrap.sh)
-
-or this :
+ 
+on aws ubuntu do as root :
 ```
-add-apt-repository -y ppa:ethereum/ethereum
-apt-get update -q
+apt-get update
 
-apt-get -y install icedtea-8-plugin openjdk-8-jre openjdk-8-jdk ethereum python-pip groff-base zip unzip wget make ant gcc uuid uuid-runtime vim git mysql-client
+apt-get install -y software-properties-common curl zip unzip wget make ant gcc vim git apt-transport-https
+add-apt-repository -y ppa:openjdk-r/ppa
 
-pip install robotframework robotframework-selenium2library robotframework-databaselibrary pymysql
+add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 
-echo "mysql-server mysql-server/root_password password root" | debconf-set-selections
-echo "mysql-server mysql-server/root_password_again password root" | debconf-set-selections
-apt-get install -y mysql-server
+curl -L https://github.com/docker/compose/releases/download/1.21.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+apt-get update
+apt-get install -y docker-ce
+usermod -aG docker ubuntu
 
-mkdir /var/xwhep && chmod 777 /var/xwhep && chmod 777 /var/log
-
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
-
-
-
-```
-
-### General 
-Before tests launch select your targeted iexec repo to test in 
-```
-iexec-node/gitcloneall.sh
-```
-
-by default master are cloned.
-If you want to test non reg into your evol branch
-
-Modifiy the git clone like this :
-```
-git clone -b "your branch to test" https://github.com/iExecBlockchainComputing/The iexec repo impacted.git
-```
-gitcloneall.sh
+apt-get install -y -qy python-pip groff-base
+pip install robotframework
+pip install robotframework-selenium2library
+pip install robotframework-databaselibrary
+pip install robotframework-archivelibrary
+pip install pymysql
 
 
-### Full Non Reg
-```
-bash
-cd ~/iexecdev/iexec-node
-./gitcloneall.sh
-pybot -d Results ./tests/rf/Tests/
-```
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+apt-get install -y nodejs
+
+# install gradle
+apt-get -y install openjdk-8-jdk
+
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 
-### Xtremweb Non Reg
-```
-bash
-cd ~/iexecdev/iexec-node
-./gitcloneall.sh
-pybot -d Results ./tests/rf/Tests/xwcommandsSuite.robot
-```
-
-
-### Oracle Non Reg On test Rpc
-```
-bash
-cd ~/iexecdev/iexec-node
-./gitcloneall.sh
-pybot -d Results ./tests/rf/Tests/truffleTestsOnTestrpc.robot
-```
-
-### Oracle Non Reg On Geth Local
-```
-bash
-cd ~/iexecdev/iexec-node
-./gitcloneall.sh
-pybot -d Results ./tests/rf/Tests/truffleTestsOnLocalGeth.robot
-```
-
-### Oracle Non Reg On Geth Local Dockerized
-```
-bash
-cd ~/iexecdev/iexec-node
-./gitcloneall.sh
-pybot -d Results ./tests/rf/Tests/truffleTestsOnLocalGethDocker.robot
-```
-
-
-### OBXW Non Reg : Geth Local Dockerized+ Oracle Dockerized+ Bridge Dockerized + Xtremweb 
-```
-bash
-cd ~/iexecdev/iexec-node
-./gitcloneall.sh
-pybot -d Results ./tests/rf/Tests/NonRegOBXW.robot
 ```
 
 
