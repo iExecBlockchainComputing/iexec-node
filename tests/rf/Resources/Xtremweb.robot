@@ -21,7 +21,7 @@ ${JWTETHSECRET}
 ${BLOCKCHAINETHENABLED} =  false
 
 ${LOGGERLEVEL} =  FINEST
-${RESULTS_FOLDER_BASE}  =  /tmp/worker
+${RESULTS_FOLDER_BASE} =  /tmp/worker
 ${WALLET_PASSWORD}
 
 
@@ -358,7 +358,7 @@ Attach A Second Worker To Docker Network
     Log  @{WORKER_DOCKER_IMAGE_VERSION}[0]
 
     ${date} =	Get Current Date
-    ${created_process} =  Start Process  docker run -t -d --net ${DOCKER_NETWORK} --restart unless-stopped -v ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/wallet/wallet_worker2.json:/iexec/wallet/wallet_worker.json -v ${RESULTS_FOLDER_BASE}_${date}:${RESULTS_FOLDER_BASE}_${date} -v /var/run/docker.sock:/var/run/docker.sock --env SCHEDULER_IP\=${XW_HOST} --env SCHEDULER_DOMAIN\=${XW_HOST} --env TMPDIR\=${RESULTS_FOLDER_BASE}_${date} --env SANDBOXENABLED\=true --env LOGGERLEVEL\=${LOGGERLEVEL} --env BLOCKCHAINETHENABLED\=${BLOCKCHAINETHENABLED} --env WALLETPASSWORD\=${WALLET_PASSWORD} --name ${WORKER_CONTAINER_NAME_2} iexechub/worker:@{WORKER_DOCKER_IMAGE_VERSION}[0]  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/worker2.log
+    ${created_process} =  Start Process  docker run -t -d --net ${DOCKER_NETWORK} --restart unless-stopped -v ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/wallet/wallet_worker2.json:/iexec/wallet/wallet_worker.json -v ${RESULTS_FOLDER_BASE}_${date}:${RESULTS_FOLDER_BASE}_${date} -v /var/run/docker.sock:/var/run/docker.sock --env SCHEDULER_IP\=${XW_HOST} --env SCHEDULER_DOMAIN\=${XW_HOST} --env TMPDIR\=${RESULTS_FOLDER_BASE} --env SANDBOXENABLED\=true --env LOGGERLEVEL\=${LOGGERLEVEL} --env BLOCKCHAINETHENABLED\=${BLOCKCHAINETHENABLED} --env WALLETPASSWORD\=${WALLET_PASSWORD} --name ${WORKER_CONTAINER_NAME_2} iexechub/worker:@{WORKER_DOCKER_IMAGE_VERSION}[0]  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/worker2.log
     Set Suite Variable  ${WORKER_2_PROCESS}  ${created_process}
     ${container_id} =  Wait Until Keyword Succeeds  5 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${WORKER_CONTAINER_NAME_2}
     Log  ${container_id}
