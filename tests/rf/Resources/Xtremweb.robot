@@ -348,8 +348,11 @@ Curl On Scheduler
 
 
 Attach A Second Worker To Docker Network
-    File Should Exist  ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/.env
-    ${env} =  GET FILE  ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/.env
+    ${dir} =  Run Process  ls ${REPO_DIR}/xtremweb-hep/build/dist/  shell=yes
+    Log  ${dir.stderr}
+    Log  ${dir.stdout}
+    File Should Exist  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/docker/.env
+    ${env} =  GET FILE  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/docker/.env
     @{imgdocker} =  Get Regexp Matches  ${env}  WORKER_DOCKER_IMAGE_VERSION\=(?P<imgdocker>.*)  imgdocker
     Log  @{imgdocker}[0]
 
