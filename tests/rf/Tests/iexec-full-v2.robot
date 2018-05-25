@@ -48,7 +48,7 @@ Test Suite Setup Initialized
 
 Test Full V2
     #init
-    IexecSdk.Prepare Iexec App For Robot Test Docker  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapps-registry/master/iExecBlockchainComputing/Blender/iexec.json  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
+    IexecSdk.Prepare Iexec App For Robot Test Docker  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapps-registry/master/iExecBlockchainComputing/VanityEth/iexec.json  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
     IexecSdk.Iexec An app Docker  wallet show
 
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
