@@ -20,7 +20,7 @@ Suite Teardown  This Suite Teardown
 # https://github.com/iExecBlockchainComputing/iexec-node/blob/master/tests/rf/README.md
 
 # to launch all tests if robot installed on your host:
-# nohup pybot -v PRIVATE_KEY_SDK_TO_USE:TBD -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/iexec-francois-wip.robot &
+# nohup pybot -v WALLET_PASSWORD:TBD -v PRIVATE_KEY_SDK_TO_USE:TBD -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/iexec-francois-wip.robot &
 # PRIVATE_KEY_SDK_TO_USE use the first account of ther geth-poco node
 
 *** Variables ***
@@ -145,4 +145,4 @@ This Suite Setup
 This Suite Teardown
     IexecPocoAPI.Docker Stop Iexec Poco Api
     Xtremweb.Stop DockerCompose Xtremweb
-    #Xtremweb.Second Worker On Docker Network
+    Xtremweb.Stop Second Worker On Docker Network

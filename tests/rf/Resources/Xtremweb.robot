@@ -22,6 +22,7 @@ ${BLOCKCHAINETHENABLED} =  false
 
 ${LOGGERLEVEL} =  FINEST
 ${RESULTS_FOLDER_BASE}  =  /tmp/worker
+${WALLET_PASSWORD}
 
 
 ${XTREMWEB_DOCKERCOMPOSE_PROCESS}
@@ -34,7 +35,7 @@ ${MYSQL_CONTAINER_ID}
 ${WORKER_CONTAINER_NAME} =  iexecworker
 ${WORKER_CONTAINER_ID}
 
-
+${WORKER_2_PROCESS}
 ${WORKER_CONTAINER_NAME_2} =  iexecworker2
 ${WORKER_CONTAINER_ID_2}
 
@@ -353,7 +354,20 @@ Attach A Second Worker To Docker Network
     Log  ${dir.stdout}
     File Should Exist  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/docker/.env
     ${env} =  GET FILE  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/docker/.env
-    @{imgdocker} =  Get Regexp Matches  ${env}  WORKER_DOCKER_IMAGE_VERSION\=(?P<imgdocker>.*)  imgdocker
-    Log  @{imgdocker}[0]
+    @{WORKER_DOCKER_IMAGE_VERSION} =  Get Regexp Matches  ${env}  WORKER_DOCKER_IMAGE_VERSION\=(?P<imgdocker>.*)  imgdocker
+    Log  @{WORKER_DOCKER_IMAGE_VERSION}[0]
+
+    ${date} =	Get Current Date
+    ${created_process} =  Start Process  docker run -t -d --net ${DOCKER_NETWORK} --restart unless-stopped -v ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/wallet/wallet_worker2.json:/iexec/wallet/wallet_worker.json -v ${RESULTS_FOLDER_BASE}_${date}:${RESULTS_FOLDER_BASE}_${date} -v /var/run/docker.sock:/var/run/docker.sock --env SCHEDULER_IP\=${XW_HOST} --env SCHEDULER_DOMAIN\=${XW_HOST} --env TMPDIR\=${RESULTS_FOLDER_BASE}_${date} --env SANDBOXENABLED\=true --env LOGGERLEVEL\=${LOGGERLEVEL} --env BLOCKCHAINETHENABLED\=${BLOCKCHAINETHENABLED} --env WALLETPASSWORD\=${WALLET_PASSWORD} --name ${WORKER_CONTAINER_NAME_2} iexechub/worker:@{WORKER_DOCKER_IMAGE_VERSION}[0]  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/worker2.log
+    Set Suite Variable  ${WORKER_2_PROCESS}  ${created_process}
+    ${container_id} =  Wait Until Keyword Succeeds  5 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${WORKER_CONTAINER_NAME_2}
+    Log  ${container_id}
+    Set Suite Variable  ${WORKER_CONTAINER_ID_2}  ${container_id}
+
+
+Stop Second Worker On Docker Network
+    DockerHelper.Stop Log And Remove Container  ${WORKER_CONTAINER_ID_2}
+    Terminate Process  ${WORKER_2_PROCESS}
+
 
 
