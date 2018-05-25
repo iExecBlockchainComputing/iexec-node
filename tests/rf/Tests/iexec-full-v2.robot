@@ -17,7 +17,7 @@ Suite Teardown  This Suite Teardown
 
 
 # to launch all tests if robot installed on your host:
-# nohup pybot -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/iexec-full-v2.robot &
+# nohup pybot -v PRIVATE_KEY_SDK_TO_USE:TBD -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/iexec-full-v2.robot &
 
 
 *** Variables ***
@@ -40,7 +40,6 @@ ${SCHEDULER_ADDRESS} =  0x8bd535d49b095ef648cd85ea827867d358872809
 
 *** Test Cases ***
 
-#nohup pybot -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD  -d Results -t 'Test Suite Setup Initialized' ./tests/rf/Tests/iexec-full-v2.robot &
 Test Suite Setup Initialized
     Log  Suite Setup Initialized
 
@@ -106,15 +105,6 @@ Test Full V2
 
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
     Log  ${logs}
-
-
-
-    #TODO check allowtocontribute
-    #TODO check contributed
-    #TODO check revealConsensus
-    #TODO check reveal
-    #TODO check finializeWork
-
 
 
 
