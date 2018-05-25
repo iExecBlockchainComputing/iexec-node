@@ -34,6 +34,10 @@ ${MYSQL_CONTAINER_ID}
 ${WORKER_CONTAINER_NAME} =  iexecworker
 ${WORKER_CONTAINER_ID}
 
+
+${WORKER_CONTAINER_NAME_2} =  iexecworker2
+${WORKER_CONTAINER_ID_2}
+
 ${SERVER_SERVICE_NAME} =  scheduler
 ${SERVER_CONTAINER_NAME} =  scheduler
 ${SERVER_CONTAINER_ID}
@@ -341,4 +345,12 @@ Curl On Scheduler
     Log  ${curl_result.stderr}
     Should Be Equal As Integers  ${curl_result.rc}  0
     [Return]  ${curl_result.stdout}
+
+
+Attach A Second Worker To Docker Network
+    File Should Exist  ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/.env
+    ${env} =  GET FILE  ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/.env
+    @{imgdocker} =  Get Regexp Matches  ${env}  WORKER_DOCKER_IMAGE_VERSION\=(?P<imgdocker>.*)  imgdocker
+    Log  @{imgdocker}[0]
+
 
