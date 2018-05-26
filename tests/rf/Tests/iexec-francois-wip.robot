@@ -97,12 +97,12 @@ Test Full V2
     @{woid} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
     Log  @{woid}[0]
 
-    Wait Until Keyword Succeeds  2 min	3 sec  Check WorkOrderRevealing  @{woid}[0]
+    Wait Until Keyword Succeeds  5 min	3 sec  Check WorkOrderRevealing  @{woid}[0]
 
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
     Log  ${logs}
 
-    Wait Until Keyword Succeeds  2 min	3 sec  Check WorkOrderCompleted  @{woid}[0]
+    Wait Until Keyword Succeeds  5 min	3 sec  Check WorkOrderCompleted  @{woid}[0]
 
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
     Log  ${logs}
