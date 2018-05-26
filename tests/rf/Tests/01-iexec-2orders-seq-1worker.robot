@@ -20,7 +20,7 @@ Suite Teardown  This Suite Teardown
 # https://github.com/iExecBlockchainComputing/iexec-node/blob/master/tests/rf/README.md
 
 # to launch all tests if robot installed on your host:
-# nohup pybot -v XTREMWEB_GIT_BRANCH:13.1.0-francois -v LOGGERLEVEL:DEBUG -v PRIVATE_KEY_SDK_TO_USE:TBD -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/iexec-full-v2-2orders.robot &
+# nohup pybot -i FullV2 -v XTREMWEB_GIT_BRANCH:13.1.0-francois -v LOGGERLEVEL:DEBUG -v PRIVATE_KEY_SDK_TO_USE:TBD -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/01-iexec-2orders-seq-1worker.robot &
 # PRIVATE_KEY_SDK_TO_USE use the first account of ther geth-poco node
 
 
@@ -48,9 +48,11 @@ ${SCHEDULER_ADDRESS} =  0x8bd535d49b095ef648cd85ea827867d358872809
 *** Test Cases ***
 
 Test Suite Setup Initialized
+    [Tags]  FullV2
     Log  Suite Setup Initialized
 
 Test Full V2
+    [Tags]  FullV2
     #init
     IexecSdk.Prepare Iexec App For Robot Test Docker  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapps-registry/master/iExecBlockchainComputing/VanityEth/iexec.json  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
     IexecSdk.Iexec An app Docker  wallet show
