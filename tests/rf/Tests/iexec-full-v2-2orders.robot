@@ -78,11 +78,10 @@ Test Full V2
     # create marketorder
     ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
     Log  ${logs}
-    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
-    Log  ${logs}
+
     ${logs} =  Xtremweb.Curl On Scheduler  getmarketorders?XWLOGIN=admin&XWPASSWD=adminp
     Log  ${logs}
-    Should Contain  ${logs}	 XMLVector SIZE="2"
+    Should Contain  ${logs}	 XMLVector SIZE="1"
 
     Wait Until Keyword Succeeds  2 min	3 sec  Check One Marketorder
 
@@ -105,9 +104,6 @@ Test Full V2
 
     Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderRevealing  @{woid}[0]
 
-    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
-    Log  ${logs}
-
     Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderCompleted  @{woid}[0]
 
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
@@ -115,6 +111,13 @@ Test Full V2
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
     #launch 2
+    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
+    Log  ${logs}
+
+    ${logs} =  Xtremweb.Curl On Scheduler  getmarketorders?XWLOGIN=admin&XWPASSWD=adminp
+    Log  ${logs}
+    Should Contain  ${logs}	 XMLVector SIZE="2"
+
     Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
 
     ${logs} =  IexecSdk.Iexec An app Docker  order fill 2
@@ -123,8 +126,10 @@ Test Full V2
     @{woid2} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
     Log  @{woid2}[0]
 
-    #check 2
+    Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderRevealing  @{woid2}[0]
+
     Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderCompleted  @{woid2}[0]
+
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid2}[0]
     Log  ${logs}
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
