@@ -47,7 +47,7 @@ Test Suite Setup Initialized
     [Tags]  FullV2
     Log  Suite Setup Initialized
 
-Test Full V2 With 5 Workers
+Test Full V2 With 2 Workers
     [Tags]  FullV2
     #init
     IexecSdk.Prepare Iexec App For Robot Test Docker  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapps-registry/master/iExecBlockchainComputing/VanityEth/iexec.json  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
@@ -137,8 +137,9 @@ This Suite Setup
     IexecSdk.Init Sdk
     Xtremweb.Gradle Build Xtremweb
     Xtremweb.Start DockerCompose Xtremweb
+    Xtremweb.Stop Worker On Docker Network By Number  1
     Xtremweb.Attach New Worker To Docker Network By Number  2
-    #Xtremweb.Attach New Worker To Docker Network By Number  3
+    Xtremweb.Attach New Worker To Docker Network By Number  3
     #Xtremweb.Attach New Worker To Docker Network By Number  4
     #Xtremweb.Attach New Worker To Docker Network By Number  5
     IexecCommon.Gradle Build Iexec Common
@@ -151,7 +152,7 @@ This Suite Setup
 This Suite Teardown
     IexecPocoAPI.Docker Stop Iexec Poco Api
     Xtremweb.Stop Worker On Docker Network By Number  2
-    #Xtremweb.Stop Worker On Docker Network By Number  3
+    Xtremweb.Stop Worker On Docker Network By Number  3
     #Xtremweb.Stop Worker On Docker Network By Number  4
     #Xtremweb.Stop Worker On Docker Network By Number  5
     Xtremweb.Stop DockerCompose Xtremweb
