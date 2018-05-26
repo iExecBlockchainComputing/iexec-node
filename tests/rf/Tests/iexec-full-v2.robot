@@ -20,8 +20,12 @@ Suite Teardown  This Suite Teardown
 # https://github.com/iExecBlockchainComputing/iexec-node/blob/master/tests/rf/README.md
 
 # to launch all tests if robot installed on your host:
-# nohup pybot -v PRIVATE_KEY_SDK_TO_USE:TBD -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/iexec-full-v2.robot &
+# nohup pybot -v XTREMWEB_GIT_BRANCH:13.1.0-francois -v LOGGERLEVEL:DEBUG -v PRIVATE_KEY_SDK_TO_USE:TBD -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/iexec-full-v2.robot &
 # PRIVATE_KEY_SDK_TO_USE use the first account of ther geth-poco node
+
+
+
+
 
 *** Variables ***
 ${REPO_DIR} =  ${CURDIR}/../repo
