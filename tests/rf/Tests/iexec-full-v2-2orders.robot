@@ -20,7 +20,7 @@ Suite Teardown  This Suite Teardown
 # https://github.com/iExecBlockchainComputing/iexec-node/blob/master/tests/rf/README.md
 
 # to launch all tests if robot installed on your host:
-# nohup pybot -v XTREMWEB_GIT_BRANCH:13.1.0-francois -v LOGGERLEVEL:DEBUG -v PRIVATE_KEY_SDK_TO_USE:TBD -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/iexec-full-v2-5orders.robot &
+# nohup pybot -v XTREMWEB_GIT_BRANCH:13.1.0-francois -v LOGGERLEVEL:DEBUG -v PRIVATE_KEY_SDK_TO_USE:TBD -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/iexec-full-v2-2orders.robot &
 # PRIVATE_KEY_SDK_TO_USE use the first account of ther geth-poco node
 
 
@@ -80,17 +80,11 @@ Test Full V2
     Log  ${logs}
     ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
     Log  ${logs}
-    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
-    Log  ${logs}
-    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
-    Log  ${logs}
-    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
-    Log  ${logs}
     ${logs} =  Xtremweb.Curl On Scheduler  getmarketorders?XWLOGIN=admin&XWPASSWD=adminp
     Log  ${logs}
-    Should Contain  ${logs}	 XMLVector SIZE="5"
+    Should Contain  ${logs}	 XMLVector SIZE="2"
 
-    Wait Until Keyword Succeeds  2 min	3 sec  Check Five Marketorder
+    Wait Until Keyword Succeeds  2 min	3 sec  Check One Marketorder
 
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/1
     Log  ${logs}
@@ -120,51 +114,22 @@ Test Full V2
     Log  ${logs}
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
-    #launch 2 -> 5 orders
+    #launch 2
+    Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
+
     ${logs} =  IexecSdk.Iexec An app Docker  order fill 2
     Log  ${logs}
     Should Contain  ${logs}  woid
     @{woid2} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
     Log  @{woid2}[0]
 
-    ${logs} =  IexecSdk.Iexec An app Docker  order fill 3
-    Log  ${logs}
-    Should Contain  ${logs}  woid
-    @{woid3} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
-    Log  @{woid3}[0]
-
-    ${logs} =  IexecSdk.Iexec An app Docker  order fill 4
-    Log  ${logs}
-    Should Contain  ${logs}  woid
-    @{woid4} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
-    Log  @{woid4}[0]
-
-    ${logs} =  IexecSdk.Iexec An app Docker  order fill 5
-    Log  ${logs}
-    Should Contain  ${logs}  woid
-    @{woid5} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
-    Log  @{woid5}[0]
-
-    #check 2 -> 5 orders
+    #check 2
     Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderCompleted  @{woid2}[0]
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid2}[0]
     Log  ${logs}
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
-    Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderCompleted  @{woid3}[0]
-    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid3}[0]
-    Log  ${logs}
-    Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
-    Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderCompleted  @{woid4}[0]
-    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid4}[0]
-    Log  ${logs}
-    Should Contain  ${logs}	 m_uri: 'xw://scheduler
-
-    Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderCompleted  @{woid5}[0]
-    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid5}[0]
-    Log  ${logs}
-    Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
 *** Keywords ***
 
@@ -181,10 +146,18 @@ Check WorkOrderCompleted
     Should Contain  ${logs}  "status":4
 
 
-Check Five Marketorder
+Check One Marketorder
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
     Log  ${logs}
-    Should Be Equal As Integers	 ${logs}  5
+    Should Be Equal As Integers	 ${logs}  1
+
+
+Check Two Marketorder
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
+    Log  ${logs}
+    Should Be Equal As Integers	 ${logs}  2
+
+
 
 This Suite Setup
     Create Directory  ${REPO_DIR}
