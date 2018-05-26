@@ -134,7 +134,7 @@ This Suite Setup
     IexecSdk.Init Sdk
     Xtremweb.Gradle Build Xtremweb
     Xtremweb.Start DockerCompose Xtremweb
-    Xtremweb.Attach A Second Worker To Docker Network
+    Xtremweb.Attach New Worker To Docker Network By Number  2
     IexecCommon.Gradle Build Iexec Common
     IexecScheduler.Gradle Build Iexec Scheduler
     IexecWorker.Gradle Build Iexec Worker
@@ -145,4 +145,4 @@ This Suite Setup
 This Suite Teardown
     IexecPocoAPI.Docker Stop Iexec Poco Api
     Xtremweb.Stop DockerCompose Xtremweb
-    Xtremweb.Stop Second Worker On Docker Network
+    Xtremweb.Stop Worker On Docker Network By Number  2

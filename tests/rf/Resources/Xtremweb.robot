@@ -32,12 +32,21 @@ ${MYSQL_SERVICE_NAME} =  db
 ${MYSQL_CONTAINER_NAME} =  mysql
 ${MYSQL_CONTAINER_ID}
 
-${WORKER_CONTAINER_NAME} =  iexecworker
-${WORKER_CONTAINER_ID}
+${WORKER_1_PROCESS}
+${WORKER_CONTAINER_NAME_1} =  iexecworker1
+${WORKER_CONTAINER_ID_1}
+
 
 ${WORKER_2_PROCESS}
-${WORKER_CONTAINER_NAME_2} =  iexecworker2
+${WORKER_3_PROCESS}
+${WORKER_4_PROCESS}
+${WORKER_5_PROCESS}
+${WORKER_CONTAINER_NAME_BASE} =  iexecworker
 ${WORKER_CONTAINER_ID_2}
+${WORKER_CONTAINER_ID_3}
+${WORKER_CONTAINER_ID_4}
+${WORKER_CONTAINER_ID_5}
+
 
 ${SERVER_SERVICE_NAME} =  scheduler
 ${SERVER_CONTAINER_NAME} =  scheduler
@@ -123,6 +132,12 @@ Start DockerCompose Xtremweb
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/iexecscheduler/${SERVER_CONTAINER_NAME}/g" docker-compose.yml > docker-compose.tmp && cat docker-compose.tmp > docker-compose.yml  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/container_name: iexecworker/container_name: ${WORKER_CONTAINER_NAME_1}/g" docker-compose.yml > docker-compose.tmp && cat docker-compose.tmp > docker-compose.yml  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+
+
 
 
 
@@ -245,9 +260,9 @@ Start DockerCompose Xtremweb
     ${created_process} =  Start Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker-compose -f docker-compose.yml logs -f  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/xtremweb-hep.log
     Set Suite Variable  ${XTREMWEB_DOCKERCOMPOSE_PROCESS}  ${created_process}
 
-    ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${WORKER_CONTAINER_NAME}
+    ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${WORKER_CONTAINER_NAME_1}
     Log  ${container_id}
-    Set Suite Variable  ${WORKER_CONTAINER_ID}  ${container_id}
+    Set Suite Variable  ${WORKER_CONTAINER_ID_1}  ${container_id}
 
     ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id From Image  ${ADMINER_IMAGE}
     Log  ${container_id}
@@ -317,7 +332,7 @@ Retrieved WorkerPool Address Automaticaly Created
 Stop DockerCompose Xtremweb
     Get Xtremweb Log
 
-    DockerHelper.Stop Log And Remove Container  ${WORKER_CONTAINER_ID}
+    DockerHelper.Stop Log And Remove Container  ${WORKER_CONTAINER_ID_1}
 
     DockerHelper.Stop Log And Remove Container  ${GRAFANA_CONTAINER_NAME}
 
@@ -348,7 +363,21 @@ Curl On Scheduler
     [Return]  ${curl_result.stdout}
 
 
-Attach A Second Worker To Docker Network
+Attach New Worker To Docker Network By Number
+    [Arguments]  ${workerNumber}
+    # range possible 1->5
+    Should Be True	${workerNumber} < 6
+    Should Be True	${workerNumber} > 0
+    # may be stop it before if present
+    Stop A Worker On Docker Network  ${workerNumber}
+
+    ${container_name} =	 Set Variable If  ${workerNumber} == 1  ${WORKER_CONTAINER_NAME_1}
+    ${container_name} =	 Set Variable If  ${workerNumber} == 2  ${WORKER_CONTAINER_NAME_2}
+    ${container_name} =	 Set Variable If  ${workerNumber} == 3  ${WORKER_CONTAINER_NAME_3}
+    ${container_name} =	 Set Variable If  ${workerNumber} == 4  ${WORKER_CONTAINER_NAME_4}
+    ${container_name} =	 Set Variable If  ${workerNumber} == 5  ${WORKER_CONTAINER_NAME_5}
+
+
     ${dir} =  Run Process  ls ${REPO_DIR}/xtremweb-hep/build/dist/  shell=yes
     Log  ${dir.stderr}
     Log  ${dir.stdout}
@@ -357,16 +386,34 @@ Attach A Second Worker To Docker Network
     @{WORKER_DOCKER_IMAGE_VERSION} =  Get Regexp Matches  ${env}  WORKER_DOCKER_IMAGE_VERSION\=(?P<imgdocker>.*)  imgdocker
     Log  @{WORKER_DOCKER_IMAGE_VERSION}[0]
 
-    ${created_process} =  Start Process  docker run -t -d --net ${DOCKER_NETWORK} --restart unless-stopped -v ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/wallet/wallet_worker2.json:/iexec/wallet/wallet_worker.json -v ${RESULTS_FOLDER_BASE}:${RESULTS_FOLDER_BASE} -v /var/run/docker.sock:/var/run/docker.sock --env SCHEDULER_IP\=${XW_HOST} --env SCHEDULER_DOMAIN\=${XW_HOST} --env TMPDIR\=${RESULTS_FOLDER_BASE} --env SANDBOXENABLED\=true --env LOGGERLEVEL\=${LOGGERLEVEL} --env BLOCKCHAINETHENABLED\=${BLOCKCHAINETHENABLED} --env WALLETPASSWORD\=${WALLET_PASSWORD} --name ${WORKER_CONTAINER_NAME_2} iexechub/worker:@{WORKER_DOCKER_IMAGE_VERSION}[0]  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/worker2.log
-    Set Suite Variable  ${WORKER_2_PROCESS}  ${created_process}
-    ${container_id} =  Wait Until Keyword Succeeds  5 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${WORKER_CONTAINER_NAME_2}
+    ${created_process} =  Start Process  docker run -t -d --net ${DOCKER_NETWORK} --restart unless-stopped -v ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/wallet/wallet_worker${workerNumber}.json:/iexec/wallet/wallet_worker.json -v ${RESULTS_FOLDER_BASE}${workerNumber}:${RESULTS_FOLDER_BASE}${workerNumber} -v /var/run/docker.sock:/var/run/docker.sock --env SCHEDULER_IP\=${XW_HOST} --env SCHEDULER_DOMAIN\=${XW_HOST} --env TMPDIR\=${RESULTS_FOLDER_BASE}${workerNumber} --env SANDBOXENABLED\=true --env LOGGERLEVEL\=${LOGGERLEVEL} --env BLOCKCHAINETHENABLED\=${BLOCKCHAINETHENABLED} --env WALLETPASSWORD\=${WALLET_PASSWORD} --name ${WORKER_CONTAINER_NAME_BASE}${workerNumber} iexechub/worker:@{WORKER_DOCKER_IMAGE_VERSION}[0]  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/worker${workerNumber}.log
+
+    Run Keyword If  '${workerNumber}' == '1'  Set Suite Variable  ${WORKER_1_PROCESS}  ${created_process}
+    Run Keyword If  '${workerNumber}' == '2'  Set Suite Variable  ${WORKER_2_PROCESS}  ${created_process}
+    Run Keyword If  '${workerNumber}' == '3'  Set Suite Variable  ${WORKER_3_PROCESS}  ${created_process}
+    Run Keyword If  '${workerNumber}' == '4'  Set Suite Variable  ${WORKER_4_PROCESS}  ${created_process}
+    Run Keyword If  '${workerNumber}' == '5'  Set Suite Variable  ${WORKER_5_PROCESS}  ${created_process}
+
+    ${container_id} =  Wait Until Keyword Succeeds  5 min	10 sec  DockerHelper.Get Docker Container Id By Name  ${WORKER_CONTAINER_NAME_BASE}${workerNumber}
     Log  ${container_id}
-    Set Suite Variable  ${WORKER_CONTAINER_ID_2}  ${container_id}
 
+    Run Keyword If  '${workerNumber}' == '1'  Set Suite Variable  ${WORKER_CONTAINER_ID_1}  ${container_id}
+    Run Keyword If  '${workerNumber}' == '2'  Set Suite Variable  ${WORKER_CONTAINER_ID_2}  ${container_id}
+    Run Keyword If  '${workerNumber}' == '3'  Set Suite Variable  ${WORKER_CONTAINER_ID_3}  ${container_id}
+    Run Keyword If  '${workerNumber}' == '4'  Set Suite Variable  ${WORKER_CONTAINER_ID_4}  ${container_id}
+    Run Keyword If  '${workerNumber}' == '5'  Set Suite Variable  ${WORKER_CONTAINER_ID_5}  ${container_id}
 
-Stop Second Worker On Docker Network
-    DockerHelper.Stop Log And Remove Container  ${WORKER_CONTAINER_ID_2}
-    Terminate Process  ${WORKER_2_PROCESS}
+Stop Worker On Docker Network By Number
+    [Arguments]  ${workerNumber}
+    # range possible to stop 1->5
+    Should Be True	${workerNumber} < 6
+    Should Be True	${workerNumber} > 0
+    DockerHelper.Stop Log And Remove Container  ${WORKER_CONTAINER_NAME_BASE}${workerNumber}
+    Run Keyword If  '${workerNumber}' == '1'  Terminate Process  ${WORKER_1_PROCESS}
+    Run Keyword If  '${workerNumber}' == '2'  Terminate Process  ${WORKER_2_PROCESS}
+    Run Keyword If  '${workerNumber}' == '3'  Terminate Process  ${WORKER_3_PROCESS}
+    Run Keyword If  '${workerNumber}' == '4'  Terminate Process  ${WORKER_4_PROCESS}
+    Run Keyword If  '${workerNumber}' == '5'  Terminate Process  ${WORKER_5_PROCESS}
 
 
 
