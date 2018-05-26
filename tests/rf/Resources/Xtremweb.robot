@@ -402,7 +402,6 @@ Stop Worker On Docker Network By Number
     Should Be True	${workerNumber} < 6
     Should Be True	${workerNumber} > 0
     DockerHelper.Stop Log And Remove Container  ${WORKER_CONTAINER_NAME_BASE}${workerNumber}
-    Run Keyword If  '${workerNumber}' == '1'  Terminate Process  ${WORKER_1_PROCESS}
     Run Keyword If  '${workerNumber}' == '2'  Terminate Process  ${WORKER_2_PROCESS}
     Run Keyword If  '${workerNumber}' == '3'  Terminate Process  ${WORKER_3_PROCESS}
     Run Keyword If  '${workerNumber}' == '4'  Terminate Process  ${WORKER_4_PROCESS}
