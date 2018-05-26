@@ -144,15 +144,11 @@ This Suite Setup
     Xtremweb.Start DockerCompose Xtremweb
     IexecCommon.Gradle Build Iexec Common
     IexecScheduler.Gradle Build Iexec Scheduler
-    #IexecSchedulerMock.Docker Run Iexec Scheduler Mock
     IexecWorker.Gradle Build Iexec Worker
-    #IexecWorkerMock.Docker Run Iexec Worker Mock
     IexecPocoAPI.Docker Run Iexec Poco Api
 
 
 
 This Suite Teardown
     IexecPocoAPI.Docker Stop Iexec Poco Api
-    #IexecWorkerMock.Docker Stop Worker Mock
-    #IexecSchedulerMock.Docker Stop Scheduler Mock
     Xtremweb.Stop DockerCompose Xtremweb
