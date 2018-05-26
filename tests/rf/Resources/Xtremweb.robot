@@ -371,13 +371,6 @@ Attach New Worker To Docker Network By Number
     # may be stop it before if present
     Run Keyword And Ignore Error  Stop Worker On Docker Network By Number  ${workerNumber}
 
-    ${container_name} =	 Set Variable If  ${workerNumber} == 1  ${WORKER_CONTAINER_NAME_1}
-    ${container_name} =	 Set Variable If  ${workerNumber} == 2  ${WORKER_CONTAINER_NAME_2}
-    ${container_name} =	 Set Variable If  ${workerNumber} == 3  ${WORKER_CONTAINER_NAME_3}
-    ${container_name} =	 Set Variable If  ${workerNumber} == 4  ${WORKER_CONTAINER_NAME_4}
-    ${container_name} =	 Set Variable If  ${workerNumber} == 5  ${WORKER_CONTAINER_NAME_5}
-
-
     ${dir} =  Run Process  ls ${REPO_DIR}/xtremweb-hep/build/dist/  shell=yes
     Log  ${dir.stderr}
     Log  ${dir.stdout}
