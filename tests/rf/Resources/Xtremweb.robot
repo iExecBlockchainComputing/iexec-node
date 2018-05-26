@@ -369,7 +369,7 @@ Attach New Worker To Docker Network By Number
     Should Be True	${workerNumber} < 6
     Should Be True	${workerNumber} > 0
     # may be stop it before if present
-    Stop A Worker On Docker Network  ${workerNumber}
+    Stop Worker On Docker Network By Number  ${workerNumber}
 
     ${container_name} =	 Set Variable If  ${workerNumber} == 1  ${WORKER_CONTAINER_NAME_1}
     ${container_name} =	 Set Variable If  ${workerNumber} == 2  ${WORKER_CONTAINER_NAME_2}
