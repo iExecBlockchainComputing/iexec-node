@@ -107,6 +107,10 @@ Test Full V2
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
     Log  ${logs}
 
+    Should Contain  ${logs}	 m_uri: 'xw://scheduler
+
+
+
 
 
 *** Keywords ***
