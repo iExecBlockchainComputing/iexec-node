@@ -20,7 +20,7 @@ Suite Teardown  This Suite Teardown
 # https://github.com/iExecBlockchainComputing/iexec-node/blob/master/tests/rf/README.md
 
 # to launch all tests if robot installed on your host:
-# nohup pybot -i FullV2 -v XTREMWEB_GIT_BRANCH:13.1.0 -v LOGGERLEVEL:DEBUG -v PRIVATE_KEY_SDK_TO_USE:TBD -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/01-iexec-2orders-seq-1worker.robot &
+# nohup pybot -i FullV2 -v XTREMWEB_GIT_BRANCH:13.1.0 -v LOGGERLEVEL:DEBUG -v PRIVATE_KEY_SDK_TO_USE:TBD -v JWTETHISSUER:TBD -v JWTETHSECRET:TBD -d Results ./tests/rf/Tests/04-iexec-2orders-parallel-1worker.robot &
 # PRIVATE_KEY_SDK_TO_USE use the first account of ther geth-poco node
 
 
@@ -87,6 +87,15 @@ Test Full V2
 
     Wait Until Keyword Succeeds  2 min	3 sec  Check One Marketorder
 
+    #deposit a second marketorder
+    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
+    Log  ${logs}
+
+    ${logs} =  Xtremweb.Curl On Scheduler  getmarketorders?XWLOGIN=admin&XWPASSWD=adminp
+    Log  ${logs}
+    Should Contain  ${logs}	 XMLVector SIZE="2"
+
+
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/1
     Log  ${logs}
 
@@ -113,12 +122,6 @@ Test Full V2
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
     #launch 2
-    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
-    Log  ${logs}
-
-    ${logs} =  Xtremweb.Curl On Scheduler  getmarketorders?XWLOGIN=admin&XWPASSWD=adminp
-    Log  ${logs}
-    Should Contain  ${logs}	 XMLVector SIZE="2"
 
     Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
 
