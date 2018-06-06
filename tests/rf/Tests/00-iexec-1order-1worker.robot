@@ -97,7 +97,7 @@ Test Full V2
     Log  ${logs}
 
     #buyforworkorder
-    ${logs} =  IexecSdk.Iexec An app Docker  order fill 1
+    ${logs} =  IexecSdk.Iexec An app Docker  order fill 1 --force
     Log  ${logs}
     Should Contain  ${logs}  woid
     @{woid} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
