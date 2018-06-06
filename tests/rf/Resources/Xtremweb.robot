@@ -369,7 +369,7 @@ Curl On Scheduler
 
 Curl Download On Scheduler
     [Arguments]  ${URL}  ${filename}
-    ${curl_result} =  Run Process  docker run --rm --net ${DOCKER_NETWORK} appropriate/curl --request GET --insecure 'https://${SERVER_SERVICE_NAME}:443/${URL}' -o ${filename}.zip  shell=yes
+    ${curl_result} =  Run Process  docker run --rm -v $(pwd):/iexec-project -w /iexec-project --net ${DOCKER_NETWORK} appropriate/curl --request GET --insecure 'https://${SERVER_SERVICE_NAME}:443/${URL}' -o ${filename}.zip  shell=yes
     Log  ${curl_result.stdout}
     Log  ${curl_result.stderr}
     Should Be Equal As Integers  ${curl_result.rc}  0
