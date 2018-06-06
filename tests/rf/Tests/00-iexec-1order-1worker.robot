@@ -117,6 +117,13 @@ Test Full V2
 
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0] --watch --download
     Log  ${logs}
+    Should Contain  ${logs}  resultUID
+    @{resultUID} =  Get Regexp Matches  ${logs}  iexec:iexec-work resultUID (?P<woid>.*)  resultUID
+    Log  @{resultUID}[0]
+
+    ${logs} =  Xtremweb.Curl On Scheduler  get/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp
+    Log  ${logs}
+
 
 
 *** Keywords ***
