@@ -104,7 +104,7 @@ Iexec An app Docker
     Remove File  ${REPO_DIR}/iexec-sdk.log
     Create File  ${REPO_DIR}/iexec-sdk.log
     Directory Should Exist  ${REPO_DIR}/iexec-app
-    ${iexec_result} =  Run Process  cd ${REPO_DIR}/iexec-app && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} ${args} --chain robot  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
+    ${iexec_result} =  Run Process  cd ${REPO_DIR}/iexec-app && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} ${args} --chain robot --force  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
     ${logs} =  Get Iexec Sdk Log
     #Should Be Equal As Integers	${iexec_result.rc}	0
     [Return]  ${logs}
