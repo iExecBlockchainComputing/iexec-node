@@ -156,7 +156,11 @@ Start DockerCompose Xtremweb
 
 
     # copy scripts, conf and certificate from scheduler
-    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/bin ${REPO_DIR}/dbbin  shell=yes
+
+    ${dbbinFullPath} =  Join Path  ${REPO_DIR}  dbbin
+    Log  ${dbbinFullPath}
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && docker cp ${SERVER_CONTAINER_NAME}:/iexec/bin ${dbbinFullPath}  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
     Should Be Equal As Integers  ${result.rc}  0
@@ -279,7 +283,7 @@ Start Poa Geth PoCo
         Create File  ${REPO_DIR}/geth-poco.log
         ${created_process} =  Start Process  docker run -t -d --net ${DOCKER_NETWORK} --name geth-poco -p 8545:8545 ${GETH_POCO_IMAGE}:${GETH_POCO_IMAGE_VERSION}  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/geth-poco.log
         Set Suite Variable  ${GETH_POCO_PROCESS}  ${created_process}
-        ${container_id} =  Wait Until Keyword Succeeds  1 min	10 sec  DockerHelper.Get Docker Container Id From Image  ${GETH_POCO_IMAGE}:${GETH_POCO_IMAGE_VERSION}
+        ${container_id} =  Wait Until Keyword Succeeds  3 min	10 sec  DockerHelper.Get Docker Container Id From Image  ${GETH_POCO_IMAGE}:${GETH_POCO_IMAGE_VERSION}
         Log  ${container_id}
         Set Suite Variable  ${GETH_POCO_CONTAINER_ID}  ${container_id}
         ${result} =  Run Process  docker inspect ${GETH_POCO_CONTAINER_ID}  shell=yes
@@ -362,6 +366,14 @@ Curl On Scheduler
     Should Be Equal As Integers  ${curl_result.rc}  0
     [Return]  ${curl_result.stdout}
 
+
+Curl Download On Scheduler
+    [Arguments]  ${URL}  ${filename}
+    ${curl_result} =  Run Process  docker run --rm --net ${DOCKER_NETWORK} appropriate/curl --request GET --insecure 'https://${SERVER_SERVICE_NAME}:443/${URL}' -o ${filename}.zip  shell=yes
+    Log  ${curl_result.stdout}
+    Log  ${curl_result.stderr}
+    Should Be Equal As Integers  ${curl_result.rc}  0
+    [Return]  ${curl_result.stdout}
 
 Attach New Worker To Docker Network By Number
     [Arguments]  ${workerNumber}

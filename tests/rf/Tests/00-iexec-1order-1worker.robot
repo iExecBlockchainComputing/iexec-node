@@ -124,6 +124,9 @@ Test Full V2
     ${logs} =  Xtremweb.Curl On Scheduler  get/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp
     Log  ${logs}
 
+    ${logs} =  Xtremweb.Curl Download On Scheduler  downloaddata/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp  @{resultUID}[0]
+    Log  ${logs}
+
 
 
 *** Keywords ***
