@@ -33,7 +33,7 @@ ${REPO_DIR} =  ${CURDIR}/../repo
 ${XW_HOST} =  scheduler
 
 
-${IEXEC_SDK_IMAGE_VERSION} =  2.2.8
+${IEXEC_SDK_IMAGE_VERSION} =  2.2.13
 ${PRIVATE_KEY_SDK_TO_USE}
 ${XTREMWEB_GIT_BRANCH} =  13.1.0
 ${START_POA_GETH_POCO} =  true
@@ -115,7 +115,7 @@ Test Full V2
 
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
-    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0] --download
+    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0] --watch --download
     Log  ${logs}
 
 
