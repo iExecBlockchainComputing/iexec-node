@@ -123,7 +123,7 @@ Test Full V2
 
     #launch 2
 
-    Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
+    Wait Until Keyword Succeeds  3 min	3 sec  Check Two Marketorder
 
     # add a 30 seconds Sleep workaround
     Sleep  30 seconds
