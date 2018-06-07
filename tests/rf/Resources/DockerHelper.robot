@@ -71,6 +71,18 @@ Stop Container
     Log  ${container_id}
     Run Process  docker stop ${container_id}  shell=yes
 
+Start Container
+    [Arguments]  ${container_id}
+    Log  ${container_id}
+    Run Process  docker start ${container_id}  shell=yes
+
+
+Restart Container
+    [Arguments]  ${container_id}
+    Stop Container  ${container_id}
+    Start Container  ${container_id}
+
+
 Remove Container
     [Arguments]  ${container_id}
     Log  ${container_id}

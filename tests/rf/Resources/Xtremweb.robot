@@ -420,4 +420,5 @@ Stop Worker On Docker Network By Number
     Run Keyword If  '${workerNumber}' == '5'  Terminate Process  ${WORKER_5_PROCESS}
 
 
-
+Restart Server
+    DockerHelper.Restart Container  ${SERVER_CONTAINER_ID}

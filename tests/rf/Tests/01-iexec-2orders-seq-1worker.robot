@@ -33,7 +33,7 @@ ${REPO_DIR} =  ${CURDIR}/../repo
 ${XW_HOST} =  scheduler
 
 
-${IEXEC_SDK_IMAGE_VERSION} =  2.2.13
+${IEXEC_SDK_IMAGE_VERSION} =  2.2.15
 ${PRIVATE_KEY_SDK_TO_USE}
 ${XTREMWEB_GIT_BRANCH} =  13.1.0
 ${START_POA_GETH_POCO} =  true
@@ -98,7 +98,7 @@ Test Full V2
     Log  ${logs}
 
     #buyforworkorder
-    ${logs} =  IexecSdk.Iexec An app Docker  order fill 1
+    ${logs} =  IexecSdk.Iexec An app Docker  order fill 1 --force
     Log  ${logs}
     Should Contain  ${logs}  woid
     @{woid} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
@@ -122,7 +122,7 @@ Test Full V2
 
     Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
 
-    ${logs} =  IexecSdk.Iexec An app Docker  order fill 2
+    ${logs} =  IexecSdk.Iexec An app Docker  order fill 2 --force
     Log  ${logs}
     Should Contain  ${logs}  woid
     @{woid2} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
