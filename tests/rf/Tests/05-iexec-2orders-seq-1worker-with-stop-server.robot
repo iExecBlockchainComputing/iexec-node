@@ -112,7 +112,7 @@ Test Full V2
     Log  ${logs}
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
-    #Xtremweb.Restart Server
+    Xtremweb.Restart Server
 
     #launch 2
     ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>

@@ -125,6 +125,9 @@ Test Full V2
 
     Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
 
+    # add a 2 minutes Sleep workaround
+    Sleep  2 minutes
+
     ${logs} =  IexecSdk.Iexec An app Docker  order fill 2 --force
     Log  ${logs}
     Should Contain  ${logs}  woid
