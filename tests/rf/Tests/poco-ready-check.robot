@@ -140,10 +140,10 @@ Test Full V2
     Log  ${logs}
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
-    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  workorders/@{woid}[0]/consensus
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/workorders/@{woid}[0]/consensus
     Log  ${logs}
 
-    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  workorders/@{woid2}[0]/consensus
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/workorders/@{woid2}[0]/consensus
     Log  ${logs}
 
 
