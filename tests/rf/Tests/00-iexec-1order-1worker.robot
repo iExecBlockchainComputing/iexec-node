@@ -115,7 +115,7 @@ Test Full V2
 
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
-    ${logs} =  IexecSdk.Iexec An app Docker  account login
+    ${logs} =  IexecSdk.Iexec An app Docker  account login --force
     Log  ${logs}
 
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0] --watch --download
