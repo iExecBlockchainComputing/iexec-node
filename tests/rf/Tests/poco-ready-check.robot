@@ -123,6 +123,9 @@ Test Full V2
 
     Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
 
+    # add a 30 seconds Sleep workaround
+    Sleep  30 seconds
+
     ${logs} =  IexecSdk.Iexec An app Docker  order fill 2 --force
     Log  ${logs}
     Should Contain  ${logs}  woid
@@ -137,11 +140,10 @@ Test Full V2
     Log  ${logs}
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
-
-    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  /workers/0/workorders/@{woid}[0]/consensus
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  workorders/@{woid}[0]/consensus
     Log  ${logs}
 
-    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  /workers/0/workorders/@{woid2}[0]/consensus
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  workorders/@{woid2}[0]/consensus
     Log  ${logs}
 
 
