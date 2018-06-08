@@ -161,7 +161,7 @@ Create Robot Chain Json
      Append To File  ${REPO_DIR}/iexec-app/chain.json  "robot": {
      Append To File  ${REPO_DIR}/iexec-app/chain.json  "host": "http://${chainhost}:8545",
      Append To File  ${REPO_DIR}/iexec-app/chain.json  "id": "1337",
-     Append To File  ${REPO_DIR}/iexec-app/chain.json  "server": "https://${schedulerhost}:443",
+     Append To File  ${REPO_DIR}/iexec-app/chain.json  "scheduler": "https://${schedulerhost}:443",
      Append To File  ${REPO_DIR}/iexec-app/chain.json  "hub": "${hub}"
      Append To File  ${REPO_DIR}/iexec-app/chain.json   }
      Append To File  ${REPO_DIR}/iexec-app/chain.json   }
