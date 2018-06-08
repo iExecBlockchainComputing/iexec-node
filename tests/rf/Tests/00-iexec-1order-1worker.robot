@@ -1,5 +1,6 @@
 *** Settings ***
 Documentation    iexec-full-v2
+Library           ArchiveLibrary
 Resource  ../Resources/DockerHelper.robot
 Resource  ../Resources/GethPocoDocker.robot
 Resource  ../Resources/IexecCommon.robot
@@ -124,11 +125,16 @@ Test Full V2
     @{resultUID} =  Get Regexp Matches  ${logs}  m_uri: 'xw://scheduler/(?P<resultUID>.*)',  resultUID
     Log  @{resultUID}[0]
 
-    ${logs} =  Xtremweb.Curl On Scheduler  get/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp
-    Log  ${logs}
+    Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  keypair.txt
+    Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  stdout.txt
+    Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  consensus.iexec
 
-    ${logs} =  Xtremweb.Curl Download On Scheduler  downloaddata/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp  @{resultUID}[0]
-    Log  ${logs}
+
+    #${logs} =  Xtremweb.Curl On Scheduler  get/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp
+    #Log  ${logs}
+
+    #${logs} =  Xtremweb.Curl Download On Scheduler  downloaddata/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp  @{resultUID}[0]
+    #Log  ${logs}
 
 
 
