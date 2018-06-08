@@ -143,9 +143,16 @@ Test Full V2
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/workorders/@{woid}[0]/consensus
     Log  ${logs}
 
+    @{consensus1} =  Get Regexp Matches  ${logs}  "consensus":"(?P<consensus1>.*)"  consensus1
+    Log  @{consensus1}[0]
+
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/workorders/@{woid2}[0]/consensus
     Log  ${logs}
 
+    @{consensus2} =  Get Regexp Matches  ${logs}  "consensus":"(?P<consensus2>.*)"  consensus2
+    Log  @{consensus2}[0]
+
+    Should Be Equal As Strings  @{consensus1}[0]  @{consensus2}[0]
 
 
 *** Keywords ***
