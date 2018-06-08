@@ -138,30 +138,13 @@ Test Full V2
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
 
-    ${logs} =  IexecSdk.Iexec An app Docker  account login --force
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  /workorders/@{woid}[0]/consensus
     Log  ${logs}
 
-    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0] --watch --download
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  /workorders/@{woid2}[0]/consensus
     Log  ${logs}
-    Should Contain  ${logs}  resultUID
 
 
-    Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  consensus.iexec
-
-    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid2}[0] --watch --download
-    Log  ${logs}
-    Should Contain  ${logs}  resultUID
-
-    Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid2}[0].zip  consensus.iexec
-
-
-     Extract Zip File  ${REPO_DIR}/iexec-app/@{woid}[0].zip    ${REPO_DIR}/iexec-app/zipout1
-     ${stdout} =  Get File  ${REPO_DIR}/iexec-app/zipout1/consensus.iexec
-     Log  ${stdout}
-
-     Extract Zip File  ${REPO_DIR}/iexec-app/@{woid2}[0].zip    ${REPO_DIR}/iexec-app/zipout2
-     ${stdout} =  Get File  ${REPO_DIR}/iexec-app/zipout2/consensus.iexec
-     Log  ${stdout}
 
 *** Keywords ***
 
