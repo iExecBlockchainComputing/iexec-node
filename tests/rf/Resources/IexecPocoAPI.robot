@@ -46,7 +46,7 @@ Docker Run Iexec Poco Api
     Should Be Equal As Integers	${result.rc}	0
     Remove File  ${REPO_DIR}/iexec-poco-api.log
     Create File  ${REPO_DIR}/iexec-poco-api.log
-    ${created_process} =  Start Process  cd ${REPO_DIR}/iexec-poco-api && docker run --net ${DOCKER_NETWORK} -v `pwd`/src/main/resources/:/src/main/resources/ iexechub/iexec-poco-api  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/iexec-poco-api.log
+    ${created_process} =  Start Process  cd ${REPO_DIR}/iexec-poco-api && docker run --net ${DOCKER_NETWORK} -p 3030:3030 -v $(pwd)/src/main/resources/wallet/wallet_visualizer.json:/wallet/wallet_visualizer.json -e WALLETPASSWORD='whatever' -e ETHNODE='http:\/\/${GETH_POCO_IP_IN_DOCKER_NETWORK}:8545' -e RLCCONTRACT='${GETH_POCO_RLCCONTRACT}' -e IEXECHUBCONTRACT='${GETH_POCO_IEXECHUBCONTRACT}' -e WORKERPOOLADDRESS='${GETH_POCO_WORKERPOOL_CREATED_AT_START}'  --name iexec-poco-api iexechub/iexec-poco-api  shell=yes  stderr=STDOUT  stdout=${REPO_DIR}/iexec-poco-api.log
     Set Suite Variable  ${IEXEC_POCO_API_PROCESS}  ${created_process}
     ${container_id} =  Wait Until Keyword Succeeds  5 min	10 sec  DockerHelper.Get Docker Container Id From Image  iexechub/iexec-poco-api
     Log  ${container_id}

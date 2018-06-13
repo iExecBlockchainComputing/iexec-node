@@ -89,7 +89,7 @@ Gradle BootRun Worker
 
 Check Worker Mock Initialized
     ${logs} =  Get File  ${REPO_DIR}/iexec-worker-mock.log
-    ${lines} =  Get Lines Containing String  ${logs}  com.iexec.worker.mock.Application - Started Application in
+    ${lines} =  Get Lines Containing String  ${logs}  com.iexec.mock.worker.Application - Started Application in
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 

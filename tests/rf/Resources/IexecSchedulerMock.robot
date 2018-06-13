@@ -121,7 +121,7 @@ Gradle BootRun Scheduler
 
 Check Scheduler Mock Initialized
     ${logs} =  Get File  ${REPO_DIR}/iexec-scheduler-mock.log
-    ${lines} =  Get Lines Containing String  ${logs}  com.iexec.scheduler.mock.Application - Started Application in
+    ${lines} =  Get Lines Containing String  ${logs}  com.iexec.mock.scheduler.Application - Started Application in
     ${lines_count} =  Get Line Count  ${lines}
     Should Be Equal As Integers	${lines_count}	1
 
