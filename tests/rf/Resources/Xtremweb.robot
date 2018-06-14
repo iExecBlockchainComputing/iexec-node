@@ -55,6 +55,9 @@ ${SERVER_CONTAINER_ID}
 ${GRAFANA_CONTAINER_NAME} =  iexecgrafana
 ${GRAFANA_CONTAINER_ID}
 
+${ORDER_PUBLISHER_CONTAINER_NAME} =  order-publisher
+${ORDER_PUBLISHER_CONTAINER_ID}
+
 ${ADMINER_IMAGE} =  adminer:4.6.2
 ${ADMINER_CONTAINER_ID}
 
@@ -276,6 +279,10 @@ Start DockerCompose Xtremweb
     Log  ${container_id}
     Set Suite Variable  ${GRAFANA_CONTAINER_ID}  ${container_id}
 
+    ${container_id} =  Wait Until Keyword Succeeds  3 min   10 sec  DockerHelper.Get Docker Container Id By Name  ${ORDER_PUBLISHER_CONTAINER_NAME}
+    Log  ${container_id}
+    Set Suite Variable  ${ORDER_PUBLISHER_CONTAINER_ID}  ${container_id}
+
 
 
 Start Poa Geth PoCo
@@ -339,6 +346,8 @@ Stop DockerCompose Xtremweb
     DockerHelper.Stop Log And Remove Container  ${WORKER_CONTAINER_ID_1}
 
     DockerHelper.Stop Log And Remove Container  ${GRAFANA_CONTAINER_NAME}
+
+    DockerHelper.Stop Log And Remove Container  ${ORDER_PUBLISHER_CONTAINER_NAME}
 
     DockerHelper.Stop Log And Remove Container  ${ADMINER_CONTAINER_ID}
 
