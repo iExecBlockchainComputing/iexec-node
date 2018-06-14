@@ -8,8 +8,8 @@ Library  DateTime
 *** Variables ***
 ${XTREMWEB_GIT_URL} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
 ${XTREMWEB_GIT_BRANCH} =  master-compile
-${BUILD_DOCKER_IMAGES} =  false
-${XTREMWEB_FORCE_GIT_CLONE} =  false
+${BUILD_DOCKER_IMAGES} =  true
+${XTREMWEB_FORCE_GIT_CLONE} =  true
 ${START_POA_GETH_POCO} =  false
 
 ${REPO_DIR}
