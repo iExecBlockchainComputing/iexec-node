@@ -34,9 +34,9 @@ ${XW_HOST} =  scheduler
 
 ${IEXEC_APP_TO_CHECK} =  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapps-registry/master/iExecBlockchainComputing/VanityEth/iexec.json
 
-${IEXEC_SDK_IMAGE_VERSION} =  2.2.15
+${IEXEC_SDK_IMAGE_VERSION} =  latest
 ${PRIVATE_KEY_SDK_TO_USE}
-${XTREMWEB_GIT_BRANCH} =  13.1.0
+${XTREMWEB_GIT_BRANCH} =  master
 ${START_POA_GETH_POCO} =  true
 ${BLOCKCHAINETHENABLED} =  true
 ${GETH_POCO_WORKERPOOL_CREATED_AT_START}
