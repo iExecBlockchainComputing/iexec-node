@@ -3,6 +3,9 @@ var rlcDeployer = eth.accounts[0];
 var scheduler = eth.accounts[1];
 var worker1 = eth.accounts[2];
 var worker2 = eth.accounts[3];
+var worker3 = eth.accounts[4];
+var worker4 = eth.accounts[5];
+var worker5 = eth.accounts[6];
 
 function transferRlc(to){
 	erc20.transfer(to, 1000, { from: rlcDeployer }, function(err, tx){});
@@ -22,6 +25,9 @@ function giveRlc(rlcContractAddress){
 	transferRlc(scheduler);
 	transferRlc(worker1);
 	transferRlc(worker2);
+	transferRlc(worker3);
+	transferRlc(worker4);
+	transferRlc(worker5);
 
 	return "Give Rlc Done";
 }
