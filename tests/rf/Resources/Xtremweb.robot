@@ -278,9 +278,9 @@ Start DockerCompose Xtremweb
     Log  ${container_id}
     Set Suite Variable  ${GRAFANA_CONTAINER_ID}  ${container_id}
 
-    ${container_id} =  Wait Until Keyword Succeeds  3 min   10 sec  DockerHelper.Get Docker Container Id By Name  ${ORDER_PUBLISHER_CONTAINER_NAME}
-    Log  ${container_id}
-    Set Suite Variable  ${ORDER_PUBLISHER_CONTAINER_ID}  ${container_id}
+    #${container_id} =  Wait Until Keyword Succeeds  3 min   10 sec  DockerHelper.Get Docker Container Id By Name  ${ORDER_PUBLISHER_CONTAINER_NAME}
+    #Log  ${container_id}
+    #Set Suite Variable  ${ORDER_PUBLISHER_CONTAINER_ID}  ${container_id}
 
 
 
@@ -312,6 +312,31 @@ Start Poa Geth PoCo
         ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^IEXECHUBCONTRACT\=.*/IEXECHUBCONTRACT\=${GETH_POCO_IEXECHUBCONTRACT}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
         Log  ${result.stderr}
         Log  ${result.stdout}
+
+        Create Robot Chain Json For Scheduler  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
+
+Create Robot Chain Json For Scheduler
+    [Arguments]  ${chainhost}  ${schedulerhost}  ${hub}
+
+     Directory Should Exist  ${REPO_DIR}/xtremweb-hep/build/dist/
+     ${dir} =  Run Process  ls ${REPO_DIR}/xtremweb-hep/build/dist/  shell=yes
+     Log  ${dir.stderr}
+     Log  ${dir.stdout}
+     File Should Exist  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json
+     Copy File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json.ori
+     Remove File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json
+     Create File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json
+     Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json  {
+     Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json  "chains": {
+     Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json  "robot": {
+     Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json  "host": "http://${chainhost}:8545",
+     Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json  "id": "1337",
+     Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json  "scheduler": "https://${schedulerhost}:443",
+     Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json  "hub": "${hub}"
+     Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json   }
+     Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json   }
+     Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json   }
+
 
 
 Check Mysql Start From Log
@@ -346,7 +371,7 @@ Stop DockerCompose Xtremweb
 
     DockerHelper.Stop Log And Remove Container  ${GRAFANA_CONTAINER_NAME}
 
-    DockerHelper.Stop Log And Remove Container  ${ORDER_PUBLISHER_CONTAINER_NAME}
+   # DockerHelper.Stop Log And Remove Container  ${ORDER_PUBLISHER_CONTAINER_NAME}
 
     DockerHelper.Stop Log And Remove Container  ${ADMINER_CONTAINER_ID}
 
