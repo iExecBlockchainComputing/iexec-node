@@ -342,7 +342,7 @@ Create Robot Chain Json For Scheduler And Deposit Some RLC
     #Deposit Some RLC
     Remove File  ${REPO_DIR}/iexec-sdk.log
     Create File  ${REPO_DIR}/iexec-sdk.log
-    ${iexec_result} =  Run Process  sudo npm -g i iexec && iexec account deposit 200 --chain robot  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
+    ${iexec_result} =  Run Process  sudo npm -g i iexec && ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler && iexec account deposit 200 --chain robot  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
     ${logs} =  GET FILE  ${REPO_DIR}/iexec-sdk.log
     LOG  ${logs}
 
