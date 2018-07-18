@@ -313,11 +313,13 @@ Start Poa Geth PoCo
         Log  ${result.stderr}
         Log  ${result.stdout}
 
-        Create Robot Chain Json For Scheduler  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
+        Create Robot Chain Json For Scheduler And Deposit Some RLC  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
 
-Create Robot Chain Json For Scheduler
+
+
+Create Robot Chain Json For Scheduler And Deposit Some RLC
     [Arguments]  ${chainhost}  ${schedulerhost}  ${hub}
-
+    #Create Robot Chain
      Directory Should Exist  ${REPO_DIR}/xtremweb-hep/build/dist/
      ${dir} =  Run Process  ls ${REPO_DIR}/xtremweb-hep/build/dist/  shell=yes
      Log  ${dir.stderr}
@@ -336,6 +338,15 @@ Create Robot Chain Json For Scheduler
      Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json   }
      Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json   }
      Append To File  ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler/chain.json   }
+
+    #Deposit Some RLC
+    Remove File  ${REPO_DIR}/iexec-sdk.log
+    Create File  ${REPO_DIR}/iexec-sdk.log
+    ${iexec_result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/${dir.stdout}/sdk-dev-accounts/scheduler && docker run -e DEBUG\=* --interactive --rm --net ${DOCKER_NETWORK} -v $(pwd):/iexec-project -w /iexec-project ${IEXEC_SDK_IMAGE}:${IEXEC_SDK_IMAGE_VERSION} account deposit 200 --chain robot  shell=yes  stderr=STDOUT  timeout=340s  stdout=${REPO_DIR}/iexec-sdk.log
+    ${logs} =  GET FILE  ${REPO_DIR}/iexec-sdk.log
+    LOG  ${logs}
+
+
 
 
 
