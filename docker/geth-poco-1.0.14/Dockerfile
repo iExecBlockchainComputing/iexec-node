@@ -18,7 +18,7 @@ RUN apt-get install -y git
 RUN curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 RUN apt-get install -y nodejs
 
-RUN git clone https://jeremyjams:<TOKEN_HERE>@github.com/iExecBlockchainComputing/PoCo.git
+RUN git clone https://github.com/iExecBlockchainComputing/PoCo.git
 
 RUN chmod +x premine.sh
 RUN ./premine.sh
