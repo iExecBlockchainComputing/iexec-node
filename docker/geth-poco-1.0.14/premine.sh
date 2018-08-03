@@ -8,3 +8,7 @@ sleep 2
 cd PoCo && git checkout tags/1.0.14 && npm install && rm -R deployed/ && ./node_modules/.bin/truffle migrate && cd ..
 
 geth --exec 'loadScript("/giveRlc.js"); giveRlc("0x091233035dcb12ae5a4a4b7fb144d3c5189892e1")' attach http://127.0.0.1:8545
+
+pkill -INT geth
+
+sleep 10
