@@ -60,7 +60,7 @@ Test Full V2
 
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
     Log  ${logs}
-    Should Be Equal As Integers	 ${logs}  0
+    Should Be Equal As Integers	 ${logs}  1
 
     # create app
 
