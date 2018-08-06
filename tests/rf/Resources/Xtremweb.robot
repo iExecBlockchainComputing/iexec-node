@@ -7,7 +7,7 @@ Library  DateTime
 
 *** Variables ***
 ${XTREMWEB_GIT_URL} =  https://github.com/iExecBlockchainComputing/xtremweb-hep.git
-${XTREMWEB_GIT_BRANCH} =  master-compile
+${XTREMWEB_GIT_BRANCH} =  closemarketorder
 ${BUILD_DOCKER_IMAGES} =  true
 ${XTREMWEB_FORCE_GIT_CLONE} =  true
 ${START_POA_GETH_POCO} =  false
@@ -19,6 +19,8 @@ ${LAUNCHED_IN_CONTAINER} =  false
 ${JWTETHISSUER}
 ${JWTETHSECRET}
 ${BLOCKCHAINETHENABLED} =  false
+${MAXCONNECTIONS} =  100
+${DBCONNECTIONS} =  60
 
 ${LOGGERLEVEL} =  FINEST
 ${RESULTS_FOLDER_BASE} =  /tmp/worker
@@ -109,6 +111,15 @@ Gradle BuildAll Xtremweb
 
 
 Start DockerCompose Xtremweb
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^MAXCONNECTIONS\=.*/MAXCONNECTIONS\=${MAXCONNECTIONS}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^DBCONNECTIONS\=.*/DBCONNECTIONS\=${DBCONNECTIONS}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^BLOCKCHAINETHENABLED\=.*/BLOCKCHAINETHENABLED\=${BLOCKCHAINETHENABLED}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
     Log  ${result.stderr}
     Log  ${result.stdout}
