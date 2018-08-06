@@ -85,20 +85,20 @@ Test Full V2
     Log  ${logs}
     Should Contain  ${logs}	 XMLVector SIZE="1"
 
-    Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
+    Wait Until Keyword Succeeds  2 min	3 sec  Check One Marketorder
 
-    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/2
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/1
     Log  ${logs}
 
     #deposit
     #${logs} =  IexecSdk.Iexec An app Docker  account deposit 30000
     #Log  ${logs}
 
-    ${logs} =  IexecSdk.Iexec An app Docker  order show 2
+    ${logs} =  IexecSdk.Iexec An app Docker  order show 1
     Log  ${logs}
 
     #buyforworkorder
-    ${logs} =  IexecSdk.Iexec An app Docker  order fill 2 --force
+    ${logs} =  IexecSdk.Iexec An app Docker  order fill 1 --force
     Log  ${logs}
     Should Contain  ${logs}  woid
     @{woid} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
@@ -153,10 +153,10 @@ Check WorkOrderCompleted
     Should Contain  ${logs}  "status":4
 
 
-Check Two Marketorder
+Check One Marketorder
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
     Log  ${logs}
-    Should Be Equal As Integers	 ${logs}  2
+    Should Be Equal As Integers	 ${logs}  1
 
 This Suite Setup
     Create Directory  ${REPO_DIR}
