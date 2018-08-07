@@ -163,11 +163,22 @@ Check WorkOrderCompleted
 
 
 Check Two Marketorder
+
+    ${query} =  Run Process  docker exec -i ${MYSQL_CONTAINER_NAME} mysql -sN --user\=root --password\=root --database\="iexec" -e "select * from users;"  shell=yes
+    Log  ${query.stderr}
+    Log  ${query.stdout}
+
+
     ${query} =  Run Process  docker exec -i ${MYSQL_CONTAINER_NAME} mysql -sN --user\=root --password\=root --database\="iexec" -e "select * from hosts;"  shell=yes
     Log  ${query.stderr}
     Log  ${query.stdout}
 
     ${query} =  Run Process  docker exec -i ${MYSQL_CONTAINER_NAME} mysql -sN --user\=root --password\=root --database\="iexec" -e "select * from marketorders;"  shell=yes
+    Log  ${query.stderr}
+    Log  ${query.stdout}
+
+
+    ${query} =  Run Process  docker exec -i ${MYSQL_CONTAINER_NAME} mysql -sN --user\=root --password\=root --database\="iexec" -e "select * from works;"  shell=yes
     Log  ${query.stderr}
     Log  ${query.stdout}
 
