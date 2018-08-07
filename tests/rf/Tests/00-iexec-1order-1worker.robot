@@ -86,11 +86,7 @@ Test Full V2
     Should Contain  ${logs}	 XMLVector SIZE="1"
 
 
-
-
-
-
-    Wait Until Keyword Succeeds  5 min	3 sec  Check Two Marketorder
+    Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
 
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
     Log  ${logs}
@@ -163,24 +159,6 @@ Check WorkOrderCompleted
 
 
 Check Two Marketorder
-
-    ${query} =  Run Process  docker exec -i ${MYSQL_CONTAINER_NAME} mysql -sN --user\=root --password\=root --database\="iexec" -e "select * from users;"  shell=yes
-    Log  ${query.stderr}
-    Log  ${query.stdout}
-
-
-    ${query} =  Run Process  docker exec -i ${MYSQL_CONTAINER_NAME} mysql -sN --user\=root --password\=root --database\="iexec" -e "select * from hosts;"  shell=yes
-    Log  ${query.stderr}
-    Log  ${query.stdout}
-
-    ${query} =  Run Process  docker exec -i ${MYSQL_CONTAINER_NAME} mysql -sN --user\=root --password\=root --database\="iexec" -e "select * from marketorders;"  shell=yes
-    Log  ${query.stderr}
-    Log  ${query.stdout}
-
-
-    ${query} =  Run Process  docker exec -i ${MYSQL_CONTAINER_NAME} mysql -sN --user\=root --password\=root --database\="iexec" -e "select * from works;"  shell=yes
-    Log  ${query.stderr}
-    Log  ${query.stdout}
 
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
     Log  ${logs}
