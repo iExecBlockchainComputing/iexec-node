@@ -86,12 +86,13 @@ Test Full V2
     Should Contain  ${logs}	 XMLVector SIZE="1"
 
 
-    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
-    Log  ${logs}
-    Should Be Equal As Integers	 ${logs}  2
+
 
     Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
 
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
+    Log  ${logs}
+    Should Be Equal As Integers	 ${logs}  2
 
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/2
     Log  ${logs}
