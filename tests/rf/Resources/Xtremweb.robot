@@ -34,6 +34,9 @@ ${MYSQL_SERVICE_NAME} =  db
 ${MYSQL_CONTAINER_NAME} =  mysql
 ${MYSQL_CONTAINER_ID}
 
+${WORKER_LOGIN} =  vworker
+${WORKER_PASSWORD} =  vworkerp
+
 ${WORKER_1_PROCESS}
 ${WORKER_CONTAINER_NAME_1} =  iexecworker1
 ${WORKER_CONTAINER_ID_1}
@@ -111,6 +114,14 @@ Gradle BuildAll Xtremweb
 
 
 Start DockerCompose Xtremweb
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^WORKER_LOGIN\=.*/WORKER_LOGIN\=${WORKER_LOGIN}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
+
+    ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^WORKER_PASSWORD\=.*/WORKER_PASSWORD\=${WORKER_PASSWORD}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
+    Log  ${result.stderr}
+    Log  ${result.stdout}
 
     ${result} =  Run Process  cd ${REPO_DIR}/xtremweb-hep/build/dist/*/docker/ && sed "s/^MAXCONNECTIONS\=.*/MAXCONNECTIONS\=${MAXCONNECTIONS}/g" .env > env.tmp && cat env.tmp > .env  shell=yes
     Log  ${result.stderr}
@@ -477,3 +488,5 @@ Stop Worker On Docker Network By Number
 
 Restart Server
     DockerHelper.Restart Container  ${SERVER_CONTAINER_ID}
+
+
