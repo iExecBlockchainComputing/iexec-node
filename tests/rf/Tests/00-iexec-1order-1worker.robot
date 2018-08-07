@@ -88,7 +88,7 @@ Test Full V2
 
 
 
-    Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
+    Wait Until Keyword Succeeds  5 min	3 sec  Check Two Marketorder
 
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
     Log  ${logs}
