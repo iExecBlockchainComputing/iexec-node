@@ -88,6 +88,8 @@ Test Full V2
 
 
 
+
+
     Wait Until Keyword Succeeds  5 min	3 sec  Check Two Marketorder
 
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
@@ -161,6 +163,14 @@ Check WorkOrderCompleted
 
 
 Check Two Marketorder
+    ${query} =  Run Process  docker exec -i ${MYSQL_CONTAINER_NAME} mysql -sN --user\=root --password\=root --database\="iexec" -e "select * from hosts;"  shell=yes
+    Log  ${query.stderr}
+    Log  ${query.stdout}
+
+    ${query} =  Run Process  docker exec -i ${MYSQL_CONTAINER_NAME} mysql -sN --user\=root --password\=root --database\="iexec" -e "select * from marketorders;"  shell=yes
+    Log  ${query.stderr}
+    Log  ${query.stdout}
+
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
     Log  ${logs}
     Should Be Equal As Integers	 ${logs}  2
