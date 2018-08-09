@@ -78,51 +78,51 @@ Test Full V2
     IexecSdk.Add App To Buy To Iexec Conf  @{app}[0]
 
     # create marketorder
-    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
+    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>10</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
     Log  ${logs}
 
     ${logs} =  Xtremweb.Curl On Scheduler  getmarketorders?XWLOGIN=admin&XWPASSWD=adminp
     Log  ${logs}
     Should Contain  ${logs}	 XMLVector SIZE="1"
 
-    Wait Until Keyword Succeeds  2 min	3 sec  Check One Marketorder
+    Wait Until Keyword Succeeds  6 min	3 sec  Check Two Marketorder
 
-    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/1
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/2
     Log  ${logs}
 
     #deposit
     ${logs} =  IexecSdk.Iexec An app Docker  account deposit 30000
     Log  ${logs}
 
-    ${logs} =  IexecSdk.Iexec An app Docker  order show 1
+    ${logs} =  IexecSdk.Iexec An app Docker  order show 2
     Log  ${logs}
 
     #buyforworkorder
-    ${logs} =  IexecSdk.Iexec An app Docker  order fill 1 --force
+    ${logs} =  IexecSdk.Iexec An app Docker  order fill 2 --force
     Log  ${logs}
     Should Contain  ${logs}  woid
     @{woid} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
     Log  @{woid}[0]
 
-    Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderRevealing  @{woid}[0]
+    Wait Until Keyword Succeeds  6 min	3 sec  Check WorkOrderRevealing  @{woid}[0]
 
-    Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderCompleted  @{woid}[0]
+    Wait Until Keyword Succeeds  6 min	3 sec  Check WorkOrderCompleted  @{woid}[0]
 
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
     Log  ${logs}
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
     #launch 2
-    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>50</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
+    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>10</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
     Log  ${logs}
 
     ${logs} =  Xtremweb.Curl On Scheduler  getmarketorders?XWLOGIN=admin&XWPASSWD=adminp
     Log  ${logs}
     Should Contain  ${logs}	 XMLVector SIZE="2"
 
-    Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
+    Wait Until Keyword Succeeds  2 min	3 sec  Check Three Marketorder
 
-    ${logs} =  IexecSdk.Iexec An app Docker  order fill 2 --force
+    ${logs} =  IexecSdk.Iexec An app Docker  order fill 3 --force
     Log  ${logs}
     Should Contain  ${logs}  woid
     @{woid2} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
@@ -153,16 +153,16 @@ Check WorkOrderCompleted
     Should Contain  ${logs}  "status":4
 
 
-Check One Marketorder
-    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
-    Log  ${logs}
-    Should Be Equal As Integers	 ${logs}  1
-
-
 Check Two Marketorder
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
     Log  ${logs}
     Should Be Equal As Integers	 ${logs}  2
+
+
+Check Three Marketorder
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
+    Log  ${logs}
+    Should Be Equal As Integers	 ${logs}  3
 
 
 
