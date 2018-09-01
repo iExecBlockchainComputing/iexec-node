@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+f#!/usr/bin/env bash
 
 set vx
 apt-get install -y software-properties-common
@@ -15,6 +15,9 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 curl -L https://github.com/docker/compose/releases/download/1.21.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 export DEBIAN_FRONTEND="noninteractive"
+#for yarn
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
 
 
 apt-get update
@@ -25,15 +28,19 @@ apt-get update
 
 
 #install for root user node v8.6.0 ( npm v5.3.0) and set it as default
-curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
-nvm install v8.6.0
+#curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+#nvm install v8.6.0
 
 #install for vagrant user node v6.11.2 (npm v3.10.10) and set it as default
-su - vagrant -c "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash"
-su - vagrant -c "touch ~/.bash_profile"
-su - vagrant -c "echo 'export NVM_DIR=~/.nvm' >> .bash_profile"
-su - vagrant -c "echo 'source ~/.nvm/nvm.sh' >> .bash_profile"
-su - vagrant -c "nvm install v8.6.0"
+#su - vagrant -c "curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash"
+#su - vagrant -c "touch ~/.bash_profile"
+#su - vagrant -c "echo 'export NVM_DIR=~/.nvm' >> .bash_profile"
+#su - vagrant -c "echo 'source ~/.nvm/nvm.sh' >> .bash_profile"
+#su - vagrant -c "nvm install v8.6.0"
+
+# install node
+curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+apt-get install -y nodejs
 
 
 #java
@@ -84,18 +91,27 @@ debconf-set-selections <<< "mysql-server mysql-server/root_password password roo
 debconf-set-selections <<< "mysql-server mysql-server/root_password_again password root"
 apt-get install -y mysql-server
 
-# ethereum solidity
-apt-get install -y solc
+# ethereum solidity compiler
+#apt-get install -y solc
+#su - vagrant -c "sudo npm install solc@0.4.17 -g"
+#ln -sF /usr/lib/node_modules/solc/solcjs /usr/bin/solc
+cd /usr/bin
+wget https://github.com/ethereum/solidity/releases/download/v0.4.17/solidity-ubuntu-trusty.zip
+unzip solidity-ubuntu-trusty.zip
+chmod 755 solc
+cd -
+
+
 apt-get install -y ethereum
 
 # install parity
 bash <(curl https://get.parity.io -kL)
 
 # truffle, testrpc pm2
-su - vagrant -c "npm install -g truffle@4.1.5"
-su - vagrant -c "npm install -g ethereumjs-testrpc@6.0.3"
-su - vagrant -c "npm install pm2 -g"
-su - vagrant -c "npm install iexec -g"
+su - vagrant -c "sudo npm install -g truffle@4.1.14"
+su - vagrant -c "sudo npm install -g ganache-cli@6.1.8"
+su - vagrant -c "sudo npm install pm2 -g"
+su - vagrant -c "sudo npm install iexec -g"
 
 # robotframework lib
 pip install robotframework
@@ -139,4 +155,9 @@ su - vagrant -c "curl -s 'https://get.sdkman.io' | bash"
 su - vagrant -c "echo 'source '~/.sdkman/bin/sdkman-init.sh'' >> .bash_profile"
 su - vagrant -c "sdk install gradle 4.6"
 
-
+#for parity bridge
+#install yarn
+apt-get install yarn
+su - vagrant -c "sudo npm i concurrently -g"
+#install rust
+curl -sf -L https://static.rust-lang.org/rustup.sh | sh
