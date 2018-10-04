@@ -45,6 +45,9 @@ ${GETH_POCO_IEXECHUBCONTRACT} =  0xc4e4a08bf4c6fd11028b714038846006e27d7be8
 ${SCHEDULER_ADDRESS} =  0x8bd535d49b095ef648cd85ea827867d358872809
 
 
+${IEXEC_APP_TO_CHECK} =  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapps-registry/master/iExecBlockchainComputing/VanityEth/iexec.json
+
+
 
 *** Test Cases ***
 
@@ -55,7 +58,7 @@ Test Suite Setup Initialized
 Test Full V2
     [Tags]  FullV2
     #init
-    IexecSdk.Prepare Iexec App For Robot Test Docker  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapps-registry/master/iExecBlockchainComputing/VanityEth/iexec.json  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
+    IexecSdk.Prepare Iexec App For Robot Test Docker  ${IEXEC_APP_TO_CHECK}  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
     IexecSdk.Iexec An app Docker  wallet show
 
     ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
