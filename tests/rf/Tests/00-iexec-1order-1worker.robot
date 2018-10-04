@@ -109,12 +109,12 @@ Test Full V2
     @{woid} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
     Log  @{woid}[0]
 
-    Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderRevealing  @{woid}[0]
+    Wait Until Keyword Succeeds  30 min	3 sec  Check WorkOrderRevealing  @{woid}[0]
 
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
     Log  ${logs}
 
-    Wait Until Keyword Succeeds  3 min	3 sec  Check WorkOrderCompleted  @{woid}[0]
+    Wait Until Keyword Succeeds  30 min	3 sec  Check WorkOrderCompleted  @{woid}[0]
 
     ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
     Log  ${logs}
@@ -130,9 +130,9 @@ Test Full V2
     @{resultUID} =  Get Regexp Matches  ${logs}  m_uri: 'xw://scheduler/(?P<resultUID>.*)',  resultUID
     Log  @{resultUID}[0]
 
-    Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  keypair.txt
-    Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  stdout.txt
-    Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  consensus.iexec
+    #Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  keypair.txt
+    #Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  stdout.txt
+    #Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  consensus.iexec
 
 
     #${logs} =  Xtremweb.Curl On Scheduler  get/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp
