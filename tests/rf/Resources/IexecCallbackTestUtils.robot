@@ -9,7 +9,7 @@ ${POCO_GIT_URL} =  https://github.com/iExecBlockchainComputing/PoCo.git
 
 Git Clone PoCo
     Directory Should Exist  ${REPO_DIR}
-    Remove Directory  ${REPO_DIR}/PoCo recursive=true
+    Remove Directory  ${REPO_DIR}/PoCo  recursive=true
     ${git_result} =  Run Process  cd ${REPO_DIR} && git clone -b callback ${POCO_GIT_URL}  shell=yes
     Log  ${git_result.stderr}
     Log  ${git_result.stdout}
