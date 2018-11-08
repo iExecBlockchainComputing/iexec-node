@@ -15,20 +15,10 @@ Git Clone PoCo
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0
 
-    ${cat_result} =  Run Process  cd ${REPO_DIR}/PoCo && cat truffle.js  shell=yes
-    Log  ${cat_result.stderr}
-    Log  ${cat_result.stdout}
-    Should Be Equal As Integers	${cat_result.rc}	0
-
     ${sed_result} =  Run Process  cd ${REPO_DIR}/PoCo && sed "s/localhost/${GETH_POCO_IP_IN_DOCKER_NETWORK}/g" truffle.js > truffle.js.tmp && cat truffle.js.tmp > truffle.js   shell=yes
     Log  ${sed_result.stderr}
     Log  ${sed_result.stdout}
     Should Be Equal As Integers	${sed_result.rc}	0
-
-    ${cat_result} =  Run Process  cd ${REPO_DIR}/PoCo && cat truffle.js  shell=yes
-    Log  ${cat_result.stderr}
-    Log  ${cat_result.stdout}
-    Should Be Equal As Integers	${cat_result.rc}	0
 
 
 
@@ -45,7 +35,11 @@ Deploy IexecAPIContract
     Log  ${unlockcheck_result.stdout}
     Should Be Equal As Integers	${unlockcheck_result.rc}	0
 
-    ${resultofrun} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && node deployIexecAPI.js  shell=yes
-    Log  ${resultofrun.stderr}
-    Log  ${resultofrun.stdout}
-    Should Be Equal As Integers	${resultofrun.rc}	0
+    #${resultofrun} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && node deployIexecAPI.js  shell=yes
+    #Log  ${resultofrun.stderr}
+    #Log  ${resultofrun.stdout}
+    #Should Be Equal As Integers	${resultofrun.rc}	0
+
+    ${trufflemigrate_result} =  Run Process  cd ${REPO_DIR}/PoCo/ && ./node_modules/.bin/truffle migrate  shell=yes
+    Log  ${trufflemigrate_result.stderr}
+    Log  ${trufflemigrate_result.stdout}
