@@ -17,10 +17,16 @@ Git Clone PoCo
 
 Deploy IexecAPIContract
     Git Clone PoCo
-    ${truffletest_result} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && npm i   shell=yes
-    Log  ${truffletest_result.stderr}
-    Log  ${truffletest_result.stdout}
-    Should Be Equal As Integers	${truffletest_result.rc}	0
+
+    ${npm_result} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && npm i   shell=yes
+    Log  ${npm_result.stderr}
+    Log  ${npm_result.stdout}
+    Should Be Equal As Integers	${npm_result.rc}	0
+
+    ${unlockcheck_result} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && node isUnlock.js  shell=yes
+    Log  ${unlockcheck_result.stderr}
+    Log  ${unlockcheck_result.stdout}
+    Should Be Equal As Integers	${unlockcheck_result.rc}	0
 
     ${resultofrun} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && node deployIexecAPI.js  shell=yes
     Log  ${resultofrun.stderr}
