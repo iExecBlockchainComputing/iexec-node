@@ -25,7 +25,7 @@ Git Clone PoCo
 Deploy IexecAPIContract
     Git Clone PoCo
 
-    ${npm_result} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && npm i   shell=yes
+    ${npm_result} =  Run Process  cd ${REPO_DIR}/PoCo && npm i   shell=yes
     Log  ${npm_result.stderr}
     Log  ${npm_result.stdout}
     Should Be Equal As Integers	${npm_result.rc}	0
