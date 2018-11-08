@@ -15,7 +15,7 @@ Git Clone PoCo
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0
 
-    ${cat_result} =  Run Process  ${REPO_DIR}/PoCo &&  cat truffle.js  shell=yes
+    ${cat_result} =  Run Process  ${REPO_DIR}/PoCo && cat truffle.js  shell=yes
     Log  ${cat_result.stderr}
     Log  ${cat_result.stdout}
     Should Be Equal As Integers	${cat_result.rc}	0
@@ -25,7 +25,7 @@ Git Clone PoCo
     Log  ${sed_result.stdout}
     Should Be Equal As Integers	${sed_result.rc}	0
 
-    ${cat_result} =  Run Process  ${REPO_DIR}/PoCo &&  cat truffle.js  shell=yes
+    ${cat_result} =  Run Process  ${REPO_DIR}/PoCo && cat truffle.js  shell=yes
     Log  ${cat_result.stderr}
     Log  ${cat_result.stdout}
     Should Be Equal As Integers	${cat_result.rc}	0
