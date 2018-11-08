@@ -60,7 +60,31 @@ Test Full V2
     [Tags]  FullV2
     #init
     IexecSdk.Prepare Iexec App For Robot Test Docker  ${IEXEC_APP_TO_CHECK}  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
+    IexecSdk.Iexec An app Docker  wallet show
 
+
+
+
+*** Keywords ***
+
+Check WorkOrderRevealing
+    [Arguments]  ${woid}
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/workorders/${woid}
+    Log  ${logs}
+    Should Contain  ${logs}  "status":2
+
+Check WorkOrderCompleted
+    [Arguments]  ${woid}
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/workorders/${woid}
+    Log  ${logs}
+    Should Contain  ${logs}  "status":4
+
+
+Check Two Marketorder
+
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
+    Log  ${logs}
+    Should Be Equal As Integers	 ${logs}  2
 
 This Suite Setup
     Create Directory  ${REPO_DIR}
