@@ -15,17 +15,17 @@ Git Clone PoCo
     Log  ${git_result.stdout}
     Should Be Equal As Integers	${git_result.rc}	0
 
-    ${cat_result} =  Run Process  ${REPO_DIR}/PoCo && cat truffle.js  shell=yes
+    ${cat_result} =  Run Process  cd ${REPO_DIR}/PoCo && cat truffle.js  shell=yes
     Log  ${cat_result.stderr}
     Log  ${cat_result.stdout}
     Should Be Equal As Integers	${cat_result.rc}	0
 
-    ${sed_result} =  Run Process  ${REPO_DIR}/PoCo && sed "s/localhost/${GETH_POCO_IP_IN_DOCKER_NETWORK}/g" truffle.js > truffle.js.tmp && cat truffle.js.tmp > truffle.js   shell=yes
+    ${sed_result} =  Run Process  cd ${REPO_DIR}/PoCo && sed "s/localhost/${GETH_POCO_IP_IN_DOCKER_NETWORK}/g" truffle.js > truffle.js.tmp && cat truffle.js.tmp > truffle.js   shell=yes
     Log  ${sed_result.stderr}
     Log  ${sed_result.stdout}
     Should Be Equal As Integers	${sed_result.rc}	0
 
-    ${cat_result} =  Run Process  ${REPO_DIR}/PoCo && cat truffle.js  shell=yes
+    ${cat_result} =  Run Process  cd ${REPO_DIR}/PoCo && cat truffle.js  shell=yes
     Log  ${cat_result.stderr}
     Log  ${cat_result.stdout}
     Should Be Equal As Integers	${cat_result.rc}	0
