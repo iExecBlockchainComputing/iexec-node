@@ -43,3 +43,8 @@ Deploy IexecAPIContract
     ${trufflemigrate_result} =  Run Process  cd ${REPO_DIR}/PoCo/ && ./node_modules/.bin/truffle migrate  shell=yes
     Log  ${trufflemigrate_result.stderr}
     Log  ${trufflemigrate_result.stdout}
+
+    #${approveIexecHub} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && node approveIexecHub.js  shell=yes
+    #Log  ${approveIexecHub.stderr}
+    #Log  ${approveIexecHub.stdout}
+    #Should Be Equal As Integers	${approveIexecHub.rc}	0
