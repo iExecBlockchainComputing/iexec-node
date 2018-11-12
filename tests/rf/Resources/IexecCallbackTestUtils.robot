@@ -62,3 +62,11 @@ Deploy IexecAPIContract
     Log  ${approveIexecHub.stderr}
     Log  ${approveIexecHub.stdout}
     Should Be Equal As Integers	${approveIexecHub.rc}	0
+
+
+
+Buy For WorkOrder
+    ${buyForWorkOrderIexecHub} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && node buyForWorkOrder.js  shell=yes
+    Log  ${buyForWorkOrderIexecHub.stderr}
+    Log  ${buyForWorkOrderIexecHub.stdout}
+    Should Be Equal As Integers	${buyForWorkOrderIexecHub.rc}	0
