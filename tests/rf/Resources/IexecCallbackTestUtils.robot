@@ -30,6 +30,11 @@ Deploy IexecAPIContract
     Log  ${npm_result.stdout}
     Should Be Equal As Integers	${npm_result.rc}	0
 
+    ${npm_result} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && npm i   shell=yes
+    Log  ${npm_result.stderr}
+    Log  ${npm_result.stdout}
+    Should Be Equal As Integers	${npm_result.rc}	0
+
     ${unlockcheck_result} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && node isUnlock.js  shell=yes
     Log  ${unlockcheck_result.stderr}
     Log  ${unlockcheck_result.stdout}
