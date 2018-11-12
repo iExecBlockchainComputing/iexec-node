@@ -24,7 +24,6 @@ Git Clone PoCo
 
 Deploy IexecAPIContract
     Git Clone PoCo
-
     ${npm_result} =  Run Process  cd ${REPO_DIR}/PoCo && npm i   shell=yes
     Log  ${npm_result.stderr}
     Log  ${npm_result.stdout}

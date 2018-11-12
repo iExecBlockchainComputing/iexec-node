@@ -62,6 +62,89 @@ Test Full V2
     IexecSdk.Prepare Iexec App For Robot Test Docker  ${IEXEC_APP_TO_CHECK}  ${GETH_POCO_IP_IN_DOCKER_NETWORK}  ${XW_HOST}  ${GETH_POCO_IEXECHUBCONTRACT}
     IexecSdk.Iexec An app Docker  wallet show
 
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
+    Log  ${logs}
+    Should Be Equal As Integers	 ${logs}  1
+
+    # create app
+
+    ${logs} =  IexecSdk.Iexec An app Docker  app deploy
+
+    @{app} =  Get Regexp Matches  ${logs}  app: '(?P<app>.*)',  app
+    Log  @{app}[0]
+
+    ${logs} =  IexecSdk.Iexec An app Docker  app show @{app}[0]
+    Log  ${logs}
+
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/apps/@{app}[0]
+    Log  ${logs}
+
+    # add app address in iexec.json
+    IexecSdk.Add App To Buy To Iexec Conf  @{app}[0]
+
+    # create marketorder
+    ${logs} =  Xtremweb.Curl On Scheduler  sendmarketorder?XWLOGIN=admin&XWPASSWD=adminp&XMLDESC=<marketorder><direction>ASK</direction><categoryid>5</categoryid><expectedworkers>1</expectedworkers><nbworkers>0</nbworkers><trust>10</trust><price>1</price><volume>1</volume><workerpooladdr>${GETH_POCO_WORKERPOOL_CREATED_AT_START}</workerpooladdr><workerpoolowneraddr>${SCHEDULER_ADDRESS}</workerpoolowneraddr></marketorder>
+    Log  ${logs}
+    ${logs} =  Xtremweb.Curl On Scheduler  getmarketorders?XWLOGIN=admin&XWPASSWD=adminp
+    Log  ${logs}
+    Should Contain  ${logs}	 XMLVector SIZE="1"
+
+
+    Wait Until Keyword Succeeds  2 min	3 sec  Check Two Marketorder
+
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/count
+    Log  ${logs}
+    Should Be Equal As Integers	 ${logs}  2
+
+    ${logs} =  IexecPocoAPI.Curl On Iexec Poco Api  api/marketorders/2
+    Log  ${logs}
+
+    #deposit
+    #${logs} =  IexecSdk.Iexec An app Docker  account deposit 20
+    #Log  ${logs}
+
+    ${logs} =  IexecSdk.Iexec An app Docker  order show 2
+    Log  ${logs}
+
+    #buyforworkorder
+    ${logs} =  IexecSdk.Iexec An app Docker  order fill 2 --force
+    Log  ${logs}
+    Should Contain  ${logs}  woid
+    @{woid} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
+    Log  @{woid}[0]
+
+    Wait Until Keyword Succeeds  30 min	3 sec  Check WorkOrderRevealing  @{woid}[0]
+
+    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
+    Log  ${logs}
+
+    Wait Until Keyword Succeeds  30 min	3 sec  Check WorkOrderCompleted  @{woid}[0]
+
+    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
+    Log  ${logs}
+
+    Should Contain  ${logs}	 m_uri: 'xw://scheduler
+
+    ${logs} =  IexecSdk.Iexec An app Docker  account login --force
+    Log  ${logs}
+
+    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0] --watch --download
+    Log  ${logs}
+    Should Contain  ${logs}  resultUID
+    @{resultUID} =  Get Regexp Matches  ${logs}  m_uri: 'xw://scheduler/(?P<resultUID>.*)',  resultUID
+    Log  @{resultUID}[0]
+
+    #Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  keypair.txt
+    #Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  stdout.txt
+    #Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  consensus.iexec
+
+
+    ${logs} =  Xtremweb.Curl On Scheduler  get/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp
+    Log  ${logs}
+
+    ${logs} =  Xtremweb.Curl Download On Scheduler  downloaddata/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp  @{resultUID}[0]
+    Log  ${logs}
+
 
 
 
