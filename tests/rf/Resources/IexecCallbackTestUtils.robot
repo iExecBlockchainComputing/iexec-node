@@ -76,3 +76,14 @@ Buy For WorkOrder
     Log  ${buyForWorkOrderIexecHub.stderr}
     Log  ${buyForWorkOrderIexecHub.stdout}
     Should Be Equal As Integers	${buyForWorkOrderIexecHub.rc}	0
+
+
+Buy For WorkOrder Old
+    ${npm_result} =  Run Process  cd ${REPO_DIR}/PoCo/test/callbackweb3old && npm i   shell=yes
+    Log  ${npm_result.stderr}
+    Log  ${npm_result.stdout}
+    Should Be Equal As Integers	${npm_result.rc}	0
+    ${buyForWorkOrderIexecHub} =  Run Process  cd ${REPO_DIR}/PoCo/test/callbackweb3old && node buyForWorkOrder.js  shell=yes
+    Log  ${buyForWorkOrderIexecHub.stderr}
+    Log  ${buyForWorkOrderIexecHub.stdout}
+    Should Be Equal As Integers	${buyForWorkOrderIexecHub.rc}	0
