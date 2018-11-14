@@ -108,6 +108,7 @@ Test Full V2
 
     IexecCallbackTestUtils.Check Balances
     IexecCallbackTestUtils.Buy For WorkOrder Old
+    IexecCallbackTestUtils.Tx Receipt
 
     #buyforworkorder
     #${logs} =  IexecSdk.Iexec An app Docker  order fill 2 --force

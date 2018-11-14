@@ -78,6 +78,12 @@ Buy For WorkOrder
     Should Be Equal As Integers	${buyForWorkOrderIexecHub.rc}	0
 
 
+Tx Receipt
+    ${getTransactionReceiptJS} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && node getTransactionReceipt.js  shell=yes
+    Log  ${getTransactionReceiptJS.stderr}
+    Log  ${getTransactionReceiptJS.stdout}
+    Should Be Equal As Integers	${getTransactionReceiptJS.rc}	0
+
 Buy For WorkOrder Old
     ${npm_result} =  Run Process  cd ${REPO_DIR}/PoCo/test/callbackweb3old && npm i   shell=yes
     Log  ${npm_result.stderr}
