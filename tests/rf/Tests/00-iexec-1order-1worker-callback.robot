@@ -155,6 +155,8 @@ Test Full V2
     ${logs} =  Xtremweb.Curl Download On Scheduler  downloaddata/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp  @{resultUID}[0]
     Log  ${logs}
 
+    IexecCallbackTestUtils.Test IsCallbackDone
+
     #IexecCallbackTestUtils.Watch CallBackEvent
 
 

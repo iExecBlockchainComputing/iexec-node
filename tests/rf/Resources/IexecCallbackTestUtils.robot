@@ -90,6 +90,13 @@ Tx Receipt
     Should Be Equal As Integers	${getTransactionReceiptJS.rc}	0
 
 
+Test IsCallbackDone
+    ${isCallbackDoneJS} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && node isCallbackDone.js  shell=yes
+    Log  ${isCallbackDoneJS.stderr}
+    Log  ${isCallbackDoneJS.stdout}
+    Should Be Equal As Integers	${isCallbackDoneJS.rc}	0
+
+
 Watch CallBackEvent
     ${watchCallbackIexecHub} =  Run Process  cd ${REPO_DIR}/PoCo/test/callbackweb3old && node watchCallback.js  shell=yes
     Log  ${watchCallbackIexecHub.stderr}
