@@ -46,7 +46,7 @@ ${GETH_POCO_IEXECHUBCONTRACT} =  0xc4e4a08bf4c6fd11028b714038846006e27d7be8
 ${SCHEDULER_ADDRESS} =  0x8bd535d49b095ef648cd85ea827867d358872809
 
 
-${IEXEC_APP_TO_CHECK} =  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapps-registry/master/iExecBlockchainComputing/VanityEth/iexec.json
+${IEXEC_APP_TO_CHECK} =  https://raw.githubusercontent.com/iExecBlockchainComputing/iexec-dapps-registry/master/iExecBlockchainComputing/Factorial/iexec.json
 
 
 
@@ -134,7 +134,7 @@ Test Full V2
 
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
-    IexecCallbackTestUtils.Watch CallBackEvent
+
 
     ${logs} =  IexecSdk.Iexec An app Docker  account login --force
     Log  ${logs}
@@ -155,7 +155,7 @@ Test Full V2
     ${logs} =  Xtremweb.Curl Download On Scheduler  downloaddata/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp  @{resultUID}[0]
     Log  ${logs}
 
-
+    #IexecCallbackTestUtils.Watch CallBackEvent
 
 
 
