@@ -93,3 +93,4 @@ Buy For WorkOrder Old
     Log  ${buyForWorkOrderIexecHub.stderr}
     Log  ${buyForWorkOrderIexecHub.stdout}
     Should Be Equal As Integers	${buyForWorkOrderIexecHub.rc}	0
+    [Return]  ${buyForWorkOrderIexecHub.stdout}

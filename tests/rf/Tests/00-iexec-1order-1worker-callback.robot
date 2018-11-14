@@ -107,8 +107,13 @@ Test Full V2
     Log  ${logs}
 
     IexecCallbackTestUtils.Check Balances
-    IexecCallbackTestUtils.Buy For WorkOrder Old
-    IexecCallbackTestUtils.Tx Receipt
+    ${logs} =  IexecCallbackTestUtils.Buy For WorkOrder Old
+    Log  ${logs}
+    Should Contain  ${logs}  woid
+    @{woid} =  Get Regexp Matches  ${logs}  args: { woid: '(?P<woid>.*)' } }  woid
+    Log  @{woid}[0]
+
+    #args: { woid: '0x5dcde002af0ab18d4882c28d8be7719323b4acfd' } }
 
     #buyforworkorder
     #${logs} =  IexecSdk.Iexec An app Docker  order fill 2 --force
@@ -117,17 +122,17 @@ Test Full V2
     #@{woid} =  Get Regexp Matches  ${logs}  woid: '(?P<woid>.*)',  woid
     #Log  @{woid}[0]
 
-    #Wait Until Keyword Succeeds  12 min	3 sec  Check WorkOrderRevealing  @{woid}[0]
+    Wait Until Keyword Succeeds  12 min	3 sec  Check WorkOrderRevealing  @{woid}[0]
 
-    #${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
-    #Log  ${logs}
+    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
+    Log  ${logs}
 
-    #Wait Until Keyword Succeeds  12 min	3 sec  Check WorkOrderCompleted  @{woid}[0]
+    Wait Until Keyword Succeeds  12 min	3 sec  Check WorkOrderCompleted  @{woid}[0]
 
-    #${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
-    #Log  ${logs}
+    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0]
+    Log  ${logs}
 
-    #Should Contain  ${logs}	 m_uri: 'xw://scheduler
+    Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
     #${logs} =  IexecSdk.Iexec An app Docker  account login --force
     #Log  ${logs}
