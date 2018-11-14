@@ -34,6 +34,11 @@ Deploy IexecAPIContract
     Log  ${npm_result.stdout}
     Should Be Equal As Integers	${npm_result.rc}	0
 
+    ${npm_result} =  Run Process  cd ${REPO_DIR}/PoCo/test/callbackweb3old && npm i   shell=yes
+    Log  ${npm_result.stderr}
+    Log  ${npm_result.stdout}
+    Should Be Equal As Integers	${npm_result.rc}	0
+
     ${unlockcheck_result} =  Run Process  cd ${REPO_DIR}/PoCo/test/callback && node isUnlock.js  shell=yes
     Log  ${unlockcheck_result.stderr}
     Log  ${unlockcheck_result.stdout}
@@ -84,11 +89,15 @@ Tx Receipt
     Log  ${getTransactionReceiptJS.stdout}
     Should Be Equal As Integers	${getTransactionReceiptJS.rc}	0
 
+
+Watch CallBackEvent
+    ${watchCallbackIexecHub} =  Run Process  cd ${REPO_DIR}/PoCo/test/callbackweb3old && node watchCallback.js  shell=yes
+    Log  ${watchCallbackIexecHub.stderr}
+    Log  ${watchCallbackIexecHub.stdout}
+    Should Be Equal As Integers	${watchCallbackIexecHub.rc}	0
+    [Return]  ${watchCallbackIexecHub.stdout}
+
 Buy For WorkOrder Old
-    ${npm_result} =  Run Process  cd ${REPO_DIR}/PoCo/test/callbackweb3old && npm i   shell=yes
-    Log  ${npm_result.stderr}
-    Log  ${npm_result.stdout}
-    Should Be Equal As Integers	${npm_result.rc}	0
     ${buyForWorkOrderIexecHub} =  Run Process  cd ${REPO_DIR}/PoCo/test/callbackweb3old && node buyForWorkOrder.js  shell=yes
     Log  ${buyForWorkOrderIexecHub.stderr}
     Log  ${buyForWorkOrderIexecHub.stdout}
