@@ -134,27 +134,26 @@ Test Full V2
 
     Should Contain  ${logs}	 m_uri: 'xw://scheduler
 
-    ${logs} =  Xtremweb.Curl On Scheduler  get/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp
-    Log  ${logs}
-
-    ${logs} =  Xtremweb.Curl Download On Scheduler  downloaddata/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp  @{resultUID}[0]
-    Log  ${logs}
-
     IexecCallbackTestUtils.Watch CallBackEvent
 
     ${logs} =  IexecSdk.Iexec An app Docker  account login --force
     Log  ${logs}
 
-    #${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0] --watch --download
-    #Log  ${logs}
-    #Should Contain  ${logs}  resultUID
-    #@{resultUID} =  Get Regexp Matches  ${logs}  m_uri: 'xw://scheduler/(?P<resultUID>.*)',  resultUID
-    #Log  @{resultUID}[0]
+    ${logs} =  IexecSdk.Iexec An app Docker  work show @{woid}[0] --watch --download
+    Log  ${logs}
+    Should Contain  ${logs}  resultUID
+    @{resultUID} =  Get Regexp Matches  ${logs}  m_uri: 'xw://scheduler/(?P<resultUID>.*)',  resultUID
+    Log  @{resultUID}[0]
 
     #Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  keypair.txt
     #Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  stdout.txt
     #Archive Should Contain File  ${REPO_DIR}/iexec-app/@{woid}[0].zip  consensus.iexec
 
+    ${logs} =  Xtremweb.Curl On Scheduler  get/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp
+    Log  ${logs}
+
+    ${logs} =  Xtremweb.Curl Download On Scheduler  downloaddata/@{resultUID}[0]?XWLOGIN=admin&XWPASSWD=adminp  @{resultUID}[0]
+    Log  ${logs}
 
 
 
