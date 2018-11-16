@@ -157,7 +157,7 @@ Test Full V2
 
     IexecCallbackTestUtils.Test IsCallbackDone
 
-    #IexecCallbackTestUtils.Watch CallBackEvent
+    IexecCallbackTestUtils.Watch CallBackEvent
 
 
 
