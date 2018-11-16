@@ -113,7 +113,6 @@ Test Full V2
     @{woid} =  Get Regexp Matches  ${logs}  args: { woid: '(?P<woid>.*)' } }  woid
     Log  @{woid}[0]
 
-    #args: { woid: '0x5dcde002af0ab18d4882c28d8be7719323b4acfd' } }
 
     #buyforworkorder
     #${logs} =  IexecSdk.Iexec An app Docker  order fill 2 --force
@@ -159,7 +158,7 @@ Test Full V2
 
     IexecCallbackTestUtils.Watch CallBackEvent
 
-
+    IexecCallbackTestUtils.Test IsCallbackDone
 
 
 *** Keywords ***
